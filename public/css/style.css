@@ -1,29 +1,125 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+/* Reset de margens e padding */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+    background-color: #f8f9fa;
 }
 
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
+/* Personalização do Navbar */
+.navbar {
+    background-color: #007bff;
 }
 
-nav ul {
-    list-style-type: none;
-    padding: 0;
+.navbar-brand {
+    font-weight: bold;
+    color: #fff !important;
 }
 
-nav ul li {
-    display: inline;
-    margin: 0 10px;
+.navbar-nav .nav-link {
+    color: #fff !important;
 }
 
-nav ul li a {
+.navbar-nav .nav-item.active .nav-link,
+.navbar-nav .nav-link:hover {
+    color: #f8f9fa !important;
+}
+
+/* Estilos de Links */
+a {
+    color: #007bff;
     text-decoration: none;
-    color: #000;
+    background-color: transparent;
 }
 
-/* Adicione mais estilos conforme necessário */
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Cabeçalho e Tipografia */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+/* Botões */
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+/* Espaçamento */
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Personalização de Formulários */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    font-size: 1.1rem;
+    padding: .5rem;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* Estilo do rodapé */
+footer {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Adaptação para dispositivos móveis */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        flex-grow: 0;
+    }
+}
