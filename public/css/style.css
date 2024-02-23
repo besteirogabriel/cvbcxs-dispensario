@@ -4,84 +4,42 @@
 *::after {
     box-sizing: border-box;
 }
-
 body {
-    font-family: 'Roboto', sans-serif; /* Mudança da fonte para Roboto */
-    margin: 0;
-    font-size: 1rem;
-    color: #333;
+    font-family: 'Roboto', sans-serif; /* Mudança de fonte para Roboto */
     background-color: #f8f9fa;
 }
 
-/* Navbar personalizado */
 .navbar {
-    background-color: #0056b3; /* Cor ajustada */
+    background-color: #007bff; /* Cor de fundo do cabeçalho */
 }
 
-.navbar-toggler {
-    border-color: rgba(255,255,255,0.1);
+.navbar-dark .navbar-nav .nav-link {
+    color: white; /* Cor dos links */
 }
 
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ccc; /* Cor dos links ao passar o mouse */
 }
 
-/* Melhoria na responsividade e estilo do menu */
-@media (max-width: 768px) {
-    .navbar-collapse {
-        background-color: #0056b3;
-    }
-    .nav-link {
-        color: #fff !important;
-    }
-}
-
-/* Ajustes no logo e texto de boas-vindas */
+/* Logo e título centralizados */
 .logo-centralizado {
-    display: block;
-    margin: 20px auto 10px;
-    width: 150px; /* Tamanho ajustado */
-}
-
-.texto-boas-vindas {
     text-align: center;
-    font-size: 24px;
-    color: #007bff;
     margin: 20px 0;
 }
 
-/* Estilos de Links */
-a {
-    color: #007bff;
-    text-decoration: none;
-    background-color: transparent;
+.logo-img {
+    width: 150px; /* Tamanho maior do logo */
 }
 
-a:hover {
-    color: #0056b3;
-    text-decoration: underline;
-}
-
-/* Cabeçalho e Tipografia */
-h1, h2, h3, h4, h5, h6 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    line-height: 1.2;
-}
-
-h1 {
-    font-size: 2.5rem;
-}
-
-/* Estilo do rodapé */
-footer {
-    background-color: #0056b3;
-    color: white;
+.titulo-centralizado {
     text-align: center;
-    padding: 10px;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
+    font-size: 24px; /* Tamanho da fonte do título */
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
 }
