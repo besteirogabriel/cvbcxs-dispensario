@@ -6,30 +6,48 @@
 }
 
 body {
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Roboto', sans-serif; /* Mudança da fonte para Roboto */
     margin: 0;
     font-size: 1rem;
     color: #333;
     background-color: #f8f9fa;
 }
 
-/* Personalização do Navbar */
+/* Navbar personalizado */
 .navbar {
-    background-color: #007bff;
+    background-color: #0056b3; /* Cor ajustada */
 }
 
-.navbar-brand {
-    font-weight: bold;
-    color: #fff !important;
+.navbar-toggler {
+    border-color: rgba(255,255,255,0.1);
 }
 
-.navbar-nav .nav-link {
-    color: #fff !important;
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-.navbar-nav .nav-item.active .nav-link,
-.navbar-nav .nav-link:hover {
-    color: #f8f9fa !important;
+/* Melhoria na responsividade e estilo do menu */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        background-color: #0056b3;
+    }
+    .nav-link {
+        color: #fff !important;
+    }
+}
+
+/* Ajustes no logo e texto de boas-vindas */
+.logo-centralizado {
+    display: block;
+    margin: 20px auto 10px;
+    width: 150px; /* Tamanho ajustado */
+}
+
+.texto-boas-vindas {
+    text-align: center;
+    font-size: 24px;
+    color: #007bff;
+    margin: 20px 0;
 }
 
 /* Estilos de Links */
@@ -56,58 +74,9 @@ h1 {
     font-size: 2.5rem;
 }
 
-h2 {
-    font-size: 2rem;
-}
-
-h3 {
-    font-size: 1.75rem;
-}
-
-/* Botões */
-.btn-primary {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.btn-primary:hover {
-    color: #fff;
-    background-color: #0069d9;
-    border-color: #0062cc;
-}
-
-/* Espaçamento */
-.mt-4 {
-    margin-top: 1.5rem !important;
-}
-
-.mb-4 {
-    margin-bottom: 1.5rem !important;
-}
-
-/* Personalização de Formulários */
-input[type="text"],
-input[type="password"],
-input[type="email"] {
-    font-size: 1.1rem;
-    padding: .5rem;
-    margin: 5px 0 22px 0;
-    display: inline-block;
-    border: none;
-    background: #f1f1f1;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus {
-    background-color: #ddd;
-    outline: none;
-}
-
 /* Estilo do rodapé */
 footer {
-    background-color: #007bff;
+    background-color: #0056b3;
     color: white;
     text-align: center;
     padding: 10px;
@@ -115,11 +84,4 @@ footer {
     left: 0;
     bottom: 0;
     width: 100%;
-}
-
-/* Adaptação para dispositivos móveis */
-@media (max-width: 768px) {
-    .navbar-collapse {
-        flex-grow: 0;
-    }
 }
