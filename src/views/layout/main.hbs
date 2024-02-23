@@ -1,15 +1,48 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">CVBCXS Dispensário</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link" href="/sobre">Sobre</a>
-            <a class="nav-item nav-link" href="/pedidos">Pedidos</a>
-            <a class="nav-item nav-link" href="/cadastro-lojas">Cadastro de Lojas</a>
-            <a class="nav-item nav-link" href="/acesso-administrativo">Acesso Administrativo</a>
-            <a class="nav-item nav-link" href="/estoque">Estoque</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sobre">Sobre</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pedidos">Pedidos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cadastro-lojas">Cadastro de Lojas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/acesso-administrativo">Acesso Administrativo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/estoque">Estoque</a>
+                </li>
+            </ul>
         </div>
+    </nav>
+
+    <div class="container">
+        {{{body}}}
     </div>
-</nav>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
