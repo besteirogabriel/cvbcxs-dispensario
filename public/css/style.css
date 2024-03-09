@@ -1,124 +1,103 @@
-/* Reset básico para margens, paddings e box-sizing */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+:root {
+    /* variáveis de cor */
+    --primaria: #E32219;
+    --secundaria: #1F1E1D;
+    --background: #fff;    
+    --color-text: #1F1E1D;
+
+    /* variáveis de fonte */
+    --font-family-texto: 'Open Sans';
+    --font-family-titulo: 'Montserrat';
+    --font-size-texto: 1em;
+    --font-size-titulo: 2em;
+
+    /* outros detalhes */
+    --shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    color: #333;
-    background-color: #f8f9fa;
-    line-height: 1.6;
-    padding-top: 20px;
+main {
+    padding: 50px 0;
 }
 
-/* Espaçamento e container */
-.container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 0 20px;
+/** BOTÕES - geral */
+.button-1 {
+    color: #fff;
+    padding: 8px 25px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    background: var(--primaria);
+}
+.button-1:hover, .button-1.active {
+    background: var(--secundaria);
+}
+/** FIM BOTÕES */
+
+/** HEADER */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    padding-block: 10px;
+    background: var(--background);
+    box-shadow: var(--shadow);
 }
 
-/* Estilo do cabeçalho removido conforme instruções */
+nav a:not(.button-1) {
+    border-bottom: 1px solid transparent;
+}
+nav a:not(.button-1):hover {
+    padding-bottom: 1px;
+    border-color: var(--primaria);
+}
+/** FIM HEADER */
 
-/* Centralização do logo e título */
-.centralizado {
-    text-align: center;
-    margin-top: 20px;
+/** CARD ABAS */
+.card-abas {
+    max-width: 700px;
+    margin: 0 auto;
 }
 
-.logo {
-    width: 200px; /* Ajuste a largura do logo conforme necessário */
-    margin: 20px auto; /* Espaçamento acima e abaixo do logo */
-    display: block;
-}
-
-.titulo {
-    font-size: 24px; /* Tamanho da fonte para o título */
-    font-weight: bold; /* Negrito para o título */
-    color: #007bff; /* Cor azul para o título */
-    margin-bottom: 20px; /* Espaçamento abaixo do título */
-}
-
-/* Links */
-a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #0056b3;
-    text-decoration: underline;
-}
-
-/* Botões */
-.btn {
-    display: inline-block;
-    background: #007bff;
-    color: #ffffff;
-    padding: 10px 20px;
+.aba {
+    background: var(--primaria);
+    color: #fff;
+    fill: #fff;
+    padding: 15px 25px;
+    gap: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: inset 2px -1px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 15px 15px 0 0;
+    min-width: 350px;
+    display: inline-flex;
+    justify-content: center;
     cursor: pointer;
-    border-radius: 5px;
-    border: none;
-    transition: background 0.3s ease;
+    border-bottom: 2px solid var(--secundaria);
 }
-
-.btn:hover {
-    background: #0056b3;
+.aba:not(.active):hover {
+    background: var(--secundaria);
 }
-
-/* Personalização de Formulários */
-input[type=text],
-input[type=password],
-input[type=email],
-select,
-textarea {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+.aba.active {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+    color: var(--color-text);
+    fill: var(--color-text);
+    border: 2px solid var(--secundaria);
+    border-bottom: none;
+    box-shadow: none;
 }
-
-input[type=submit] {
-    width: 100%;
-    background-color: #007bff;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-input[type=submit]:hover {
-    background-color: #0056b3;
-}
-
-/* Rodapé */
-footer {
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    position: fixed;
-    left: 0;
-    bottom: 0;
+.aba-ghost {
+    border-bottom: 2px solid var(--secundaria);
     width: 100%;
 }
 
-/* Media queries para responsividade */
-@media (max-width: 768px) {
-    .logo {
-        width: 150px; /* Tamanho menor do logo para dispositivos móveis */
-    }
-
-    .titulo {
-        font-size: 20px; /* Tamanho menor da fonte para o título em dispositivos móveis */
-    }
+.card-abas form {
+    padding: 30px 50px;
+    border: 2px solid var(--secundaria);
+    border-top: none;
+    border-radius: 0 0 15px 15px;
 }
+/** FIM CARD ABAS */
