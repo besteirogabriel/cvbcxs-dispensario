@@ -1,22 +1,8 @@
-jQuery(document).ready(function( $ ) {     
-    $('#cep').on('input', function() {
-        var cep = $(this).val();
-        if (cep.length === 8) {
-          buscarEndereco(cep);
-        }
-    });
+document.addEventListener('DOMContentLoaded', function() {
+  var pageName = document.body.getAttribute('data-name');
+  var navLinks = document.querySelectorAll('nav a[data-active="' + pageName + '"]');
+  
+  navLinks.forEach(function(link) {
+      link.classList.add('active');
+  });
 });
-
-
-function buscarEndereco(cep) {
-    $.ajax({
-      url: '/loja-cadastrar/endereco/' + cep,
-      method: 'GET',
-      success: function(response) {
-        console.log(response);
-      },
-      error: function(error) {
-        console.error('Erro ao buscar endereço:', error);
-      }
-    });
-}

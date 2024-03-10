@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/global.css">
     {{#if page }}<link rel="stylesheet" href="css/{{page}}.css">{{/if}}
+
 </head>
-<body class="{{ page }}">    
+<body class="{{ page }}" data-name="{{ page }}">    
     <!-- Cabeçalho página -->
     {{> header }}
 
@@ -20,4 +21,7 @@
         {{{ body }}}
     </main>
 </body>
+
+{{!-- JS --}}
+<script src="js/global.js"></script>
 </html>

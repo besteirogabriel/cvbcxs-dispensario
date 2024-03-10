@@ -1,6 +1,7 @@
 var express = require('express');
 const bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
+var jQuery = require('jquery');
 var path = require('path');
 
 // MOCKS
