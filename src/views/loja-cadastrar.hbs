@@ -1,0 +1,42 @@
+<section class="container loja-card">
+    <div class="card-abas-container">
+        <div class="card-abas">
+            {{> abas }}
+            <!-- formulário de login da loja -->
+            <form action="" method="post">
+                <fieldset>
+                    <input type="text" name="name" id="name" required>
+                    <label> Nome </label>
+                </fieldset>                    
+                <fieldset>
+                    <input type="email" name="email" id="email" required>
+                    <label> E-mail principal </label>
+                </fieldset>   
+                <div class="fieldset-group d-flex align-center gap-2">
+                    <fieldset>
+                        <input type="number" name="telefone" id="telefone" required>  <!-- adicionar mascara  -->
+                        <label> Telefone </label>
+                    </fieldset>   
+                    <fieldset>
+                        <input type="number" name="celular" id="celular" required>  <!-- adicionar mascara  -->
+                        <label> Celular </label>
+                    </fieldset> 
+                </div>                              
+                <fieldset>
+                    <input type="text" name="cep" id="cep" required> <!-- fazer busca por CEP -->
+                    <label> CEP </label>
+                </fieldset>        
+                <fieldset>
+                    <input type="text" name="endereco" id="endereco" required>
+                    <label> Endereço </label>
+                </fieldset>
+                <button type="submit" class="button-1">Cadastrar</button>
+                <p class="info">Ao enviar o formulário, você automaticamente concorda com nossa <a href="">política de privacidade</a> e <a href="">termos de uso</a></p>
+            </form>
+        </div>
+        <div class="card-abas-introducao">
+            <h1> CADASTRAR LOJA </h1>
+            <img src="/images/register-illustration.svg" alt="Ilustração representando o cadastro de um usuário">
+        </div>
+    </div>
+</section>

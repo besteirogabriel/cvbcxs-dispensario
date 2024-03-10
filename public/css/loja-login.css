@@ -1,0 +1,5 @@
+.loja-login main {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+}

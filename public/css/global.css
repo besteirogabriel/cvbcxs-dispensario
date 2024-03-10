@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+:root {
+    /* variáveis de cor */
+    --primaria: #E32219;
+    --secundaria: #1F1E1D;
+    --background: #fff;    
+    --color-text: #1F1E1D;
+
+    /* variáveis de fonte */
+    --font-family-texto: 'Open Sans';
+    --font-family-titulo: 'Montserrat';
+    --font-size-texto: 1em;
+    --font-size-titulo: 2em;
+
+    /* outros detalhes */
+    --shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+main {
+    padding: 50px 0;
+}
+
+
+/** HEADER */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    padding-block: 10px;
+    background: var(--background);
+    box-shadow: var(--shadow);
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+nav a:not(.button-1) {
+    border-bottom: 1px solid transparent;
+}
+nav a:not(.button-1):hover {
+    padding-bottom: 1px;
+    border-color: var(--primaria);
+}
+/** FIM HEADER */
+

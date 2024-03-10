@@ -1,0 +1,93 @@
+/** PADRÕES de layout utilizados dentro do sistema para reaproveitamento por meio de classes mantendo a consistência do layout */
+
+/** BOTÕES - geral */
+.button-1 {
+    color: #fff;
+    padding: 8px 25px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    background: var(--primaria);
+}
+.button-1:hover, .button-1.active {
+    background: var(--secundaria);
+}
+/** FIM BOTÕES */
+
+/** CARD ABAS */
+.card-abas-container {
+    gap: 4vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 50px 50px 50px 0;
+}
+.card-abas-container::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 60%;
+    background: linear-gradient(55deg, var(--secundaria) 10%, var(--primaria));
+    z-index: -1;
+    border-radius: 20px;
+}
+
+.card-abas {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.aba {
+    background: var(--primaria);
+    color: #fff;
+    fill: #fff;
+    padding: 15px 25px;
+    gap: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: inset 2px -1px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 15px 15px 0 0;
+    max-width: 300px;
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    cursor: pointer;
+    border-bottom: 2px solid var(--secundaria);
+}
+.aba:not(.active):hover {
+    background: var(--secundaria);
+}
+.aba.active {
+    position: relative;
+    z-index: 1;
+    background: var(--background);
+    color: var(--color-text);
+    fill: var(--color-text);
+    border: 2px solid var(--secundaria);
+    border-bottom: none;
+    box-shadow: none;
+}
+.aba-ghost {
+    border-bottom: 2px solid var(--secundaria);
+    width: 100%;
+}
+
+.card-abas form {
+    padding: 30px 50px;
+    border: 2px solid var(--secundaria);
+    border-top: none;
+    border-radius: 0 0 15px 15px;
+    background: var(--background);
+}
+
+.card-abas-introducao h1 {
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding-bottom: 70px;
+}
+/** FIM CARD ABAS */

@@ -40,13 +40,13 @@ h1, h2, h3 {
     font-family: var(--font-family-titulo);
 }
 h1 {
-    font-size: calc(var(--font-size-titulo) * 2.5);
+    font-size: calc(var(--font-size-titulo) * 1.1);
 }
 h2 {
-    font-size: calc(var(--font-size-titulo) * 1.5);
+    font-size: calc(var(--font-size-titulo) * 0.8);
 }
-h2 {
-    font-size: var(--font-size-titulo);
+h3 {
+    font-size: var(--font-size-titulo * 0.7);
 }
 
 ul {
@@ -154,6 +154,13 @@ form .info a:hover {
 }
 .justify-space-between {
     justify-content: space-between;
+}
+
+.flex-1 {
+    flex: 1;
+}
+.flex-2 {
+    flex: 2;
 }
 
 /* posicionamento */

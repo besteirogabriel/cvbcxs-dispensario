@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    {{!-- CSS --}}
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/global.css">
+    {{#if page }}<link rel="stylesheet" href="css/{{page}}.css">{{/if}}
+</head>
+<body class="{{ page }}">    
+    <!-- Cabeçalho página -->
+    {{> header }}
+
+    <main>
+        {{!-- Conteúdo da página - encontrado no arquivo .hbs com o nome da url --}}
+        {{{ body }}}
+    </main>
+</body>
+</html>

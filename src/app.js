@@ -8,8 +8,10 @@ const lojas = require('./mocks/lojas');
 
 // Routes
 var verifyToken = require('./routes/authMiddleware');
+
 var routes = require('./routes/home');
 var lojaLogin = require('./routes/loja-login');
+var lojaCadastrar = require('./routes/loja-cadastrar');
 
 var app = express();
 var port = 3000;
@@ -21,9 +23,9 @@ app.use(bodyParser.json());
 // Configure Handlebars engine
 app.engine('hbs', exphbs({
   extname: '.hbs',
-  defaultLayout: 'main',
+  defaultLayout: 'index',
   layoutsDir: __dirname + '/views/layouts',
-  partialsDir: __dirname + '/views/partials'
+  partialsDir: __dirname + '/views/components'
 }));
 
 app.set('views', path.join(__dirname, 'views'));
@@ -33,10 +35,8 @@ app.set('view engine', 'hbs');
 app.use(express.static('public'));
 
 app.use('/', routes);
-app.use('/loja-login', (req, res, next) => {
-  req.lojas = lojas;
-  next();
-}, lojaLogin);
+app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
+app.use('/loja-cadastrar', lojaCadastrar);
 
 //rota protegida - verifica a autenticação do login
 app.get('/protected-route', verifyToken, (req, res) => {
