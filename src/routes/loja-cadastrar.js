@@ -19,7 +19,7 @@ var abas = [
 
 //chama o template
 router.get('/', function(req, res, next){
-    res.render('loja-cadastrar', { title: 'Cadastrar loja - CVBCXS dispensário', page: 'loja-cadastrar', abas: abas });
+    res.render('loja-cadastrar', { title: 'Cadastrar loja - CVBCXS dispensário', page: 'loja-cadastrar', data: {abas} });
 });
 
 

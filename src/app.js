@@ -5,13 +5,16 @@ var path = require('path');
 
 // MOCKS
 const lojas = require('./mocks/lojas');
+const admins = require('./mocks/admins');
 
 // Routes
 var verifyToken = require('./routes/authMiddleware');
-
 var routes = require('./routes/home');
+  //loja
 var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
+  //administrativo
+var adminLogin = require('./routes/admin-login');
 
 var app = express();
 var port = 3000;
@@ -34,9 +37,14 @@ app.set('view engine', 'hbs');
 // Static files
 app.use(express.static('public'));
 
+//routes init
 app.use('/', routes);
+  //lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);
+  //admin
+app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, adminLogin);
+
 
 //rota protegida - verifica a autenticação do login
 app.get('/protected-route', verifyToken, (req, res) => {

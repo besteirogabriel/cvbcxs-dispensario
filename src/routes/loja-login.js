@@ -21,7 +21,7 @@ var abas = [
 
 //chama o template
 router.get('/', function(req, res, next){
-    res.render('loja-login', { title: 'Login lojas - CVBCXS dispensário', page: 'loja-login', abas: abas });
+    res.render('loja-login', { title: 'Login lojas - CVBCXS dispensário', page: 'loja-login', data: {abas} });
 });
 
 
