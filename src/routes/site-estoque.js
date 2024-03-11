@@ -13,7 +13,20 @@ var tableHeaders = {
 };
 
 router.get('/', function(req, res, next){
-    res.render('site-estoque', { title: 'Estoque - CVBCXS dispensário', page: 'estoque', data: { tableHeaders: tableHeaders, tableBody: req.estoque, tableFilters: {search: true} } });
+    res.render('site-estoque', { 
+        title: 'Estoque - CVBCXS dispensário', 
+        page: 'estoque table', 
+        data: { 
+            tableHeaders: tableHeaders, 
+            tableBody: req.estoque,             
+            tablePageHeader: {
+                title: 'Estoque',
+                tableActions: {
+                    search: true
+                },
+            }
+        } 
+    });
 });
 
 module.exports = router;

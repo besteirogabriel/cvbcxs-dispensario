@@ -1,26 +1,43 @@
-{{#if data.tableFilters}}
-<div class="table-filters">
-    {{#if data.tableFilters.search}}
-    {{> table-search }}
-    {{/if}}
-</div>
-{{/if}}
-
 <div class="table-container {{data.tableClass}}">
+    {{!-- título, descrições e ações da tabela --}}
+    {{#if data.tablePageHeader}}
     <div class="table-header">
+        {{!-- titulo e descrição da página --}}
+        {{#if data.tablePageHeader.title}}
+        <div class="table-header-content">
+            <h1>{{data.tablePageHeader.title}}</h1>
+            {{#if data.tablePageHeader.description}}
+            <p>{{data.tablePageHeader.description}}</p>
+            {{/if}}
+        </div>
+        {{/if}}
+        {{!-- filtros e ações da página --}}
+        {{#if data.tablePageHeader.tableActions}}
+        <div class="table-header-filters">
+            {{!-- template de search de termos --}}
+            {{#if data.tablePageHeader.tableActions.search}}
+            {{> table-search }}
+            {{/if}}
+        </div>
+        {{/if}}
+    </div>
+    {{/if}}
+    
+    {{!-- conteúdo da tabela --}}
+    <div class="table-columns">
+        {{!-- colunas da tabela --}}
         <ul>
             {{#each data.tableHeaders}}
             <li>{{ this }}</li>
             {{/each}}
         </ul>
     </div>
+    {{!-- conteúdo dos itens --}}
     <div class="table-body">
         {{#each data.tableBody as |item|}}   
         <ul class="table-item">
             {{#each item }}
-                <li>   
-                    {{ this }}
-                </li>       
+                <li> {{ this }} </li>       
             {{/each}}    
         </ul>
         {{/each}}
