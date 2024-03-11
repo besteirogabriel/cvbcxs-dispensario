@@ -15,6 +15,7 @@ var handlebarsHelpers  = require('./routes/handlebars-helpers');
   //site
 var routes = require('./routes/site-home');
 var siteEstoque = require('./routes/site-estoque');
+var sitePedidos = require('./routes/site-pedidos');
   //loja
 var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
@@ -46,6 +47,7 @@ app.use(express.static('public'));
 //routes init
 app.use('/', routes);
 app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
+app.use('/pedidos', sitePedidos);
   //lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);
