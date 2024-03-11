@@ -22,7 +22,9 @@ router.get('/', function(req, res, next){
             tablePageHeader: {
                 title: 'Estoque',
                 tableActions: {
-                    search: true
+                    search: {
+                        placeholder: 'Pesquisar medicamento'
+                    }
                 },
             }
         } 

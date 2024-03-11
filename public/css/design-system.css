@@ -189,5 +189,9 @@ body.table {
     border-radius: 0 15px 15px 0;
     background: var(--primaria);
     fill: white;
+    transition: all .3s ease-in-out;
+}
+.table-search button:hover {
+    background: var(--secundaria);
 }
 /** FIM TABELA */
