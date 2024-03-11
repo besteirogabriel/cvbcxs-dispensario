@@ -7,10 +7,14 @@ var path = require('path');
 // MOCKS
 const lojas = require('./mocks/lojas');
 const admins = require('./mocks/admins');
+const estoque = require('./mocks/estoque');
 
 // Routes
 var verifyToken = require('./routes/authMiddleware');
-var routes = require('./routes/home');
+var handlebarsHelpers  = require('./routes/handlebars-helpers');
+  //site
+var routes = require('./routes/site-home');
+var siteEstoque = require('./routes/site-estoque');
   //loja
 var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
@@ -29,7 +33,8 @@ app.engine('hbs', exphbs({
   extname: '.hbs',
   defaultLayout: 'index',
   layoutsDir: __dirname + '/views/layouts',
-  partialsDir: __dirname + '/views/components'
+  partialsDir: __dirname + '/views/components',
+  helpers: handlebarsHelpers
 }));
 
 app.set('views', path.join(__dirname, 'views'));
@@ -40,6 +45,7 @@ app.use(express.static('public'));
 
 //routes init
 app.use('/', routes);
+app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
   //lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);

@@ -38,7 +38,7 @@ header {
 nav a:not(.button-1) {
     border-bottom: 1px solid transparent;
 }
-nav a:not(.button-1):hover {
+nav a:not(.button-1):hover, nav a:not(.button-1).active {
     padding-bottom: 1px;
     border-color: var(--primaria);
 }

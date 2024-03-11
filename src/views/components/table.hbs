@@ -1,0 +1,28 @@
+{{#if data.tableFilters}}
+<div class="table-filters">
+    {{#if data.tableFilters.search}}
+    {{> table-search }}
+    {{/if}}
+</div>
+{{/if}}
+
+<div class="table-container {{data.tableClass}}">
+    <div class="table-header">
+        <ul>
+            {{#each data.tableHeaders}}
+            <li>{{ this }}</li>
+            {{/each}}
+        </ul>
+    </div>
+    <div class="table-body">
+        {{#each data.tableBody as |item|}}   
+        <ul class="table-item">
+            {{#each item }}
+                <li>   
+                    {{ this }}
+                </li>       
+            {{/each}}    
+        </ul>
+        {{/each}}
+    </div>
+</div>
