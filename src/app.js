@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var path = require('path');
 const $ = require('jquery');
+const cookieParser = require('cookie-parser'); //cookies 
 const axios = require('axios'); //autocomplete CEP
 
 // MOCKS
@@ -21,6 +22,7 @@ var sitePedidos = require('./routes/site-pedidos');
   //loja
 var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
+var lojaDashboard = require('./routes/loja-dashboard');
   //administrativo
 var adminLogin = require('./routes/admin-login');
 
@@ -46,6 +48,9 @@ app.set('view engine', 'hbs');
 // Static files
 app.use(express.static('public'));
 
+//configuração cookies 
+app.use(cookieParser());
+
 //routes init
 app.use('/', routes);
 app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
@@ -53,6 +58,7 @@ app.use('/pedidos', (req, res, next) => { req.lojas = lojas; req.estoque = estoq
   //lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);
+app.use('/loja-dashboard', verifyToken, lojaDashboard);
   //admin
 app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, adminLogin);
 

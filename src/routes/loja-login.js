@@ -42,7 +42,12 @@ router.post('/', (req, res) => {
     const secretKey = crypto.randomBytes(64).toString('hex');
     loja.secretKey = secretKey; 
 
-    jwt.sign({ email: loja.email }, secretKey, { expiresIn: '1h' }); //gera um token com expiração de 1h
+    const token = jwt.sign({ email: loja.email }, secretKey, { expiresIn: '1h' }); //gera um token com expiração de 1h
+
+    // Define o cookie com o token - REVISAR SEGURANÇA
+    res.cookie('token', token, { httpOnly: true, secure: true });
+    res.cookie('secretKey', secretKey, { httpOnly: true, secure: true });
+
     res.redirect('/loja-dashboard'); //redireciona para o dashboard se usuário autenticado
 });
 

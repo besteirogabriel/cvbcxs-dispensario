@@ -40,7 +40,7 @@ $(function() {
   });
 
   //preenche os campos com o endereço da loja
-  $('#loja').change(function() {
+  $('#loja').on('change', function() {
     var idLojaSelecionada = $(this).val();
     var form = $(this).closest('form');
     if (idLojaSelecionada) {
@@ -50,7 +50,7 @@ $(function() {
           method: 'GET',
           success: function(response) {
             // Preenche os campos de endereço com os dados retornados
-            $(form).find('#cep').val(response.cep);
+            $(form).find('#cep').val(response.cep.replace(/^(\d{5})(\d{3})$/, '$1-$2'));
             $(form).find('#endereco').val(response.endereco);
             $(form).find('#numero').val(response.numero);
             $(form).find('#cidade').val(response.cidade);

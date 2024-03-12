@@ -6,4 +6,8 @@ module.exports = function (exphbs) {
     exphbs.registerHelper('getProp', function(obj, prop) {
         return obj[prop];
     });
+    
+    exphbs.registerHelper('eq', function (a, b) {
+        return a === b;
+    });
 };
