@@ -17,20 +17,20 @@ $(function() {
 
   //preenche os campos de endereço a partir do CEP
   $('#cep').on('input', function() {
-    var cep = $(this).val();  
-    var form = $(this).closest('form');  
+    var cep = $(this).val();   
+    
     cep = cep.replace(/\D/g, ''); //limpa o campo de CEP
 
     //faz a busca pelo endereço a partir do CEP e preenche os outros campos
     if (cep.length === 8) {
-        $(this).val(cep.replace(/^(\d{5})(\d{3})$/, '$1-$2')); // Aplica a máscara de CEP (XXXXX-XXX)
+        cep = cep.replace(/^(\d{5})(\d{3})$/, '$1-$2'); // Aplica a máscara de CEP (XXXXX-XXX)
         $.ajax({
             url: '/buscar-endereco/' + cep,
             method: 'GET',
             success: function(response) {
-              $(form).find('#endereco') && $(form).find('#endereco').val(response.logradouro);
-              $(form).find('#cidade') && $(form).find('#cidade').val(response.localidade);
-              $(form).find('#estado') && $(form).find('#estado').val(response.uf);
+                $('#endereco').val(response.logradouro);
+                $('#cidade').val(response.localidade);
+                $('#estado').val(response.uf);
             },
             error: function(error) {
               console.error('Erro ao buscar endereço:', error);

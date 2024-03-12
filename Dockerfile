@@ -22,4 +22,3 @@ CMD ["npm", "start"]
 
 # Install bcrypt with build from source option
 RUN npm install bcrypt --build-from-source
-
