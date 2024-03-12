@@ -17,8 +17,8 @@ $(function() {
 
   //preenche os campos de endereço a partir do CEP
   $('#cep').on('input', function() {
-    var cep = $(this).val();  
-    var form = $(this).closest('form');  
+    var cep = $(this).val();   
+    
     cep = cep.replace(/\D/g, ''); //limpa o campo de CEP
 
     //faz a busca pelo endereço a partir do CEP e preenche os outros campos
