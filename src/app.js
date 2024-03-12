@@ -84,6 +84,13 @@ app.get('/buscar-endereco/:cep', async (req, res) => {
   }
 });
 
+//logout sistema
+app.get('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.clearCookie('secretKey');
+  res.redirect('/loja-login');
+});
+
 app.listen(port, () => {
   console.log(`Aplicativo rodando em http://localhost:${port}`);
 });

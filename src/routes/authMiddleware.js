@@ -13,7 +13,9 @@ function verifyToken(req, res, next) {
         if(error) {
             return res.status(401).json({ message: "Token Inválido" });
         }
-        req.email = decoded.email;
+        
+        req.user = { email: decoded.email, id: decoded.id };
+
         next();
     });
 }
