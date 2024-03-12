@@ -8,7 +8,7 @@ const pool = new Pool({
   host: 'cvbcxs-dispensario_db_1',
   database: 'dbname',
   password: 'password',
-  port: 5432, // or your PostgreSQL port
+  port: 5432, // 
 });
 
 // Table headers definition
@@ -27,15 +27,33 @@ const selectQuery = 'SELECT * FROM medicamentos';
 
 router.get('/', async function(req, res, next){
     try {
+        // Get the search query from the request
+        const searchQuery = req.query.search;
+
         // Connect to the database
         const client = await pool.connect();
+
+        // Define the base query
+        let query = selectQuery;
+
+        // Check if there's a search query
+        if (searchQuery) {
+            // Modify the query to include the search condition
+            query = `SELECT * FROM medicamentos WHERE medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%'`;
+        }
+
         // Execute the query
-        const result = await client.query(selectQuery);
+        const result = await client.query(query);
+
         // Release the client back to the pool
         client.release();
         
-        // Extract the rows from the result
-        const tableBody = result.rows;
+        // Extract the rows from the result and format the date
+        const tableBody = result.rows.map(row => ({
+            ...row,
+            fabricacao: new Date(row.fabricacao).toLocaleDateString('en-US', { month: '2-digit', year: 'numeric' }),
+            validade: new Date(row.validade).toLocaleDateString('en-US', { month: '2-digit', year: 'numeric' })
+        }));
 
         // Render the template with the retrieved data
         res.render('site-estoque', { 
@@ -48,7 +66,7 @@ router.get('/', async function(req, res, next){
                     title: 'Estoque',
                     tableActions: {
                         search: {
-                            placeholder: 'Pesquisar medicamento'
+                            placeholder: 'Pesquisar medicamento ou composto'
                         }
                     },
                 }
