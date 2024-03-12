@@ -9,6 +9,7 @@ COPY package*.json ./
 
 # Instalando dependências do projeto
 RUN npm install
+RUN npm install pg
 
 # Copiando o restante dos arquivos do projeto
 COPY . .

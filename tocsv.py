@@ -1,27 +1,30 @@
-import csv
-from datetime import datetime
+import pandas as pd
 
+# Read the CSV file
+df = pd.read_csv('planilha.csv')
+
+# Define function to convert date formats
 def convert_date(date_str):
-    formats = ['%m/%y', '%m/%Y']
-    for fmt in formats:
-        try:
-            return datetime.strptime(date_str, fmt).strftime('%Y-%m-%d')
-        except ValueError:
-            pass
-    return None
+    try:
+        return pd.to_datetime(date_str, format='%m/%y').strftime('%Y-%m-%d')
+    except ValueError:
+        pass
+    try:
+        return pd.to_datetime(date_str, format='%m/%d/%y').strftime('%Y-%m-%d')
+    except ValueError:
+        pass
+    try:
+        return pd.to_datetime(date_str, format='%m/%d').strftime('2025-%m-%d')
+    except ValueError:
+        pass
+    try:
+        return pd.to_datetime(date_str, format='%y').strftime('2025-%m-%d')
+    except ValueError:
+        return '2025-01-01'
 
-def fix_dates(input_file, output_file):
-    with open(input_file, 'r', newline='') as infile, open(output_file, 'w', newline='') as outfile:
-        reader = csv.DictReader(infile)
-        writer = csv.DictWriter(outfile, fieldnames=reader.fieldnames)
-        writer.writeheader()
-        for row in reader:
-            row['FABRICACAO'] = convert_date(row['FABRICACAO'])
-            row['VALIDADE'] = convert_date(row['VALIDADE'])
-            writer.writerow(row)
+# Apply the conversion function to the 'FABRICACAO' and 'VALIDADE' columns
+df['FABRICACAO'] = df['FABRICACAO'].apply(convert_date)
+df['VALIDADE'] = df['VALIDADE'].apply(convert_date)
 
-if __name__ == "__main__":
-    input_file = 'planilha.csv'
-    output_file = 'fixed_planilha.csv'
-    fix_dates(input_file, output_file)
-    print(f"Dates fixed and written to {output_file}")
+# Write the result to another CSV file
+df.to_csv('fixed_planilha.csv', index=False)
