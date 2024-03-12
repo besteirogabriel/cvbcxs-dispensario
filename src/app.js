@@ -1,24 +1,77 @@
-const express = require('express');
-const { engine } = require('express-handlebars');
-const app = express();
-const port = 3000;
+var express = require('express');
+const bodyParser = require('body-parser');
+var exphbs = require('express-handlebars');
+var path = require('path');
+const $ = require('jquery');
+const axios = require('axios'); //autocomplete CEP
 
-// Configuração do motor de template Handlebars
-app.engine('hbs', engine({
+// MOCKS
+const lojas = require('./mocks/lojas');
+const admins = require('./mocks/admins');
+const estoque = require('./mocks/estoque');
+const pedidos = require('./mocks/pedidos');
+
+// Routes
+var verifyToken = require('./routes/authMiddleware');
+var handlebarsHelpers  = require('./routes/handlebars-helpers');
+  //site
+var routes = require('./routes/site-home');
+var siteEstoque = require('./routes/site-estoque');
+var sitePedidos = require('./routes/site-pedidos');
+  //loja
+var lojaLogin = require('./routes/loja-login');
+var lojaCadastrar = require('./routes/loja-cadastrar');
+  //administrativo
+var adminLogin = require('./routes/admin-login');
+
+var app = express();
+var port = 3000;
+
+// Configure o body-parser para analisar solicitações JSON e codificadas URL
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Configure Handlebars engine
+app.engine('hbs', exphbs({
   extname: '.hbs',
-  defaultLayout: 'main',
-  layoutsDir: __dirname + '/views/layout',
-  partialsDir: __dirname + '/views/partials'
+  defaultLayout: 'index',
+  layoutsDir: __dirname + '/views/layouts',
+  partialsDir: __dirname + '/views/components',
+  helpers: handlebarsHelpers
 }));
-app.set('view engine', 'hbs');
-app.set('views', './src/views');
 
-// Arquivos estáticos
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
+
+// Static files
 app.use(express.static('public'));
 
-// Rotas
-app.get('/', (req, res) => {
-  res.render('home', { title: 'CVBCXS Dispensário' });
+//routes init
+app.use('/', routes);
+app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
+app.use('/pedidos', (req, res, next) => { req.lojas = lojas; req.estoque = estoque; req.pedidos = pedidos; next(); }, sitePedidos);
+  //lojas
+app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
+app.use('/loja-cadastrar', lojaCadastrar);
+  //admin
+app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, adminLogin);
+
+
+//rota protegida - verifica a autenticação do login
+app.get('/protected-route', verifyToken, (req, res) => {
+  res.sendStatus(200);
+});
+
+//busca endereço por CEP
+app.get('/buscar-endereco/:cep', async (req, res) => {
+  const { cep } = req.params;
+  try {
+    const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+    const endereco = response.data;
+    res.json(endereco);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar o endereço.' });
+  }
 });
 
 app.listen(port, () => {

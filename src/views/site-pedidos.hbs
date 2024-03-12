@@ -1,0 +1,119 @@
+<section class="container pedidos-card">
+    <div class="card-abas-container">
+        <div class="card-abas">
+            {{> abas }}
+            <div class="card-abas-content">
+                {{!-- mensagens de envio --}}
+                {{#if data.message}}
+                    {{> system-message }}
+                {{/if}}
+                <!-- formulário de login administrador -->
+                <form action="" method="post">
+                    {{!-- Informações --}}
+                    <div class="form-section">
+                        <div class="form-section-title">Informações contato</div>
+                        {{!-- email --}}
+                        <fieldset>
+                            <input type="text" name="email" id="email" required>
+                            <label> E-mail* </label>
+                        </fieldset>
+                        {{!-- beneficiado e CIM --}}
+                        <div class="fieldset-group"> 
+                            <fieldset> {{!-- beneficiado --}}
+                                <input type="text" name="beneficiado" id="beneficiado" required>
+                                <label> Nome do beneficiado* </label>
+                            </fieldset>                             
+                            <fieldset> {{!-- CIM --}}
+                                <input type="number" name="cim" id="cim" required>
+                                <label> CIM* </label>
+                            </fieldset> 
+                        </div>   
+                        {{!-- select loja--}}
+                        <fieldset>
+                            <select name="loja" id="loja" required class="js-select2" data-placeholder="Seleciona uma loja">
+                                <option></option>
+                                {{#each data.lojas}}
+                                <option value="{{this.id}}">{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                            <label>Loja*</label>
+                        </fieldset>      
+                        {{!-- venerável --}}
+                        <fieldset>
+                            <input type="text" name="veneravel" id="veneravel" required>
+                            <label> Nome do venerável* </label>
+                        </fieldset> 
+                    </div>
+
+                    {{!-- endereço de entrega --}}
+                    <div class="form-section">
+                        <div class="form-section-title">Endereço de entrega</div>
+                        {{!-- CEP --}}
+                        <fieldset>
+                            <input type="text" name="cep" id="cep" disabled>
+                            <label>CEP*</label>
+                        </fieldset>
+                        {{!-- endereço --}}
+                        <fieldset>
+                            <input type="text" name="endereco" id="endereco" required disabled>
+                            <label>Endereço*</label>
+                        </fieldset>
+                        {{!-- numero, cidade e estado --}}
+                        <div class="fieldset-group">
+                            {{!-- numero --}}                            
+                            <fieldset>
+                                <input type="number" name="numero" id="numero" required disabled>
+                                <label>Número*</label>
+                            </fieldset>
+                            {{!-- cidade --}}
+                            <fieldset>
+                                <input type="text" name="cidade" id="cidade" required disabled>
+                                <label>Cidade*</label>
+                            </fieldset>
+                            {{!-- estado --}}
+                            <fieldset>
+                                <input type="text" name="estado" id="estado" required disabled>
+                                <label>Estado*</label>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    {{!-- informações do pedido --}}
+                    <div class="form-section">
+                        <div class="form-section-title">Informações do pedido</div>
+                        {{!-- select item estoque --}}
+                        <fieldset>
+                            <select name="medicamento" id="medicamento" required class="js-select2" data-placeholder="Seleciona um medicamento">
+                                <option></option>
+                                {{#each data.estoque as |value key|}}
+                                <option value="{{key}}">{{this.medicamento}}</option>
+                                {{/each}}
+                            </select>
+                            <label>Medicamento*</label>
+                        </fieldset>  
+                        {{!-- dosagem diária e peridiciodade --}}
+                        <div class="fieldset-group">
+                            {{!-- dosagem diária --}}
+                            <fieldset>
+                                <input type="text" name="dosagem" id="dosagem" required>
+                                <label>Dosagem diária*</label>
+                            </fieldset>
+                            {{!-- peridiciodade --}}
+                            <fieldset>
+                                <input type="number" name="periodo" id="periodo" required>
+                                <label>Período (dias)*</label>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="button-1">Enviar solicitação</button>
+                    <p class="info">Ao preencher o formulário você automaticamente concorda com nossa <a href="">politica de privacidade</a> e <a href="">termos de uso</a></p>
+                </form>
+            </div>
+        </div>
+        <div class="card-abas-introducao">
+            <h1> FORMULÁRIO DE REQUERIMENTO </h1>
+            <img src="/images/pedido-illustration.svg" alt="Ilustração representando o pedido de um usuário">
+        </div>
+    </div>
+</section>

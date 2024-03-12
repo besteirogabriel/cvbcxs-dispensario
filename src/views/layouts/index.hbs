@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    {{!-- Plugins CSS --}}    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    {{!-- CSS --}}
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/global.css">
+    {{#if page }}<link rel="stylesheet" href="css/{{page}}.css">{{/if}}
+
+</head>
+<body class="{{ page }}" data-name="{{ page }}">    
+    <!-- Cabeçalho página -->
+    {{> header }}
+
+    <main>
+        {{{ body }}} {{!-- Conteúdo da página - encontrado no arquivo .hbs com o nome da url --}}
+    </main>
+</body>
+
+{{!-- Plugins JS --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+{{!-- JS --}}
+<script src="js/global.js"></script>
+</html>

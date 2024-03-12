@@ -1,0 +1,12 @@
+<!-- abas de navegação login e cadastro de loja -->
+<div class="abas d-flex">
+    {{#each data.abas}}
+    <a href="{{this.url}}" class="aba {{this.class}}">
+        {{{this.icon}}}
+        {{this.name}}
+    </a>
+    {{/each}}
+    {{#if data.abaGhost}}
+    <div class="aba-ghost"></div>
+    {{/if}}
+</div>
