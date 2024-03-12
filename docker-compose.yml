@@ -1,9 +1,7 @@
 version: '3.8'
 services:
   web:
-    build:
-      context: .
-      target: node_builder
+    build: .
     ports:
       - "3000:3000"
     depends_on:
@@ -11,9 +9,7 @@ services:
     environment:
       DATABASE_URL: postgres://user:password@db:5432/dbname
   db:
-    build:
-      context: .
-      target: postgres
+    build: .
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
