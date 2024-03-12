@@ -1,19 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const lojas = require('../mocks/lojas');
-const { Pool } = require('pg');
-
-// Connection pool configuration
-const pool = new Pool({
-    user: 'user',
-    host: 'cvbcxs-dispensario_db_1',
-    database: 'dbname',
-    password: 'password',
-    port: 5432, // 
-  });
-
-// SQL query to select data from the medicamentos table
-const selectQuery = 'SELECT medicamento, ID FROM medicamentos';
 
 // variáveis template
 var abas = [
@@ -39,7 +26,7 @@ router.get('/', function(req, res, next){
         data: { 
             abas: abas, 
             lojas: req.lojas, 
-            estoque: selectQuery[0]
+            estoque: req.estoque
         } 
     });
 });
