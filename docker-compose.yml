@@ -7,18 +7,17 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgres://cvbcxsuser:cruzv3m3lh4@db:5432/cvbcxs_dispensario
+      DATABASE_URL: postgres://user:password@db:5432/dbname
   db:
     image: postgres:13
     environment:
-      POSTGRES_USER: cvbcxsuser
-      POSTGRES_PASSWORD: cruzv3m3lh4
-      POSTGRES_DB: cvbcxs_dispensario
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dbname
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./planilha.csv:/var/lib/postgresql/data/arquivo.csv
 
 volumes:
   postgres_data:
