@@ -9,7 +9,7 @@ services:
     environment:
       DATABASE_URL: postgres://user:password@db:5432/dbname
   db:
-    build: .
+    image: postgres:13
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
