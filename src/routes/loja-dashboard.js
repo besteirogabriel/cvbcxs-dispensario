@@ -6,15 +6,16 @@ const pedidos = require('../mocks/pedidos');
 // variaveis template
 var tableHeaders = {
     cim: 'CIM',
+    email: 'Email',
     beneficiado: 'Beneficiado',
     medicamento: 'Medicamento',
     status: 'Status',
 };
 
-var pedidosLoja = pedidos.getPedidosLoja(2);
 
 //chama o template
 router.get('/', function(req, res, next){
+    var pedidosLoja = pedidos.getPedidos(2);
     res.render('loja-dashboard', { 
         title: 'Login Dashboard - CVBCXS dispensário', 
         page: 'loja-dashboard', 
@@ -26,11 +27,6 @@ router.get('/', function(req, res, next){
             tableBody: pedidosLoja.data,             
             tablePageHeader: {
                 title: 'Solicitações',
-                tableActions: {
-                    search: {
-                        placeholder: 'Pesquisar solicitações'
-                    }
-                },
             }
         } 
     });

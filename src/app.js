@@ -19,6 +19,7 @@ var handlebarsHelpers  = require('./routes/handlebars-helpers');
 var routes = require('./routes/site-home');
 var siteEstoque = require('./routes/site-estoque');
 var sitePedidos = require('./routes/site-pedidos');
+var sitePedidoAcompanhar = require('./routes/site-pedido-acompanhar');
   //loja
 var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
@@ -55,6 +56,7 @@ app.use(cookieParser());
 app.use('/', routes);
 app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
 app.use('/pedidos', (req, res, next) => { req.lojas = lojas; req.estoque = estoque; req.pedidos = pedidos; next(); }, sitePedidos);
+app.use('/pedido-acompanhar', sitePedidoAcompanhar);
   //lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);

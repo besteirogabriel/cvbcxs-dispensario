@@ -1,0 +1,25 @@
+<section class="pedidos-table">
+    <div class="container">
+        <div class="card-abas-container">
+            <div class="card-abas">
+                {{> abas }}
+                <div class="card-abas-content">
+                    <form action="#solicitacoes" method="post">
+                        <fieldset>
+                            <input type="email" id="email" name="email">
+                            <label>Email solicitante</label>
+                        </fieldset>
+                        <button type="submit" class="button-1">Buscar solicitações</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-abas-introducao">
+                <h1> ACOMPANHAR SOLICITAÇÃO </h1>
+                <img src="/images/pedido-illustration.svg" alt="Ilustração representando o pedido de um usuário">
+            </div>
+        </div>
+        <div id="solicitacoes">
+        {{> table }}
+        </div>
+    </div>
+</section>
