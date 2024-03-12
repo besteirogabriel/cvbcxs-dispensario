@@ -7,17 +7,15 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgres://user:password@db:5432/dbname
+      DATABASE_URL: postgres://cvbcxsuser:cruzv3m3lh4@db:5432/cvbcxs_dispensario
   db:
     image: postgres:13
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: dbname
+      POSTGRES_USER: cvbcxsuser
+      POSTGRES_PASSWORD: cruzv3m3lh4
+      POSTGRES_DB: cvbcxs_dispensario
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
+      - ./planilha.csv:/docker-entrypoint-initdb.d/arquivo.csv
