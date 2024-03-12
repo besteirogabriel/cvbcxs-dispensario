@@ -99,7 +99,7 @@ label {
     font-size: 14px;
     transition: all .3s ease-in-out;
 }
-input:focus ~ label, input:valid ~ label {
+input:focus ~ label, input:valid ~ label, input:disabled ~ label {
     font-size: 12px;
     top: -20px;
 }

@@ -6,7 +6,7 @@ const lojas = [
         numero_da_loja: '3168',
         vm: 'Edson Lazaretti',
         hospitaleiro: 'Hueslei Soares',
-        cep: '950115',
+        cep: '95115366',
         endereco: 'Rua Paulino Balbinotti - Forqueta',
         numero_endereco: '100',
         cidade: 'Caxias do Sul',

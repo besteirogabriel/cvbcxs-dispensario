@@ -66,11 +66,11 @@ app.get('/protected-route', verifyToken, (req, res) => {
 app.get('/buscar-endereco/:cep', async (req, res) => {
   const { cep } = req.params;
   try {
-      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-      const endereco = response.data;
-      res.json(endereco);
+    const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+    const endereco = response.data;
+    res.json(endereco);
   } catch (error) {
-      res.status(500).json({ error: 'Erro ao buscar o endereço.' });
+    res.status(500).json({ error: 'Erro ao buscar o endereço.' });
   }
 });
 

@@ -50,30 +50,29 @@
                         <div class="form-section-title">Endereço de entrega</div>
                         {{!-- CEP --}}
                         <fieldset>
-                            <input type="text" name="cep" id="cep">
+                            <input type="text" name="cep" id="cep" disabled>
                             <label>CEP*</label>
                         </fieldset>
                         {{!-- endereço --}}
+                        <fieldset>
+                            <input type="text" name="endereco" id="endereco" required disabled>
+                            <label>Endereço*</label>
+                        </fieldset>
+                        {{!-- numero, cidade e estado --}}
                         <div class="fieldset-group">
+                            {{!-- numero --}}                            
                             <fieldset>
-                                <input type="text" name="endereco" id="endereco" required>
-                                <label>Endereço*</label>
-                            </fieldset>
-                            <fieldset>
-                                <input type="number" name="numero" id="numero" required>
+                                <input type="number" name="numero" id="numero" required disabled>
                                 <label>Número*</label>
                             </fieldset>
-                        </div>
-                        {{!-- cidade e estado --}}
-                        <div class="fieldset-group">
                             {{!-- cidade --}}
                             <fieldset>
-                                <input type="text" name="cidade" id="cidade" required>
+                                <input type="text" name="cidade" id="cidade" required disabled>
                                 <label>Cidade*</label>
                             </fieldset>
                             {{!-- estado --}}
                             <fieldset>
-                                <input type="text" name="estado" id="estado" required>
+                                <input type="text" name="estado" id="estado" required disabled>
                                 <label>Estado*</label>
                             </fieldset>
                         </div>
