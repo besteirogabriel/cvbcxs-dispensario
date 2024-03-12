@@ -18,6 +18,3 @@ EXPOSE 3000
 
 # Comando para iniciar o aplicativo
 CMD ["npm", "start"]
-
-# Install bcrypt with build from source option
-RUN npm install bcrypt --build-from-source
