@@ -1,0 +1,11 @@
+<div class="message-container {{data.message.type}}">
+    <div class="message-content">
+        {{{data.message.icon}}}
+        <p class="message">
+            {{data.message.text}}
+        </p>
+    </div>
+    {{#if data.message.button}}
+    <a href="{{data.message.button.url}}" class="button-2">{{data.message.button.text}}</a>
+    {{/if}}
+</div>

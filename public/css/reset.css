@@ -103,6 +103,10 @@ input:focus ~ label, input:valid ~ label {
     font-size: 12px;
     top: -20px;
 }
+select ~ label {
+    font-size: 12px;
+    top: -20px;
+}
 
 button {
     border: none;
@@ -125,9 +129,16 @@ form .info a:hover {
 
 .fieldset-group {
     margin: 30px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 .fieldset-group fieldset {
     margin: 0;
+}
+
+.form-section-title {
+    font-weight: bold;
 }
 /* FIM FORMULÁRIOS */
 
@@ -189,4 +200,39 @@ form .info a:hover {
 }
 .gap-6 {
     gap: 30px;
+}
+
+
+/** SELECT */
+.select2-container {
+    width: 100% !important;
+}
+.select2-container  * {
+    outline: none;
+}
+.select2-container--default .select2-selection--single {
+    border: none;
+    border-bottom: 1px solid var(--secundaria);
+    border-radius: 0;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+    color: var(--secundaria);
+    padding: 0;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--secundaria);
+    font-size: 14px;
+}
+.select2-container--default .select2-search--dropdown .select2-search__field,
+.select2-results__option,
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    font-size: 14px;
+}
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border-color: var(--secundaria);
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+.select2-dropdown {
+    border-color: var(--secundaria);
 }

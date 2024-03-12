@@ -12,6 +12,18 @@
 .button-1:hover, .button-1.active {
     background: var(--secundaria);
 }
+
+.button-2 {
+    border: 1px solid var(--secundaria);
+    padding: 5px 15px;
+    font-size: 14px;
+    border-radius: 15px;
+    transition: all .3s ease-in-out;
+}
+.button-2:hover {
+    background: var(--secundaria);
+    color: white;
+}
 /** FIM BOTÕES */
 
 /** CARD ABAS */
@@ -76,7 +88,7 @@
     width: 100%;
 }
 
-.card-abas form {
+.card-abas .card-abas-content {
     padding: 30px 50px;
     border: 2px solid var(--secundaria);
     border-top: none;
@@ -195,3 +207,27 @@ body.table {
     background: var(--secundaria);
 }
 /** FIM TABELA */
+
+/** MESSAGES */
+.message-container  {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.message-content {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+.message-container svg {
+    width: 30px;
+}
+.message-container.success {
+    background-color: #BDECB6;
+}
+/** FIM MESSAGES */

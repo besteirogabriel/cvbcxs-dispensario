@@ -1,13 +1,15 @@
 var express = require('express');
 const bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
-var jQuery = require('jquery');
 var path = require('path');
+const $ = require('jquery');
+const axios = require('axios'); //autocomplete CEP
 
 // MOCKS
 const lojas = require('./mocks/lojas');
 const admins = require('./mocks/admins');
 const estoque = require('./mocks/estoque');
+const pedidos = require('./mocks/pedidos');
 
 // Routes
 var verifyToken = require('./routes/authMiddleware');
@@ -47,7 +49,7 @@ app.use(express.static('public'));
 //routes init
 app.use('/', routes);
 app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
-app.use('/pedidos', sitePedidos);
+app.use('/pedidos', (req, res, next) => { req.lojas = lojas; req.estoque = estoque; req.pedidos = pedidos; next(); }, sitePedidos);
   //lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);
@@ -58,6 +60,18 @@ app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, ad
 //rota protegida - verifica a autenticação do login
 app.get('/protected-route', verifyToken, (req, res) => {
   res.sendStatus(200);
+});
+
+//busca endereço por CEP
+app.get('/buscar-endereco/:cep', async (req, res) => {
+  const { cep } = req.params;
+  try {
+      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+      const endereco = response.data;
+      res.json(endereco);
+  } catch (error) {
+      res.status(500).json({ error: 'Erro ao buscar o endereço.' });
+  }
 });
 
 app.listen(port, () => {
