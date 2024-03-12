@@ -15,7 +15,7 @@ var tableHeaders = {
 
 //chama o template
 router.get('/', function(req, res, next){
-    var pedidosLoja = pedidos.getPedidos(2);
+    var pedidosLoja = pedidos.getPedidos({lojaId: 2});
     res.render('loja-dashboard', { 
         title: 'Login Dashboard - CVBCXS dispensário', 
         page: 'loja-dashboard', 

@@ -42,7 +42,7 @@ router.get('/', function(req, res, next){
 //envia o email e filtra os pedidos
 router.post('/', function(req, res, next){
     var { email } = req.body
-    var pedidosLoja = pedidos.getPedidos(null, email);
+    var pedidosLoja = pedidos.getPedidos({userEmail: email});
     res.render('site-pedido-acompanhar', { 
         title: 'Acompanhar Solicitação - CVBCXS dispensário', 
         page: 'site-pedido-acompanhar', 

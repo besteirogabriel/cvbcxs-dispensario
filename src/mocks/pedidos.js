@@ -12,18 +12,23 @@ function adicionarPedido(pedido) { //adiciona o pedido enviado pela rota ao arra
     }
 }
 
-function getPedidos(lojaId = null, userEmail = null) {
+function getPedidos(filters) {
     try {
         var pedidosLoja = [];
 
+        // filtra os pedidos
+        if(filters.adminId) {
+            pedidosLoja = pedidos;
+        }
+
         // Filtra os pedidos da loja especificada
-        if(lojaId) {
-            pedidosLoja = pedidos.filter(pedido => pedido.loja == lojaId);
+        if(filters.lojaId) {
+            pedidosLoja = pedidos.filter(pedido => pedido.loja == filters.lojaId);
         }
 
         // Filtra os pedidos do usuário especificado
-        if(userEmail) {
-            pedidosLoja = pedidos.filter(pedido => pedido.email == userEmail);
+        if(filters.userEmail) {
+            pedidosLoja = pedidos.filter(pedido => pedido.email == filters.userEmail);
         }
 
         // apenas os campos desejados
