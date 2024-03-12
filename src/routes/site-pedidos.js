@@ -19,7 +19,6 @@ var abas = [
 
 //chama o template
 router.get('/', function(req, res, next){
-    console.log(selectQuery);
     res.render('site-pedidos', { 
         title: 'Cadastrar loja - CVBCXS dispensário', 
         page: 'pedidos', 
