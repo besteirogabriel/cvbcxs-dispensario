@@ -26,6 +26,7 @@ var lojaCadastrar = require('./routes/loja-cadastrar');
 var lojaDashboard = require('./routes/loja-dashboard');
   //administrativo
 var adminLogin = require('./routes/admin-login');
+var adminDashboard = require('./routes/admin-dashboard');
 
 var app = express();
 var port = 3000;
@@ -63,6 +64,7 @@ app.use('/loja-cadastrar', lojaCadastrar);
 app.use('/loja-dashboard', verifyToken, lojaDashboard);
   //admin
 app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, adminLogin);
+app.use('/admin-dashboard', verifyToken, adminDashboard);
 
 
 //rota protegida - verifica a autenticação do login
