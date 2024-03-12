@@ -88,7 +88,7 @@
                             <select name="medicamento" id="medicamento" required class="js-select2" data-placeholder="Seleciona um medicamento">
                                 <option></option>
                                 {{#each data.estoque as |value key|}}
-                                <option value="{{key}}">{{this.medicamento}}</option>
+                                <option value="{{this.id}}">{{this.medicamento}}</option>
                                 {{/each}}
                             </select>
                             <label>Medicamento*</label>
