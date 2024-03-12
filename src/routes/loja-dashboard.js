@@ -18,6 +18,7 @@ router.get('/', function(req, res, next){
     res.render('loja-dashboard', { 
         title: 'Login Dashboard - CVBCXS dispensário', 
         page: 'loja-dashboard', 
+        bodyClass: 'table',
         system: true,
         prefix: 'loja',
         data: { 

@@ -86,7 +86,7 @@ header.header-system nav li a {
 header.header-system nav a:last-child {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-header.header-system a.active {
+header.header-system a.active, header.header-system a:hover {
     padding-bottom: 10px;
     border-color: rgba(255, 255, 255, 0.2);
     border-left: 5px solid var(--primaria);

@@ -58,7 +58,8 @@ router.get('/', async function(req, res, next){
         // Render the template with the retrieved data
         res.render('site-estoque', { 
             title: 'Estoque - CVBCXS dispensário', 
-            page: 'estoque table', 
+            page: 'estoque', 
+            bodyClass: 'table',
             data: { 
                 tableHeaders: tableHeaders, 
                 tableBody: tableBody, // Pass the retrieved data here
