@@ -39,7 +39,7 @@ router.get('/', function(req, res, next){
         data: { 
             abas: abas, 
             lojas: req.lojas, 
-            estoque: selectQuery 
+            estoque: selectQuery[0]
         } 
     });
 });
