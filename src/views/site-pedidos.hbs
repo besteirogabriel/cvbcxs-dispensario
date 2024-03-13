@@ -8,7 +8,7 @@
                     {{> system-message }}
                 {{/if}}
                 <!-- formulário de login administrador -->
-                <form action="" method="post">
+                <form id="form" method="post">
                     {{!-- Informações --}}
                     <div class="form-section">
                         <div class="form-section-title">Informações contato</div>
@@ -85,29 +85,27 @@
                         <div class="form-section-title">Informações do pedido</div>
                         {{!-- select item estoque --}}
                         <fieldset>
-                            <select name="medicamento" id="medicamento" required class="js-select2" data-placeholder="Seleciona um medicamento">
-                                <option></option>
-                                {{#each data.estoque as |value key|}}
-                                <option value="{{key}}">{{this.medicamento}}</option>
+                            <select name="medicamento[]" id="medicamento" required class="js-select2" multiple data-placeholder="Seleciona um ou mais medicamentos">
+                                {{#each data.estoque as |medicamento key|}}
+                                    <option value="{{key}}">{{medicamento.medicamento}}</option>
                                 {{/each}}
                             </select>
                             <label>Medicamento*</label>
-                        </fieldset>  
+                        </fieldset>
                         {{!-- dosagem diária e peridiciodade --}}
-                        <div class="fieldset-group">
+                         <div class="fieldset-group">
                             {{!-- dosagem diária --}}
-                            <fieldset>
-                                <input type="text" name="dosagem" id="dosagem" required>
+                            <fieldset title="Se mais de um medicamento for selecionado, a dosagem e os períodos devem ser separados por vírgulas.">
+                                <input type="text" name="dosagem" id="dosagem" required  >
                                 <label>Dosagem diária*</label>
                             </fieldset>
                             {{!-- peridiciodade --}}
                             <fieldset>
-                                <input type="number" name="periodo" id="periodo" required>
+                                <input type="text" name="periodo" id="periodo" required>
                                 <label>Período (dias)*</label>
                             </fieldset>
                         </div>
                     </div>
-
                     <button type="submit" class="button-1">Enviar solicitação</button>
                     <p class="info">Ao preencher o formulário você automaticamente concorda com nossa <a href="">politica de privacidade</a> e <a href="">termos de uso</a></p>
                 </form>
@@ -119,3 +117,24 @@
         </div>
     </div>
 </section>
+<script>
+    document.getElementById('form').addEventListener('submit', function(event) {
+        var select = document.getElementById('medicamento');
+        var numMedicamentos = select.selectedOptions.length;
+
+        var dosagemInput = document.getElementById('dosagem').value;
+        var periodoInput = document.getElementById('periodo').value;
+
+        var dosagemCommas = (dosagemInput.match(/,/g) || []).length;
+        var periodoCommas = (periodoInput.match(/,/g) || []).length;
+
+        if (dosagemCommas !== numMedicamentos - 1 || periodoCommas !== numMedicamentos -1) {
+            event.preventDefault();
+            alert('O número de dosagens ou períodos não corresponde ao número de medicamentos selecionados!');
+            return;
+        } else {
+            return
+        }
+    });
+</script>
+
