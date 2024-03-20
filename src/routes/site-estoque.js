@@ -8,7 +8,7 @@ const pool = new Pool({
   host: '172.16.10.33',
   database: 'cvbcxcs_dispensario_gob',
   password: 'l_W[x1a2e~t0)',
-  port: 5432, // 
+  port: 5433, // 
 });
 
 // Table headers definition
