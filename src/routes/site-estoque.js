@@ -4,10 +4,10 @@ const { Pool } = require('pg');
 
 // Connection pool configuration
 const pool = new Pool({
-  user: 'user',
-  host: 'cvbcxs-dispensario_db_1',
-  database: 'dbname',
-  password: 'password',
+  user: 'cvbcxs',
+  host: '127.0.0.1',
+  database: 'cvbcxcs_dispensario_gob',
+  password: 'l_W[x1a2e~t0)',
   port: 5432, // 
 });
 
