@@ -5,7 +5,7 @@ const { Pool } = require('pg');
 // Connection pool configuration
 const pool = new Pool({
   user: 'cvbcxs',
-  host: 'host.docker.internal',
+  host: '172.16.10.33',
   database: 'cvbcxcs_dispensario_gob',
   password: 'l_W[x1a2e~t0)',
   port: 5432, // 
