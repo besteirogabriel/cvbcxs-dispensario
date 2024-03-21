@@ -3,7 +3,6 @@ const router = express.Router();
 
 const pedidos = require('../mocks/pedidos');
 
-// variaveis template
 var tableHeaders = {
   cim: 'CIM',
   beneficiado: 'Beneficiado',
@@ -11,19 +10,18 @@ var tableHeaders = {
   status: 'Status',
 };
 
-var pedidosLoja = pedidos.getPedidosLoja(2);
+var pedidosGeral = pedidos.getPedidos();
 
-//chama o template
 router.get('/', function (req, res, next) {
-  res.render('loja-dashboard', {
-    title: 'Loja Dashboard - CVBCXS dispensário',
-    page: 'loja-dashboard',
+  res.render('admin-dashboard', {
+    title: 'Admin Dashboard  - CVBCXS dispensário',
+    page: 'admin-dashboard',
     bodyClass: 'table',
     system: true,
-    prefix: 'loja',
+    prefix: 'admin',
     data: {
       tableHeaders: tableHeaders,
-      tableBody: pedidosLoja.data,
+      tableBody: pedidosGeral.data,
       tablePageHeader: {
         title: 'Solicitações',
         tableActions: {
