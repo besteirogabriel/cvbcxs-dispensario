@@ -15,7 +15,7 @@ function adicionarPedido(pedido) { //adiciona o pedido enviado pela rota ao arra
 function getPedidos(filters) {
     try {
         var pedidosLoja = [];
-
+        
         // filtra os pedidos
         if(filters.adminId) {
             pedidosLoja = pedidos;

@@ -51,6 +51,7 @@ router.post('/', (req, res) => {
     res.cookie('token', token, { httpOnly: true, secure: true });
     res.cookie('secretKey', secretKey, { httpOnly: true, secure: true });
 
+    console.log('passou');
     res.redirect('/loja-dashboard'); //redireciona para o dashboard se usuário autenticado
 });
 
