@@ -6,19 +6,23 @@
                 <!-- formulário de login da loja -->
                 <form action="" method="post">
                     <fieldset>
-                        <input type="text" name="name" id="name" required>
-                        <label> Nome da Loja (com número) </label>
-                    </fieldset>                    
-                    <fieldset>
-                        <input type="number" name="cnpj" id="cnpj">
-                        <label> CNPJ da Loja </label>
-                    </fieldset>     
-                    <div class="fieldset-group d-flex align-center gap-2">
+                        <input type="text" name="name" id="name" required style="text-transform: uppercase;">
+                        <label> Nome da Loja </label>
+                    </fieldset>    
+                    <div class="fieldset-group">       
                         <fieldset>
-                            <input type="number" name="telefone" id="telefone" required>  <!-- adicionar mascara  -->
-                            <label> Telefone para contato </label>
-                        </fieldset>  
-                    </div>
+                            <input type="number" name="numero_loja" id="numero_loja" required>
+                            <label> Número loja </label>
+                        </fieldset>                    
+                        <fieldset>
+                            <input type="number" name="cnpj" id="cnpj">
+                            <label> CNPJ da Loja </label>
+                        </fieldset> 
+                    </div>   
+                    <fieldset>
+                        <input type="number" name="telefone" id="telefone" required>  <!-- adicionar mascara  -->
+                        <label> Telefone para contato </label>
+                    </fieldset>     
                     <fieldset>
                         <input type="text" name="vm" id="vm" required>  <!-- adicionar mascara  -->
                         <label> Nome do V:.M:. </label>

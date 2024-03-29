@@ -3,35 +3,33 @@ const router = express.Router();
 
 const pedidos = require('../mocks/pedidos');
 
+// variaveis template
 var tableHeaders = {
-  cim: 'CIM',
-  beneficiado: 'Beneficiado',
-  medicamento: 'Medicamento',
-  status: 'Status',
+    cim: 'CIM',
+    email: 'Email',
+    beneficiado: 'Beneficiado',
+    medicamento: 'Medicamento',
+    status: 'Status',
 };
 
-var pedidosGeral = pedidos.getPedidos();
 
-router.get('/', function (req, res, next) {
-  res.render('admin-dashboard', {
-    title: 'Admin Dashboard  - CVBCXS dispensário',
-    page: 'admin-dashboard',
-    bodyClass: 'table',
-    system: true,
-    prefix: 'admin',
-    data: {
-      tableHeaders: tableHeaders,
-      tableBody: pedidosGeral.data,
-      tablePageHeader: {
-        title: 'Solicitações',
-        tableActions: {
-          search: {
-            placeholder: 'Pesquisar solicitações',
-          },
-        },
-      },
-    },
-  });
+//chama o template
+router.get('/', function(req, res, next){
+    // var pedidosLoja = pedidos.getPedidos({adminId: 1});
+    res.render('admin-dashboard', { 
+        title: 'Administrador Dashboard - CVBCXS dispensário', 
+        page: 'admin-dashboard', 
+        bodyClass: 'table',
+        system: true,
+        prefix: 'admin',
+        // data: { 
+        //     tableHeaders: tableHeaders, 
+        //     tableBody: pedidosLoja.data,             
+        //     tablePageHeader: {
+        //         title: 'Solicitações',
+        //     }
+        // } 
+    });
 });
 
 module.exports = router;

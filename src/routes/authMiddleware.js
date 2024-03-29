@@ -9,13 +9,13 @@ function verifyToken(req, res, next) {
   if (!token) {
     return res.status(403).json({ message: 'Token não fornecido' });
   }
+
   jwt.verify(token, secretKey, (error, decoded) => {
-    console.log(error);
-    if (error) {
-      return res.status(401).json({ message: 'Token Inválido' });
-    }
-    req.email = decoded.email;
-    next();
+      if(error) {
+          return res.status(401).json({ message: "Token Inválido" });
+      }      
+      req.user = { email: decoded.email, id: decoded.id };
+      next();
   });
 }
 

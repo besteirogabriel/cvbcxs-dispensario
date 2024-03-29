@@ -19,7 +19,7 @@ var handlebarsHelpers  = require('./routes/handlebars-helpers');
 var routes = require('./routes/site-home');
 var siteEstoque = require('./routes/site-estoque');
 var sitePedidos = require('./routes/site-pedidos');
-var pedidoAcompanhar = require('./routes/pedido-acompanhar');
+var sitePedidoAcompanhar = require('./routes/site-pedido-acompanhar');
   //loja
 var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
@@ -57,14 +57,14 @@ app.use(cookieParser());
 app.use('/', routes);
 app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
 app.use('/pedidos', (req, res, next) => { req.lojas = lojas; req.estoque = estoque; req.pedidos = pedidos; next(); }, sitePedidos);
-app.use('/pedido-acompanhar', (req, res, next) => { req.lojas = lojas; req.estoque = estoque; req.pedidos = pedidos; next(); }, pedidoAcompanhar);
+app.use('/pedido-acompanhar', sitePedidoAcompanhar);
   //lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);
 app.use('/loja-dashboard', verifyToken, lojaDashboard);
   //admin
 app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, adminLogin);
-app.use('/admin-dashboard', verifyToken, (req, res, next) => { req.estoque = estoque; req.pedidos = pedidos; next(); }, adminDashboard);
+app.use('/admin-dashboard', verifyToken, adminDashboard);
 
 
 //rota protegida - verifica a autenticação do login
@@ -82,6 +82,13 @@ app.get('/buscar-endereco/:cep', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Erro ao buscar o endereço.' });
   }
+});
+
+//logout sistema
+app.get('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.clearCookie('secretKey');
+  res.redirect('/loja-login');
 });
 
 app.listen(port, () => {

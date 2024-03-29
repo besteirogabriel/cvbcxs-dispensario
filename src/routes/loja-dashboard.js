@@ -5,13 +5,13 @@ const pedidos = require('../mocks/pedidos');
 
 // variaveis template
 var tableHeaders = {
-  cim: 'CIM',
-  beneficiado: 'Beneficiado',
-  medicamento: 'Medicamento',
-  status: 'Status',
+    cim: 'CIM',
+    email: 'Email',
+    beneficiado: 'Beneficiado',
+    medicamento: 'Medicamento',
+    status: 'Status',
 };
 
-var pedidosLoja = pedidos.getPedidosLoja(2);
 
 //chama o template
 router.get('/', function (req, res, next) {
