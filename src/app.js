@@ -23,10 +23,10 @@ var sitePedidoAcompanhar = require('./routes/site-pedido-acompanhar');
   //loja
 var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
-var lojaDashboard = require('./routes/loja-dashboard');
   //administrativo
 var adminLogin = require('./routes/admin-login');
-var adminDashboard = require('./routes/admin-dashboard');
+  //system
+var dashboard = require('./routes/system-dashboard');
 
 var app = express();
 var port = 3000;
@@ -61,10 +61,10 @@ app.use('/pedido-acompanhar', sitePedidoAcompanhar);
   //lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);
-app.use('/loja-dashboard', verifyToken, lojaDashboard);
   //admin
 app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, adminLogin);
-app.use('/admin-dashboard', verifyToken, adminDashboard);
+  //system
+app.use('/dashboard', verifyToken, dashboard);
 
 
 //rota protegida - verifica a autenticação do login
@@ -88,7 +88,7 @@ app.get('/buscar-endereco/:cep', async (req, res) => {
 app.get('/logout', (req, res) => {
   res.clearCookie('token');
   res.clearCookie('secretKey');
-  res.redirect('/loja-login');
+  res.redirect('/');
 });
 
 app.listen(port, () => {

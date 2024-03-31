@@ -16,14 +16,14 @@ function getPedidos(filters) {
     try {
         var pedidosLoja = [];
         
-        // filtra os pedidos
-        if(filters.adminId) {
+        // filtra os pedidos - administrador
+        if(filters.type == 1) {
             pedidosLoja = pedidos;
         }
 
         // Filtra os pedidos da loja especificada
-        if(filters.lojaId) {
-            pedidosLoja = pedidos.filter(pedido => pedido.loja == filters.lojaId);
+        if(filters.type == 2) {
+            pedidosLoja = pedidos.filter(pedido => pedido.loja == filters.id);
         }
 
         // Filtra os pedidos do usuário especificado

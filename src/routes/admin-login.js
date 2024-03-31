@@ -34,11 +34,13 @@ router.post('/', (req, res) => {
     }
     const secretKey = crypto.randomBytes(64).toString('hex');
     admin.secretKey = secretKey;
-    const token = jwt.sign({ email: admin.email }, secretKey, { expiresIn: '1h' });
+
+    const token = jwt.sign({ email: admin.email, id: admin.id, type: 1 }, secretKey, { expiresIn: '1h' }); //gera um token com expiração de 1h
+
     res.cookie('secretKey', secretKey, { httpOnly: true });
     res.cookie('token', token, { httpOnly: true });
 
-    res.redirect('/admin-dashboard'); //redireciona para o dashboard se usuário autenticado
+    res.redirect('/dashboard'); //redireciona para o dashboard se usuário autenticado
 });
 
 module.exports = router;

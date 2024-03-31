@@ -11,10 +11,13 @@ function verifyToken(req, res, next) {
 
     jwt.verify(token, secretKey, (error, decoded) => {
         if(error) {
+            // Limpar os cookies
+            res.clearCookie('token');
+            res.clearCookie('secretKey');
             return res.status(401).json({ message: "Token Inválido" });
         }
         
-        req.user = { email: decoded.email, id: decoded.id };
+        req.user = { email: decoded.email, id: decoded.id, type: decoded.type };
 
         next();
     });
