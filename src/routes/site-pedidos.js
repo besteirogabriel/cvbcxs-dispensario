@@ -65,7 +65,8 @@ router.get('/buscar-endereco-loja/:id', (req, res) => {
             endereco: lojaSelecionada.endereco,
             numero: lojaSelecionada.numero_endereco,
             cidade: lojaSelecionada.cidade,
-            estado: lojaSelecionada.estado
+            estado: lojaSelecionada.estado,
+            veneravel: lojaSelecionada.vm,
         };
         res.json(enderecoLoja);
     } else {
