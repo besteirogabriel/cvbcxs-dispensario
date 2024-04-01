@@ -24,7 +24,7 @@ var tableHeaders = {
 
 // SQL query to select data from the medicamentos table
 // const selectQuery = 'SELECT * FROM medicamentos';
-const selectQuery = 'SELECT medicamento, composto, laboratorio, lote, fabricacao, validade, qtd_cx FROM medicamentos';
+const selectQuery = "SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) AS qtd_total_cx FROM medicamentos GROUP BY  medicamento, composto, laboratorio, fabricacao, validade;";
 
 router.get('/', async function(req, res, next){
     try {
