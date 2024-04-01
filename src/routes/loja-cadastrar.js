@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
               INSERT INTO usuarios (email, senha, created_at, nome, admin)
               VALUES ($1, $2, CURRENT_TIMESTAMP, $3, false)
               RETURNING id`;
-    const userData = [loja.email, passwordHash, loja.name, false];
+    const userData = [loja.email, passwordHash, loja.name];
     const userResult = await client.query(userInsertQuery, userData);
 
     const userId = userResult.rows[0].id;
