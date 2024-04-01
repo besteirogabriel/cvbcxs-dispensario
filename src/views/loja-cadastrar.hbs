@@ -39,6 +39,26 @@
                         <input type="text" name="endereco" id="endereco" required>
                         <label> Endereço </label>
                     </fieldset>
+                    <fieldset>
+                        <input type="number" name="numero" id="numero" required>
+                        <label> Número </label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="text" name="complemento" id="complemento">
+                        <label> Complemento </label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="email" name="email" id="email" required>
+                        <label> E-mail </label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="password" name="password" id="password" required>
+                        <label> Senha </label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="password" name="password_confirm" id="password_confirm" required>
+                        <label> Confirmar Senha </label>
+                    </fieldset>
                     <button type="submit" class="button-1">Cadastrar</button>
                     <p class="info">Ao enviar o formulário, você automaticamente concorda com nossa <a href="">política de privacidade</a> e <a href="">termos de uso</a></p>
                 </form>
@@ -50,3 +70,32 @@
         </div>
     </div>
 </section>
+<script>
+    // validate form data and if passwords match, then submit form if all data is valid
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.querySelector('#name').value;
+        const numero_loja = document.querySelector('#numero_loja').value;
+        const cnpj = document.querySelector('#cnpj').value;
+        const telefone = document.querySelector('#telefone').value;
+        const vm = document.querySelector('#vm').value;
+        const hospitaleiro = document.querySelector('#hospitaleiro').value;
+        const cep = document.querySelector('#cep').value;
+        const endereco = document.querySelector('#endereco').value;
+        const numero = document.querySelector('#numero').value;
+        const complemento = document.querySelector('#complemento').value;
+        const email = document.querySelector('#email').value;
+        const password = document.querySelector('#password').value;
+        const password_confirm = document.querySelector('#password_confirm').value;
+        if (name && numero_loja && telefone && vm && hospitaleiro && cep && endereco && email && password && password_confirm) {
+            if (password === password_confirm) {
+                form.submit();
+            } else {
+                alert('As senhas não coincidem');
+            }
+        } else {
+            alert('Preencha todos os campos');
+        }
+    });
+</script>

@@ -55,6 +55,7 @@ $(function() {
             $(form).find('#numero').val(response.numero);
             $(form).find('#cidade').val(response.cidade);
             $(form).find('#estado').val(response.estado);
+            $(form).find('#veneravel').val(response.veneravel);
           },
           error: function(error) {
             console.error('Erro ao buscar endereço da loja:', error);
