@@ -23,7 +23,8 @@ var tableHeaders = {
 };
 
 // SQL query to select data from the medicamentos table
-const selectQuery = 'SELECT * FROM medicamentos';
+// const selectQuery = 'SELECT * FROM medicamentos';
+const selectQuery = 'SELECT medicamento, composto, laboratorio, lote, fabricacao, validade, qtd_cx FROM medicamentos';
 
 router.get('/', async function(req, res, next){
     try {
@@ -39,7 +40,8 @@ router.get('/', async function(req, res, next){
         // Check if there's a search query
         if (searchQuery) {
             // Modify the query to include the search condition
-            query = `SELECT * FROM medicamentos WHERE medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%'`;
+            // query = `SELECT * FROM medicamentos WHERE medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%'`;
+            query = `SELECT medicamento, composto, laboratorio, lote, fabricacao, validade, qtd_cx FROM medicamentos WHERE medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%'`;
         }
 
         // Execute the query
