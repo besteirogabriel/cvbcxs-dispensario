@@ -81,11 +81,11 @@
                     </div>
 
                     {{!-- informações do pedido --}}
-                    <div class="form-section">
+                    <div class="form-section" id="medicamentos">
                         <div class="form-section-title">Informações do pedido</div>
                         {{!-- select item estoque --}}
                         <fieldset>
-                            <select name="medicamento[]" id="medicamento" required class="js-select2" multiple data-placeholder="Seleciona um ou mais medicamentos">
+                            <select name="medicamento[]" id="medicamento[]" required class="js-select2" data-placeholder="Selecione um medicamento">
                                 {{#each data.estoque as |medicamento key|}}
                                     <option value="{{key}}">{{medicamento.medicamento}}</option>
                                 {{/each}}
@@ -95,15 +95,13 @@
                         {{!-- dosagem diária e peridiciodade --}}
                          <div class="fieldset-group">
                             {{!-- dosagem diária --}}
-                            <fieldset title="Se mais de um medicamento for selecionado, a dosagem e os períodos devem ser separados por vírgulas.">
-                                <input type="text" name="dosagem" id="dosagem" required  >
-                                <label>Dosagem diária*</label>
-                            </fieldset>
-                            {{!-- peridiciodade --}}
                             <fieldset>
-                                <input type="text" name="periodo" id="periodo" required>
-                                <label>Período (dias)*</label>
+                                <input type="text" name="quantidade[]" id="quantidade[]" required  >
+                                <label>Quantidade*</label>
                             </fieldset>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <button type="button" class="button-2" id="adicionar-medicamento">Adicionar Medicamento</button>
                         </div>
                     </div>
                     <button type="submit" class="button-1">Enviar solicitação</button>
@@ -117,24 +115,56 @@
         </div>
     </div>
 </section>
+
 <script>
+    // Função para adicionar campo de medicamento e quantidade
+    document.getElementById('adicionar-medicamento').addEventListener('click', function() {
+        const container = document.querySelector('#medicamentos');
+        const novoCampo = document.createElement('div');
+        novoCampo.innerHTML = `
+            <fieldset>
+                <select name="medicamento[]" required class="js-select2" data-placeholder="Selecione um medicamento">
+                    {{#each data.estoque as |medicamento key|}}
+                        <option value="{{key}}">{{medicamento.medicamento}}</option>
+                    {{/each}}
+                </select>
+                <label>Medicamento*</label>
+            <button type="button" class="button-remove" onclick="removerMedicamento(this)">x</button>
+            </fieldset>
+            <div class="fieldset-group">
+                <fieldset>
+                    <input type="text" name="quantidade[]" required>
+                    <label>Quantidade*</label>
+                </fieldset>
+            </div>
+        `;
+        container.appendChild(novoCampo);
+    });
+
+    // Função para remover campo de medicamento e quantidade associados
+    function removerMedicamento(button) {
+        const container = button.parentElement.parentElement;
+        container.remove();
+    }
+
+    // TO-DO: Envio do formulário 
     document.getElementById('form').addEventListener('submit', function(event) {
-        var select = document.getElementById('medicamento');
-        var numMedicamentos = select.selectedOptions.length;
-
-        var dosagemInput = document.getElementById('dosagem').value;
-        var periodoInput = document.getElementById('periodo').value;
-
-        var dosagemCommas = (dosagemInput.match(/,/g) || []).length;
-        var periodoCommas = (periodoInput.match(/,/g) || []).length;
-
-        if (dosagemCommas !== numMedicamentos - 1 || periodoCommas !== numMedicamentos -1) {
-            event.preventDefault();
-            alert('O número de dosagens ou períodos não corresponde ao número de medicamentos selecionados!');
-            return;
-        } else {
-            return
-        }
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = {};
+        formData.forEach((value, key) => {
+            if (value !== '' && value !== undefined) {
+                if (key.includes('[]')) {
+                    const newKey = key.replace('[]', '');
+                    if (!data[newKey]) {
+                        data[newKey] = [];
+                    }
+                    data[newKey].push(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+        });
+        console.log(data);
     });
 </script>
-
