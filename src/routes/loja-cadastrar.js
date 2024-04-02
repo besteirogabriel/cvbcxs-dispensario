@@ -59,8 +59,8 @@ router.post('/', async (req, res) => {
     const userId = userResult.rows[0].id;
 
     const lojaInsertQuery = `
-            INSERT INTO lojas (user_id, nome_loja, numero_loja, cnpj, telefone, nome_vm, nome_hospitaleiro, cep, endereco, numero, complemento, created_at)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, CURRENT_TIMESTAMP)`;
+            INSERT INTO lojas (user_id, nome_loja, numero_loja, cnpj, telefone, nome_vm, nome_hospitaleiro, cep, endereco, uf, cidade, numero, complemento, created_at)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, CURRENT_TIMESTAMP)`;
     const lojaData = [
       userId,
       loja.name,
@@ -71,6 +71,8 @@ router.post('/', async (req, res) => {
       loja.hospitaleiro,
       loja.cep,
       loja.endereco,
+      loja.estado,
+      loja.cidade,
       loja.numero,
       loja.complemento,
     ];
