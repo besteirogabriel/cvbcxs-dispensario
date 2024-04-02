@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const lojas = require('../mocks/lojas');
+// const lojas = require('../mocks/lojas');
+const formatLojasData = require('../queries/selects/select-lojas');
+
 
 // variáveis template
 var abas = [
@@ -56,8 +58,9 @@ router.post('/', (req, res) => {
 });
 
 //busca o endereço da loja
-router.get('/buscar-endereco-loja/:id', (req, res) => {
+router.get('/buscar-endereco-loja/:id', async (req, res) => {
     const { id } = req.params;
+    const lojas = await formatLojasData();
     const lojaSelecionada = lojas.find(loja => loja.id === parseInt(id));
     if (lojaSelecionada) {
         const enderecoLoja = {
