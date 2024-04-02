@@ -35,7 +35,7 @@ async function formatLojasData() {
         endereco: loja.endereco,
         numero_endereco: loja.numero,
         cidade: loja.cidade,
-        estado: loja.estado,
+        estado: loja.uf,
 
     }));
     console.log('formattedLojas:', formattedLojas)
