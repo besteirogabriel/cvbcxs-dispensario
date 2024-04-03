@@ -22,8 +22,9 @@ var abas = [
 //chama o template
 router.get('/', function(req, res, next){
     res.render('site-pedidos', { 
-        title: 'Cadastrar loja - CVBCXS dispensário', 
+        title: 'Pedidos - CVBCXS dispensário', 
         page: 'pedidos', 
+        system: true,
         data: { 
             abas: abas, 
             lojas: req.lojas, 
@@ -46,8 +47,9 @@ router.post('/', (req, res) => {
         } : false
     }
     res.render('site-pedidos', { //chama novamente o template com mensagem
-        title: 'Cadastrar loja - CVBCXS dispensário', 
+        title: 'Pedidos - CVBCXS dispensário', 
         page: 'pedidos', 
+        system: true,
         data: { 
             abas: abas, 
             lojas: req.lojas, 

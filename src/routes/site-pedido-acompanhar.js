@@ -32,6 +32,7 @@ router.get('/', function(req, res, next){
     res.render('site-pedido-acompanhar', { 
         title: 'Acompanhar Solicitação - CVBCXS dispensário', 
         page: 'site-pedido-acompanhar', 
+        system: true,
         bodyClass: 'table',
         data: {
             abas: abas, 
@@ -46,6 +47,7 @@ router.post('/', function(req, res, next){
     res.render('site-pedido-acompanhar', { 
         title: 'Acompanhar Solicitação - CVBCXS dispensário', 
         page: 'site-pedido-acompanhar', 
+        system: true,
         bodyClass: 'table',
         data: { 
             abas: abas, 

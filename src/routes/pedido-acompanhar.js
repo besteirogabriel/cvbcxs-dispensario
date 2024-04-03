@@ -8,6 +8,7 @@ router.get('/', function (req, res, next) {
   res.render('pedido-acompanhar', {
     title: 'Acompanhar Pedido - CVBCXS dispensário',
     page: 'pedidos',
+    system: true,
     data: {
       lojas: req.lojas,
       estoque: req.estoque,
