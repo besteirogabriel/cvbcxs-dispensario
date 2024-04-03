@@ -74,6 +74,7 @@ router.post('/', async (req, res) => {
       { expiresIn: '1h' }
     );
 
+    res.cookie('id', user.id, { httpOnly: true });
     res.cookie('secretKey', secretKey, { httpOnly: true });
     res.cookie('token', token, { httpOnly: true });
     res.redirect('/dashboard');

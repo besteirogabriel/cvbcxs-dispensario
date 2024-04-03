@@ -20,10 +20,11 @@ async function fetchLojasFromDatabase() {
   }
 }
 
-async function formatLojasData() {
+async function formatLojasData(cookiesId = null) {
   const lojasFromDB = await fetchLojasFromDatabase();
   const formattedLojas = lojasFromDB.map((loja) => ({
     id: loja.id,
+    user_id: loja.user_id,
     name: loja.nome_loja,
     email: loja.email,
     numero_da_loja: loja.numero_loja,
@@ -35,7 +36,11 @@ async function formatLojasData() {
     cidade: loja.cidade,
     estado: loja.uf,
   }));
-  return formattedLojas;
+  if (cookiesId) {
+    return [formattedLojas.find((loja) => loja.user_id == cookiesId)];
+  } else {
+    return formattedLojas;
+  }
 }
 
 module.exports = formatLojasData;

@@ -9,6 +9,7 @@ const axios = require('axios'); //autocomplete CEP
 // MOCKS
 const lojas = require('./mocks/lojas');
 const formatLojasData = require('./queries/selects/select-lojas');
+const formatMedicineData = require('./queries/selects/select-estoque');
 const admins = require('./mocks/admins');
 const estoque = require('./mocks/estoque');
 const pedidos = require('./mocks/pedidos');
@@ -57,18 +58,18 @@ app.use(cookieParser());
 //routes init
 app.use('/', routes);
 app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
-app.use('/pedidos', async (req, res, next) => {
+app.use('/pedidos', verifyToken, async (req, res, next) => {
   try {
-      req.lojas = await formatLojasData();
-      req.estoque = estoque;
-      req.pedidos = pedidos;
-      next();
+    const idDoCookie = req?.cookies?.id || null;
+    req.lojas = await formatLojasData(idDoCookie);
+    req.estoque = await formatMedicineData();
+    req.pedidos = pedidos;
+    next();
   } catch (error) {
-      console.error('Error fetching data:', error);
-      res.status(500).send('Internal Server Error');
+    console.error('Error fetching data:', error);
+    res.status(500).send('Internal Server Error');
   }
 }, sitePedidos);
-
 // app.use('/pedidos', (req, res, next) => { req.lojas = formatLojasData(); req.estoque = estoque; req.pedidos = pedidos; next(); }, sitePedidos);
 app.use('/pedido-acompanhar', sitePedidoAcompanhar);
   //lojas
