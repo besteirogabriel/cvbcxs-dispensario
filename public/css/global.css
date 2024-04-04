@@ -69,7 +69,8 @@ header.header-system > * {
 
 header.header-system .logo h1 {
     font-size: 14px;
-    text-align: center;
+    margin: 20px 0 0 20px;
+    /* text-align: center; */
 }
 header.header-system img {
     width: 100px;

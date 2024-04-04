@@ -27,7 +27,8 @@ var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
   //administrativo
 var adminLogin = require('./routes/admin-login');
-  //system
+var medicamentoCadastrar = require('./routes/medicamento-cadastrar');  
+//system
 var dashboard = require('./routes/system-dashboard');
 
 var app = express();
@@ -78,8 +79,18 @@ app.use('/loja-cadastrar', lojaCadastrar);
   //admin
 app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, adminLogin);
   //system
-app.use('/dashboard', verifyToken, dashboard);
-
+  app.use(
+    '/dashboard',
+    verifyToken,
+    (req, res, next) => {
+      req.token = req.cookies.token;
+      req.secretKey = req.cookies.secretKey;
+      next();
+    },
+    dashboard
+  );
+  //cadastrar medicamento
+  app.use('/medicamento-cadastrar', verifyToken, medicamentoCadastrar);
 
 //rota protegida - verifica a autenticação do login
 app.get('/protected-route', verifyToken, (req, res) => {

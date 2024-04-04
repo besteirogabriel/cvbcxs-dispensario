@@ -1,0 +1,96 @@
+<section class="container medicamento-card"  style="margin-top: -100vh; margin-left: 320px;">
+    <div class="card-abas-container">
+        <div class="card-abas">
+            {{> abas }}
+            <div class="card-abas-content">
+                <!-- formulário de cadastro de medicamento -->
+                <form action="" method="post">
+                    <fieldset>
+                        <select name="estoque_medicamento" id="estoque_medicamento" class="js-select2" required>
+                            <option value="" disabled selected>Selecione um medicamento do estoque</option>
+                            {{#each estoque as |medicamento key|}}
+                                <option value="{{key}}">{{medicamento.medicamento}}</option>
+                            {{/each}}
+                        </select>
+                        <label>Selecionar medicamento existente</label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="date" name="fabricacao" id="fabricacao" required>
+                        <label> Data de Fabricação*</label>
+                    </fieldset>    
+                    <fieldset>
+                        <input type="date" name="validade" id="validade" required>
+                        <label> Data de Validade*</label>
+                    </fieldset>                    
+                    <fieldset>
+                        <input type="number" name="qtd_cx" id="qtd_cx" required>
+                        <label>Quantidade de caixas*</label>
+                    </fieldset> 
+                    <fieldset>
+                        <input type="number" name="unidades_cx" id="unidades_cx" required>
+                        <label> Unidades por caixa (OU</label>
+                    </fieldset> 
+                    <fieldset>
+                        <input type="text" name="composto" id="composto" required>
+                        <label> Composto*</label>
+                    </fieldset> 
+                    <fieldset>
+                        <input type="text" name="laboratorio" id="laboratorio" required>
+                        <label> Laboratório*</label>
+                    </fieldset> 
+                    <fieldset>
+                        <input type="text" name="lote" id="lote" required>
+                        <label> Lote*</label>
+                    </fieldset> 
+                    <fieldset>
+                        <input type="text" name="medicamento" id="medicamento" required>
+                        <label> Nome Medicamento*</label>
+                    </fieldset> 
+                    <fieldset>
+                        <select name="tipo_medicamento" id="tipo_medicamento"   class="js-select2" required>
+                            <option value="comprimido">comprimido</option>
+                            <option value="gotas">gotas</option>
+                        </select>
+                        <label> Tipo de Medicamento*</label>
+                    </fieldset> 
+                    <button type="submit" class="button-1">Cadastrar</button>
+                    <p class="info">Ao enviar o formulário, você automaticamente concorda com nossa <a href="">política de privacidade</a> e <a href="">termos de uso</a></p>
+                </form>
+            </div>
+        </div>
+        <div class="card-abas-introducao">
+            <h1> CADASTRAR MEDICAMENTO </h1>
+            <img src="/images/register-illustration.svg" alt="Ilustração representando o cadastro de um medicamento">
+        </div>
+    </div>
+</section>
+<script>
+    // validate form data and submit form if all data is valid
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fabricacao = document.querySelector('#fabricacao').value;
+        const validade = document.querySelector('#validade').value;
+        const qtd_cx = document.querySelector('#qtd_cx').value;
+        const unidades_cx = document.querySelector('#unidades_cx').value;
+        const composto = document.querySelector('#composto').value;
+        const laboratorio = document.querySelector('#laboratorio').value;
+        const lote = document.querySelector('#lote').value;
+        const medicamento = document.querySelector('#medicamento').value;
+        const tipo_medicamento = document.querySelector('#tipo_medicamento').value;
+        if (fabricacao && validade && qtd_cx && unidades_cx && composto && laboratorio && lote && medicamento && tipo_medicamento) {
+            form.submit();
+        } else {
+            alert('Preencha todos os campos');
+        }
+    });
+</script>
+{{!-- fabricacao: 2024-04-01
+validade: 2024-04-24
+qtd_cx: 2
+unidades_cx: 12
+composto: asdfasdfasdf
+laboratorio: asfasfasd
+lote: dfsxfgsad
+medicamento: sdfasdfasd
+tipo_medicamento: gotas --}}

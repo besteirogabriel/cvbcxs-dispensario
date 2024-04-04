@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 // const lojas = require('../mocks/lojas');
+const jwt = require('jsonwebtoken');
 const formatLojasData = require('../queries/selects/select-lojas');
 
 
@@ -21,7 +22,16 @@ var abas = [
 
 //chama o template
 router.get('/', function(req, res, next){
+    jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
+        if (err) {
+          return res.status(401).json({ message: 'Token inválido' });
+        } else {
+          console.log('decoded:', decoded);
+          req.user = decoded;
+        }
+      });
     res.render('site-pedidos', { 
+        user: req.user,
         title: 'Pedidos - CVBCXS dispensário', 
         page: 'pedidos', 
         system: true,

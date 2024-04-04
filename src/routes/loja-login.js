@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
 
     const secretKey = crypto.randomBytes(64).toString('hex');
     const token = jwt.sign(
-      { email: user.email, id: user.id, type: user.admin ? 1 : 2 },
+      { nome: user.nome, email: user.email, id: user.id, type: user.admin ? 1 : 2 },
       secretKey,
       { expiresIn: '1h' }
     );
