@@ -69,19 +69,29 @@
         const lote = document.querySelector('#lote').value;
         const medicamento = document.querySelector('#medicamento').value;
         const tipo_medicamento = document.querySelector('#tipo_medicamento').value;
-        if (fabricacao && validade && qtd_cx && unidades_cx && composto && laboratorio && lote && medicamento && tipo_medicamento) {
+        const fabricacaoDate = new Date(fabricacao);
+        const validadeDate = new Date(validade);
+        const today = new Date();
+
+        if (fabricacao && validade && qtd_cx && unidades_cx && composto && laboratorio && lote && medicamento && tipo_medicamento &&
+            !isNaN(fabricacaoDate) && !isNaN(validadeDate) && fabricacaoDate <= today && fabricacaoDate < validadeDate && validadeDate >= today) {
             form.submit();
         } else {
-            alert('Preencha todos os campos');
+            if (!fabricacao || !validade) {
+                alert('Preencha as datas de fabricação e validade.');
+            } else if (isNaN(fabricacaoDate)) {
+                alert('A data de fabricação é inválida.');
+            } else if (isNaN(validadeDate)) {
+                alert('A data de validade é inválida.');
+            } else if (fabricacaoDate > today) {
+                alert('A data de fabricação não pode ser futura.');
+            } else if (validadeDate < today) {
+                alert('A data de validade não pode ser inferior à hoje.');
+            } else if (fabricacaoDate >= validadeDate) {
+                alert('A data de validade deve ser posterior à data de fabricação.');
+            } else {
+                alert('Preencha todos os campos obrigatórios.');
+            }
         }
     });
 </script>
-{{!-- fabricacao: 2024-04-01
-validade: 2024-04-24
-qtd_cx: 2
-unidades_cx: 12
-composto: asdfasdfasdf
-laboratorio: asfasfasd
-lote: dfsxfgsad
-medicamento: sdfasdfasd
-tipo_medicamento: gotas --}}
