@@ -9,7 +9,9 @@ const axios = require('axios'); //autocomplete CEP
 // MOCKS
 const lojas = require('./mocks/lojas');
 const formatLojasData = require('./queries/selects/select-lojas');
-const formatMedicineData = require('./queries/selects/select-estoque');
+// const formatMedicineData = require('./queries/selects/select-estoque');
+// const formatBasicMedicineData = require('./queries/selects/select-estoque');
+const { formatMedicineData, formatBasicMedicineData } = require('./queries/selects/select-estoque');
 const admins = require('./mocks/admins');
 const estoque = require('./mocks/estoque');
 const pedidos = require('./mocks/pedidos');
@@ -90,7 +92,16 @@ app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, ad
     dashboard
   );
   //cadastrar medicamento
-  app.use('/medicamento-cadastrar', verifyToken, medicamentoCadastrar);
+  app.use('/medicamento-cadastrar', //verifyToken,
+   async (req, res, next) => {
+    try {
+      req.estoque = await formatBasicMedicineData();
+      next();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  }, medicamentoCadastrar);
 
 //rota protegida - verifica a autenticação do login
 app.get('/protected-route', verifyToken, (req, res) => {
@@ -111,6 +122,8 @@ app.get('/buscar-endereco/:cep', async (req, res) => {
 
 //logout sistema
 app.get('/logout', (req, res) => {
+  // clear all cookies
+  res.clearCookie('id');
   res.clearCookie('token');
   res.clearCookie('secretKey');
   res.redirect('/');

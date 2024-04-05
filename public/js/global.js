@@ -64,3 +64,25 @@ $(function() {
     }
   });
 });
+
+//preenche os campos com base no medicamento selecionado
+$('#medicamento-estoque').on('change', function() {
+  var medicamentoId = $(this).val();
+  console.log('medicamentoId:', medicamentoId)
+  var form = $(this).closest('form');
+  if (medicamentoId) {
+    $.ajax({
+        url: '/medicamento-cadastrar/' + medicamentoId,
+        method: 'GET',
+        success: function(response) {
+          // Preenche os campos de endereço com os dados retornados
+          $(form).find('#composto').val(response.composto);
+          $(form).find('#laboratorio').val(response.laboratorio);
+          $(form).find('#unidades-cx').val(response.unidades_cx);
+        },
+        error: function(error) {
+          console.error('Erro ao buscar medicamento:', error);
+        }
+    });
+  }
+});

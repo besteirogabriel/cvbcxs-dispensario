@@ -17,7 +17,6 @@ router.get('/', function (req, res, next) {
     if (err) {
       return res.status(401).json({ message: 'Token inválido' });
     } else {
-      console.log('decoded:', decoded);
       req.user = decoded;
     }
   });

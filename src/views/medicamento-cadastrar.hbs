@@ -6,53 +6,44 @@
                 <!-- formulário de cadastro de medicamento -->
                 <form action="" method="post">
                     <fieldset>
-                        <select name="estoque_medicamento" id="estoque_medicamento" class="js-select2" required>
-                            <option value="" disabled selected>Selecione um medicamento do estoque</option>
-                            {{#each estoque as |medicamento key|}}
-                                <option value="{{key}}">{{medicamento.medicamento}}</option>
-                            {{/each}}
-                        </select>
-                        <label>Selecionar medicamento existente</label>
-                    </fieldset>
-                    <fieldset>
                         <input type="date" name="fabricacao" id="fabricacao" required>
                         <label> Data de Fabricação*</label>
-                    </fieldset>    
+                    </fieldset>
                     <fieldset>
                         <input type="date" name="validade" id="validade" required>
                         <label> Data de Validade*</label>
-                    </fieldset>                    
+                    </fieldset>
                     <fieldset>
                         <input type="number" name="qtd_cx" id="qtd_cx" required>
                         <label>Quantidade de caixas*</label>
-                    </fieldset> 
+                    </fieldset>
                     <fieldset>
                         <input type="number" name="unidades_cx" id="unidades_cx" required>
-                        <label> Unidades por caixa (OU</label>
-                    </fieldset> 
+                        <label> Unidades por caixa</label>
+                    </fieldset>
                     <fieldset>
                         <input type="text" name="composto" id="composto" required>
                         <label> Composto*</label>
-                    </fieldset> 
+                    </fieldset>
                     <fieldset>
                         <input type="text" name="laboratorio" id="laboratorio" required>
                         <label> Laboratório*</label>
-                    </fieldset> 
+                    </fieldset>
                     <fieldset>
                         <input type="text" name="lote" id="lote" required>
                         <label> Lote*</label>
-                    </fieldset> 
+                    </fieldset>
                     <fieldset>
                         <input type="text" name="medicamento" id="medicamento" required>
                         <label> Nome Medicamento*</label>
-                    </fieldset> 
+                    </fieldset>
                     <fieldset>
                         <select name="tipo_medicamento" id="tipo_medicamento"   class="js-select2" required>
                             <option value="comprimido">comprimido</option>
                             <option value="gotas">gotas</option>
                         </select>
                         <label> Tipo de Medicamento*</label>
-                    </fieldset> 
+                    </fieldset>
                     <button type="submit" class="button-1">Cadastrar</button>
                     <p class="info">Ao enviar o formulário, você automaticamente concorda com nossa <a href="">política de privacidade</a> e <a href="">termos de uso</a></p>
                 </form>

@@ -78,8 +78,7 @@ router.post('/', async (req, res) => {
     ];
 
     await client.query(lojaInsertQuery, lojaData);
-
-    res.json({ success: true, message: 'Loja cadastrada com sucesso.' });
+    res.redirect('/loja-login?success=true');
   } catch (error) {
     console.error('Erro ao cadastrar loja:', error);
     res.status(500).json({

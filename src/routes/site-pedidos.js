@@ -26,10 +26,10 @@ router.get('/', function(req, res, next){
         if (err) {
           return res.status(401).json({ message: 'Token inválido' });
         } else {
-          console.log('decoded:', decoded);
           req.user = decoded;
         }
       });
+      console.log('estoque pedidos', req.estoque)
     res.render('site-pedidos', { 
         user: req.user,
         title: 'Pedidos - CVBCXS dispensário', 

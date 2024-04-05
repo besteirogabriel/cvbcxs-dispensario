@@ -3,6 +3,10 @@ const axios = require('axios');
 const crypto = require('crypto');
 const { Pool } = require('pg');
 const router = express.Router();
+const {
+  formatMedicineData,
+  formatBasicMedicineData,
+} = require('../queries/selects/select-estoque');
 const jwt = require('jsonwebtoken');
 
 const pool = new Pool({
@@ -27,22 +31,71 @@ var abas = [
   //   },
 ];
 
+//buscar dados do medicamento
+router.get('/medicamento-cadastrar/:id', async (req, res) => {
+  console.log('req.params:', req.params);
+  const { id } = req.params;
+  const medicamento = await formatBasicMedicineData();
+  const medicamentoSelecionado = medicamento.find(
+    (medicamento) => medicamento.id === parseInt(id)
+  );
+  console.log('medicamentoSelecionado:', medicamentoSelecionado);
+  if (medicamentoSelecionado) {
+    const medicamento = {
+      composto: medicamentoSelecionado.composto,
+      laboratorio: medicamentoSelecionado.laboratorio,
+      unidades_cx: medicamentoSelecionado.unidades_cx,
+    };
+    res.json(medicamento);
+  } else {
+    res.status(404).json({ error: 'Medicamento não encontrado.' });
+  }
+});
+
+router.post('/', async (req, res) => {
+  const client = await pool.connect();
+  const medicamento = req.body;
+
+  try {
+    const medicamentoInsertQuery = `
+  INSERT INTO MEDICAMENTOS (fabricacao, validade, qtd_cx, unidades_cx, composto, laboratorio, lote, medicamento, tipo_medicamento)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
+
+    const medicamentoData = [
+      medicamento.fabricacao,
+      medicamento.validade,
+      medicamento.qtd_cx,
+      medicamento.unidades_cx,
+      medicamento.composto,
+      medicamento.laboratorio,
+      medicamento.lote,
+      medicamento.medicamento,
+      medicamento.tipo_medicamento,
+    ];
+    await client.query(medicamentoInsertQuery, medicamentoData);
+    console.log('Data inserted:', medicamentoData);
+    res.redirect('/estoque?cadastrado=true');
+  } catch (error) {
+    console.error('Error inserting data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 //chama o template
 router.get('/', function (req, res, next) {
   jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: 'Token inválido' });
     } else {
-      console.log('decoded:', decoded);
       req.user = decoded;
     }
   });
   res.render('medicamento-cadastrar', {
     user: req.user,
     system: true,
-    title: 'Cadastrar loja - CVBCXS dispensário',
+    title: 'Cadastrar Medicamento - CVBCXS dispensário',
     page: 'medicamento-cadastrar',
-    data: { abas },
+    data: { abas: abas, estoque: req.estoque },
   });
 });
 
