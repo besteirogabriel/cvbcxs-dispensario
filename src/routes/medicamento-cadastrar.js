@@ -4,8 +4,8 @@ const crypto = require('crypto');
 const { Pool } = require('pg');
 const router = express.Router();
 const {
-  formatMedicineData,
-  formatBasicMedicineData,
+  medicineData,
+  basicMedicineData,
 } = require('../queries/selects/select-estoque');
 const jwt = require('jsonwebtoken');
 
@@ -35,7 +35,7 @@ var abas = [
 router.get('/medicamento-cadastrar/:id', async (req, res) => {
   console.log('req.params:', req.params);
   const { id } = req.params;
-  const medicamento = await formatBasicMedicineData();
+  const medicamento = await basicMedicineData();
   const medicamentoSelecionado = medicamento.find(
     (medicamento) => medicamento.id === parseInt(id)
   );
@@ -57,21 +57,30 @@ router.post('/', async (req, res) => {
   const medicamento = req.body;
 
   try {
+    let qtd_total = null;
+    if (medicamento.tipo_medicamento === 'comprimido') {
+      qtd_total = medicamento.qtd_cx * medicamento.unidades_cx;
+    }
+
     const medicamentoInsertQuery = `
-  INSERT INTO MEDICAMENTOS (fabricacao, validade, qtd_cx, unidades_cx, composto, laboratorio, lote, medicamento, tipo_medicamento)
-  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
+      INSERT INTO MEDICAMENTOS
+      (fabricacao, validade, qtd_cx, unidades_cx, composto, laboratorio, lote, medicamento, tipo_medicamento, qtd_total)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    `;
 
     const medicamentoData = [
       medicamento.fabricacao,
       medicamento.validade,
       medicamento.qtd_cx,
       medicamento.unidades_cx,
-      medicamento.composto,
-      medicamento.laboratorio,
-      medicamento.lote,
-      medicamento.medicamento,
-      medicamento.tipo_medicamento,
+      medicamento.composto.toUpperCase(),
+      medicamento.laboratorio.toUpperCase(),
+      medicamento.lote.toUpperCase(),
+      medicamento.medicamento.toUpperCase(),
+      medicamento.tipo_medicamento.toUpperCase(),
+      qtd_total,
     ];
+
     await client.query(medicamentoInsertQuery, medicamentoData);
     console.log('Data inserted:', medicamentoData);
     res.redirect('/estoque?cadastrado=true');

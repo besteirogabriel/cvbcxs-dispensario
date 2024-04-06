@@ -9,9 +9,9 @@ const axios = require('axios'); //autocomplete CEP
 // MOCKS
 const lojas = require('./mocks/lojas');
 const formatLojasData = require('./queries/selects/select-lojas');
-// const formatMedicineData = require('./queries/selects/select-estoque');
-// const formatBasicMedicineData = require('./queries/selects/select-estoque');
-const { formatMedicineData, formatBasicMedicineData } = require('./queries/selects/select-estoque');
+// const medicineData = require('./queries/selects/select-estoque');
+// const basicMedicineData = require('./queries/selects/select-estoque');
+const { medicineData, basicMedicineData, medicineDataAggregate } = require('./queries/selects/select-estoque');
 const admins = require('./mocks/admins');
 const estoque = require('./mocks/estoque');
 const pedidos = require('./mocks/pedidos');
@@ -65,7 +65,7 @@ app.use('/pedidos', verifyToken, async (req, res, next) => {
   try {
     const idDoCookie = req?.cookies?.id || null;
     req.lojas = await formatLojasData(idDoCookie);
-    req.estoque = await formatMedicineData();
+    req.estoque = await basicMedicineData();
     req.pedidos = pedidos;
     next();
   } catch (error) {
@@ -95,7 +95,7 @@ app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, ad
   app.use('/medicamento-cadastrar', //verifyToken,
    async (req, res, next) => {
     try {
-      req.estoque = await formatBasicMedicineData();
+      req.estoque = await basicMedicineData();
       next();
     } catch (error) {
       console.error('Error fetching data:', error);

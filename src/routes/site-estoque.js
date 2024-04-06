@@ -17,14 +17,15 @@ var tableHeaders = {
     composto: 'Composto',
     laboratorio: 'Laboratorio',
     lote: 'Lote',
+    // tipo: 'Tipo',
     fabricacao: 'Fabricação',
     validade: 'Validade',
-    quantidade: 'Qtd'
+    quantidade_total: 'Quantidade Total'
 };
 
 // SQL query to select data from the medicamentos table
-// const selectQuery = 'SELECT * FROM medicamentos';
-const selectQuery = "SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) AS qtd_total_cx FROM medicamentos GROUP BY  medicamento, composto, laboratorio, fabricacao, validade;";
+// const selectQuery = "SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) FROM medicamentos GROUP BY  medicamento, composto, laboratorio, fabricacao, validade;";
+const selectQuery = "SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN SUM(qtd_total) WHEN tipo_medicamento = 'GOTAS' THEN SUM(qtd_cx) ELSE NULL END AS quantidade_total FROM medicamentos GROUP BY medicamento, composto, laboratorio,fabricacao, validade, tipo_medicamento;";
 
 router.get('/', async function(req, res, next){
     try {
@@ -40,8 +41,7 @@ router.get('/', async function(req, res, next){
         // Check if there's a search query
         if (searchQuery) {
             // Modify the query to include the search condition
-            // query = `SELECT * FROM medicamentos WHERE medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%'`;
-            query = `SELECT medicamento, composto, laboratorio, lote, fabricacao, validade, qtd_cx FROM medicamentos WHERE medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%'`;
+            query = `SELECT medicamento, composto, laboratorio, lote, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN qtd_total WHEN tipo_medicamento = 'GOTAS' THEN qtd_cx ELSE NULL END AS quantidade FROM medicamentos WHERE medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%'`;
         }
 
         // Execute the query

@@ -20,21 +20,26 @@ async function fetchMedicineFromDatabase(query) {
   }
 }
 
-async function formatBasicMedicineData() {
-  const medicineFromDB = await fetchMedicineFromDatabase("SELECT id, medicamento, composto, laboratorio, unidades_cx FROM medicamentos GROUP BY id, medicamento, composto, laboratorio, unidades_cx ORDER BY medicamento ASC;"  );
+async function basicMedicineData() {
+  const medicineFromDB = await fetchMedicineFromDatabase("SELECT medicamento, composto, laboratorio FROM medicamentos GROUP BY  medicamento, composto, laboratorio;"  );
   const formattedMedicine = medicineFromDB.map((medicine) => ({
-    id: medicine.id,
+    // id: medicine.id,
+    medicamento_composto: `${medicine.medicamento} - ${medicine.composto}`,
     medicamento: medicine.medicamento,
     composto: medicine.composto,
     laboratorio: medicine.laboratorio,
-    unidades_cx: medicine?.unidades_cx ?? 0,
+    // lote: medicine.lotes,
+    // fabricacao: medicine.fabricacao,
+    // validade: medicine.validade,
+    // quantidade: medicine.qtd_total_cx,
   }));
   return formattedMedicine;
 }
 
-async function formatMedicineData() {
-  const medicineFromDB = await fetchMedicineFromDatabase("SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) AS qtd_total_cx FROM medicamentos GROUP BY  medicamento, composto, laboratorio, fabricacao, validade;"  );
+async function medicineData() {
+  const medicineFromDB = await fetchMedicineFromDatabase("SELECT id, medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) AS qtd_total_cx FROM medicamentos GROUP BY  id, medicamento, composto, laboratorio, fabricacao, validade;"  );
   const formattedMedicine = medicineFromDB.map((medicine) => ({
+    id: medicine.id,
     medicamento: medicine.medicamento,
     composto: medicine.composto,
     laboratorio: medicine.laboratorio,
@@ -46,4 +51,19 @@ async function formatMedicineData() {
   return formattedMedicine;
 }
 
-module.exports = { formatMedicineData, formatBasicMedicineData };
+async function medicineDataAggregate() {
+  const medicineFromDB = await fetchMedicineFromDatabase("SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) AS qtd_total_cx FROM medicamentos GROUP BY  medicamento, composto, laboratorio, fabricacao, validade;"  );
+  const formattedMedicine = medicineFromDB.map((medicine) => ({
+    medicamento: medicine.medicamento,
+    composto: medicine.composto,
+    laboratorio: medicine.laboratorio,
+    lote: medicine.lotes,
+    fabricacao: medicine.fabricacao,
+    validade: medicine.validade,
+    quantidade: medicine.qtd_total_cx,
+  }));
+  return formattedMedicine;
+
+}
+
+module.exports = { medicineData, basicMedicineData, medicineDataAggregate };

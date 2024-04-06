@@ -86,8 +86,8 @@
                         {{!-- select item estoque --}}
                         <fieldset>
                             <select name="medicamento[]" id="medicamento[]" required class="js-select2" data-placeholder="Selecione um medicamento">
-                                {{#each data.estoque as |medicamento key|}}
-                                    <option value="{{key}}">{{medicamento.medicamento}}</option>
+                                {{#each data.estoque}}
+                                    <option value="{{this.medicamento_composto}}">{{this.medicamento_composto}}</option>
                                 {{/each}}
                             </select>
                             <label>Medicamento*</label>
@@ -124,8 +124,8 @@
         novoCampo.innerHTML = `
             <fieldset>
                 <select name="medicamento[]" required class="js-select2" data-placeholder="Selecione um medicamento">
-                    {{#each data.estoque as |medicamento key|}}
-                        <option value="{{key}}">{{medicamento.medicamento}}</option>
+                    {{#each data.estoque}}
+                        <option value="{{this.medicamento_composto}}">{{this.medicamento_composto}}</option>
                     {{/each}}
                 </select>
                 <label>Medicamento*</label>

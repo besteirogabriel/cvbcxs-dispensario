@@ -18,7 +18,7 @@
                         <label>Quantidade de caixas*</label>
                     </fieldset>
                     <fieldset>
-                        <input type="number" name="unidades_cx" id="unidades_cx" required>
+                        <input type="number" name="unidades_cx" id="unidades_cx">
                         <label> Unidades por caixa</label>
                     </fieldset>
                     <fieldset>
@@ -73,10 +73,13 @@
         const validadeDate = new Date(validade);
         const today = new Date();
 
-        if (fabricacao && validade && qtd_cx && unidades_cx && composto && laboratorio && lote && medicamento && tipo_medicamento &&
+        if (fabricacao && validade && qtd_cx && composto && laboratorio && lote && medicamento && tipo_medicamento &&
             !isNaN(fabricacaoDate) && !isNaN(validadeDate) && fabricacaoDate <= today && fabricacaoDate < validadeDate && validadeDate >= today) {
             form.submit();
         } else {
+            if (tipo_medicamento === 'comprimido' && !unidades_cx) {
+                alert('Preencha o campo de unidades por caixa.');
+            }
             if (!fabricacao || !validade) {
                 alert('Preencha as datas de fabricação e validade.');
             } else if (isNaN(fabricacaoDate)) {

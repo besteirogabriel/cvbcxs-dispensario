@@ -46,6 +46,7 @@ router.get('/', function(req, res, next){
 //envia a solicitação
 router.post('/', (req, res) => {
     var pedido = req.body; //pega os dados do formulário enviado
+    console.log('pedido', pedido)
     var response = req.pedidos.adicionarPedido(pedido); //adiciona as informações do formulário no array de pedidos do mock
     var message = { //monta a mensagem de retorno
         type: response? 'success' : 'error',
