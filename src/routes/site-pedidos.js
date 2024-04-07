@@ -58,24 +58,28 @@ router.post('/', async (req, res) => {
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
-        
+
         const pedidoQuery = `
-            INSERT INTO pedidos(email, nome_beneficiado, cim, id_loja)
+            INSERT INTO pedidos(nome_beneficiado, cim, id_loja, estado)
             VALUES($1, $2, $3, $4)
             RETURNING id;
         `;
-        const pedidoValues = [req.body.email, req.body.nome_beneficiado, req.body.cim, req.body.id_loja];
+        const pedidoValues = [req.body.beneficiado, req.body.cim, req.body.loja, 'EM PREPARAÇÃO'];
         const pedidoResult = await client.query(pedidoQuery, pedidoValues);
         const pedidoId = pedidoResult.rows[0].id;
 
-        const medicamentos = req.body.medicamentos; // Assuming this is how you're receiving it
-        
-        for (const medicamento of medicamentos) {
+        const medicamentos = req.body.medicamento;
+        const quantidades = req.body.quantidade;
+
+        for (let i = 0; i < medicamentos.length; i++) {
+            const medicamento = medicamentos[i];
+            const quantidade = quantidades[i];
+
             const medicamentoQuery = `
-                INSERT INTO pedidos_medicamentos(pedido_id, medicamento_id, quantidade)
+                INSERT INTO pedidos_medicamentos(pedido_id, medicamento_composto, quantidade)
                 VALUES($1, $2, $3);
             `;
-            await client.query(medicamentoQuery, [pedidoId, medicamento.medicamento_id, medicamento.quantidade]);
+            await client.query(medicamentoQuery, [pedidoId, medicamento, quantidade]);
         }
 
         await client.query('COMMIT');
