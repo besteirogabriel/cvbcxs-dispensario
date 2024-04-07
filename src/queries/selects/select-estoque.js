@@ -21,17 +21,18 @@ async function fetchMedicineFromDatabase(query) {
 }
 
 async function basicMedicineData() {
-  const medicineFromDB = await fetchMedicineFromDatabase("SELECT medicamento, composto, laboratorio FROM medicamentos GROUP BY  medicamento, composto, laboratorio;"  );
+  // const medicineFromDB = await fetchMedicineFromDatabase("SELECT medicamento, composto, laboratorio FROM medicamentos GROUP BY  medicamento, composto, laboratorio;"  );
+  const medicineFromDB = await fetchMedicineFromDatabase(`SELECT medicamento, composto, laboratorio, SUM(CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN qtd_total WHEN tipo_medicamento = 'GOTAS' THEN qtd_cx ELSE 0 END) AS quantidade FROM medicamentos WHERE (tipo_medicamento = 'COMPRIMIDO' AND qtd_total > 0) OR (tipo_medicamento = 'GOTAS' AND qtd_cx > 0) GROUP BY medicamento, composto, laboratorio`);
   const formattedMedicine = medicineFromDB.map((medicine) => ({
     // id: medicine.id,
     medicamento_composto: `${medicine.medicamento} - ${medicine.composto}`,
     medicamento: medicine.medicamento,
     composto: medicine.composto,
     laboratorio: medicine.laboratorio,
+    quantidade: medicine.quantidade,
     // lote: medicine.lotes,
     // fabricacao: medicine.fabricacao,
     // validade: medicine.validade,
-    // quantidade: medicine.qtd_total_cx,
   }));
   return formattedMedicine;
 }
