@@ -12,11 +12,6 @@
                     {{!-- Informações --}}
                     <div class="form-section">
                         <div class="form-section-title">Informações contato</div>
-                        {{!-- email --}}
-                        <fieldset>
-                            <input type="text" name="email" id="email" required>
-                            <label> E-mail* </label>
-                        </fieldset>
                         {{!-- beneficiado e CIM --}}
                         <div class="fieldset-group">        
                             {{!-- beneficiado --}}
@@ -186,6 +181,12 @@
                 }
             }
         });
-        console.log(data);
+        console.log('data', data);
+        if (data.medicamento.length === data.quantidade.length) {
+         console.log('enviar formulário', data);
+         form.submit();
+        } else {
+            alert('Preencha todos os campos de medicamento e quantidade');
+        }
     });
 </script>

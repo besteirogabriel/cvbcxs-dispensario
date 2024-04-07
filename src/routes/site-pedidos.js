@@ -1,9 +1,20 @@
 const express = require('express');
 const router = express.Router();
 // const lojas = require('../mocks/lojas');
+const {checkAvailability, insertPedido} = require('../queries/inserts/insert-pedidos');
 const jwt = require('jsonwebtoken');
 const formatLojasData = require('../queries/selects/select-lojas');
 
+const { Pool } = require('pg');
+
+// Connection pool configuration
+const pool = new Pool({
+  user: 'cvbcxs',
+  host: '172.16.10.33',
+  database: 'cvbcxcs_dispensario_gob',
+  password: 'l_W[x1a2e~t0)',
+  port: 5433, // 
+});
 
 // variáveis template
 var abas = [
@@ -29,7 +40,6 @@ router.get('/', function(req, res, next){
           req.user = decoded;
         }
       });
-      console.log('estoque pedidos', req.estoque)
     res.render('site-pedidos', { 
         user: req.user,
         title: 'Pedidos - CVBCXS dispensário', 
@@ -44,30 +54,39 @@ router.get('/', function(req, res, next){
 });
 
 //envia a solicitação
-router.post('/', (req, res) => {
-    var pedido = req.body; //pega os dados do formulário enviado
-    console.log('pedido', pedido)
-    var response = req.pedidos.adicionarPedido(pedido); //adiciona as informações do formulário no array de pedidos do mock
-    var message = { //monta a mensagem de retorno
-        type: response? 'success' : 'error',
-        icon: response? '<svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.998 2.005c5.517 0 9.997 4.48 9.997 9.997 0 5.518-4.48 9.998-9.997 9.998-5.518 0-9.998-4.48-9.998-9.998 0-5.517 4.48-9.997 9.998-9.997zm0 1.5c-4.69 0-8.498 3.807-8.498 8.497s3.808 8.498 8.498 8.498 8.497-3.808 8.497-8.498-3.807-8.497-8.497-8.497zm-5.049 8.886 3.851 3.43c.142.128.321.19.499.19.202 0 .405-.081.552-.242l5.953-6.509c.131-.143.196-.323.196-.502 0-.41-.331-.747-.748-.747-.204 0-.405.082-.554.243l-5.453 5.962-3.298-2.938c-.144-.127-.321-.19-.499-.19-.415 0-.748.335-.748.746 0 .205.084.409.249.557z" fill-rule="nonzero"/></svg>' : '<svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m2.095 19.886 9.248-16.5c.133-.237.384-.384.657-.384.272 0 .524.147.656.384l9.248 16.5c.064.115.096.241.096.367 0 .385-.309.749-.752.749h-18.496c-.44 0-.752-.36-.752-.749 0-.126.031-.252.095-.367zm1.935-.384h15.939l-7.97-14.219zm7.972-6.497c-.414 0-.75.336-.75.75v3.5c0 .414.336.75.75.75s.75-.336.75-.75v-3.5c0-.414-.336-.75-.75-.75zm-.002-3c.552 0 1 .448 1 1s-.448 1-1 1-1-.448-1-1 .448-1 1-1z" fill-rule="nonzero"/></svg>',
-        text: response.message,
-        button: response? {
-            url: 'pedido-acompanhar',
-            text: 'Acompanhar pedido',
-        } : false
+router.post('/', async (req, res) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        
+        const pedidoQuery = `
+            INSERT INTO pedidos(email, nome_beneficiado, cim, id_loja)
+            VALUES($1, $2, $3, $4)
+            RETURNING id;
+        `;
+        const pedidoValues = [req.body.email, req.body.nome_beneficiado, req.body.cim, req.body.id_loja];
+        const pedidoResult = await client.query(pedidoQuery, pedidoValues);
+        const pedidoId = pedidoResult.rows[0].id;
+
+        const medicamentos = req.body.medicamentos; // Assuming this is how you're receiving it
+        
+        for (const medicamento of medicamentos) {
+            const medicamentoQuery = `
+                INSERT INTO pedidos_medicamentos(pedido_id, medicamento_id, quantidade)
+                VALUES($1, $2, $3);
+            `;
+            await client.query(medicamentoQuery, [pedidoId, medicamento.medicamento_id, medicamento.quantidade]);
+        }
+
+        await client.query('COMMIT');
+        res.json({ success: true, message: 'Pedido criado com sucesso.', pedidoId: pedidoId });
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.error('Error processing pedido', error);
+        res.status(500).json({ success: false, message: 'Erro ao criar pedido.' });
+    } finally {
+        client.release();
     }
-    res.render('site-pedidos', { //chama novamente o template com mensagem
-        title: 'Pedidos - CVBCXS dispensário', 
-        page: 'pedidos', 
-        system: true,
-        data: { 
-            abas: abas, 
-            lojas: req.lojas, 
-            estoque: req.estoque,
-            message: message
-        } 
-    });
 });
 
 //busca o endereço da loja

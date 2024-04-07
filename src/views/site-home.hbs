@@ -1,1 +1,39 @@
-<h1>Home</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Website Title</title>
+    <link rel="stylesheet" href="/public/css/global.css">
+</head>
+<body>
+
+<div class="hero-image">
+    <div class="text-overlay">
+        <img src="/images/dispensario.png" alt="dispensario">
+    </div>
+</div>
+
+<section>
+    <p class="animated-text">This text will animate as you scroll.</p>
+    <!-- Add more content here that you want to animate or display -->
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new Intersection Observer((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate');
+      }
+    });
+  });
+
+  document.querySelectorAll('.animated-text').forEach(item => {
+    observer.observe(item);
+  });
+});
+</script>
+
+</body>
+</html>
