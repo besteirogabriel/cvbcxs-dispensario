@@ -103,6 +103,7 @@
                     </div>
                      <div style="margin-bottom: 20px;">
                         <button type="button" class="button-2" id="adicionar-medicamento">Adicionar Medicamento</button>
+                        <button type="button" class="button-2" id="open-dialog">Não encontro meu medicamento</button>
                      </div>
                     <button type="submit" class="button-1">Enviar solicitação</button>
                     <p class="info">Ao preencher o formulário você automaticamente concorda com nossa <a href="">politica de privacidade</a> e <a href="">termos de uso</a></p>
@@ -115,6 +116,18 @@
         </div>
     </div>
 </section>
+
+<!-- Dialog HTML -->
+<div id="medication-dialog" style="display:none; position:fixed; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1050; justify-content:center; align-items:center;">
+    <div style="background:#fff; padding:20px; border-radius:5px; max-width:600px; width:90%; margin:10px;">
+        <span id="close-dialog" style="float:right; cursor:pointer; font-size: 1.5em;">&times;</span>
+        <h2>Medicamento Não Encontrado</h2>
+        <p>Se você, associado ao Grande Oriente do Brasil - Rio Grande do Sul (GOB-RS) não encontrar o medicamento de que precisa no Dispensário de Medicamentos, pedimos que entre em contato diretamente com o GOB-RS para solicitar a inclusão do item. É fundamental para nós garantir o acesso aos medicamentos necessários para todos os membros.</p>
+        <p>Para fazer essa solicitação, você pode entrar em contato com:</p>
+        <p>Paulo Aragão: +55 51 8416-0207<br>Sérgio Bueno: +55 51 9877-9887</p>
+        <p>Informe qual medicamento está faltando. Nós vamos avaliar a possibilidade de adicioná-lo ao nosso catálogo, visando expandir o nosso atendimento e melhorar o acesso a tratamentos essenciais. A sua contribuição é importante para nós, pois ajuda a aprimorar os serviços desta Central de Medicamentos.</p>
+    </div>
+</div>
 
 <script>
     // Função para adicionar campo de medicamento e quantidade
@@ -139,6 +152,14 @@
             </div>
         `;
         container.appendChild(novoCampo);
+    });
+
+    document.getElementById('open-dialog').addEventListener('click', function() {
+        document.getElementById('medication-dialog').style.display = 'flex';
+    });
+
+    document.getElementById('close-dialog').addEventListener('click', function() {
+        document.getElementById('medication-dialog').style.display = 'none';
     });
 
     // Função para remover campo de medicamento e quantidade associados

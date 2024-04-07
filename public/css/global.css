@@ -103,3 +103,27 @@ header.header-system ul {
 }
 /** FIM HEADER SYSTEM */
 
+.whatsapp-icon {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1000;
+}
+
+.whatsapp-icon a {
+    display: inline-flex;
+    background-color: #25D366;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.3);
+    transition: background-color 0.3s;
+}
+
+.whatsapp-icon img {
+    width: 50px;
+    height: 50px;
+}
+
+.whatsapp-icon a:hover {
+    background-color: #1ebe5f;
+}
