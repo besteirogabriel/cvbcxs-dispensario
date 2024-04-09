@@ -44,20 +44,33 @@ async function checkAvailability(pedido) {
       );
       const totalDisponivel = result.rows[0].total;
       if (parseInt(totalDisponivel) >= parseInt(quantidade)) {
-        console.log(
-          `Medicamento ${medicamento} - ${composto}: disponível. Quantidade: ${totalDisponivel}`
-        );
-        return true;
+        return {
+          success: true,
+          message: `Medicamento ${medicamento} - ${composto} disponível.`,
+        };
+      }
+      if (
+        parseInt(totalDisponivel) <= parseInt(quantidade) &&
+        totalDisponivel > 0
+      ) {
+        return {
+          success: false,
+          message: `Medicamento ${medicamento} - ${composto} disponível em quantidade insuficiente, ${
+            tipoMedicamento == 'COMPRIMIDO' ?
+              `${totalDisponivel === 1 ? '1 comprimido' : `${totalDisponivel} comprimidos`}` :
+              `${totalDisponivel === 1 ? '1 caixa' : `${totalDisponivel} caixas`}`
+          } disponíveis.`,
+        };
       } else {
-        console.log(
-          `total: ${totalDisponivel}, Medicamento ${medicamento} - ${composto}: não disponível.`
-        );
-        return false;
+        return {
+          success: false,
+          message: `Medicamento ${medicamento} - ${composto} não disponível.`,
+        };
       }
     }
   } catch (error) {
     console.error('Erro ao verificar disponibilidade:', error);
-    return false;
+    return { success: false };
   } finally {
     client.release();
   }
@@ -99,7 +112,7 @@ async function insertPedido(pedido) {
     await client.query('COMMIT');
     return {
       success: true,
-      message: 'Pedido criado com sucesso.',
+      message: 'Pedido criado com successo.',
       pedidoId: pedidoId,
     };
   } catch (error) {
