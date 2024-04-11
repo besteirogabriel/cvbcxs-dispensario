@@ -6,7 +6,7 @@ const pedidos = require('../mocks/pedidos');
 // variaveis template
 var tableHeaders = {
     cim: 'CIM',
-    email: 'Email',
+   // email: 'Email',
     beneficiado: 'Beneficiado',
     medicamento: 'Medicamento',
     status: 'Status',
