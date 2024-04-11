@@ -58,12 +58,18 @@ router.get('/', function (req, res, next) {
 
 //envia a solicitação
 router.post('/', async (req, res) => {
+  jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Token inválido' });
+    } else {
+      req.user = decoded;
+    }
+  });
   try {
     const pedido = req.body;
     const isAvailable = await checkAvailability(pedido);
     if (isAvailable.success) {
-      // const pedidoId = await insertPedido(pedido);
-      // console.log('Pedido inserido com sucesso:', pedidoId);
+      const pedidoId = await insertPedido(pedido, isAvailable.requestedMedicines);
     }
     const message = {
       type: isAvailable.success ? 'success' : 'error',

@@ -8,67 +8,89 @@ const pool = new Pool({
   port: 5433,
 });
 
-// check if requested medicine is in stock, if not, return false,
-// if it is, insert the order into the database and return true
 async function checkAvailability(pedido) {
   const client = await pool.connect();
-  const medicamentos = pedido.medicamento;
-  const quantidades = pedido.quantidade;
-
+  const requestedMedicines = [];
   try {
-    const promises = medicamentos.map(async (medicamento) => {
-      const result = await client.query(
-        'SELECT tipo_medicamento FROM medicamentos WHERE medicamento ILIKE $1',
-        [`%${medicamento.split(' - ')[0]}%`]
-      );
-      return result.rows[0].tipo_medicamento;
-    });
+    await client.query('BEGIN');
 
-    const tiposMedicamento = await Promise.all(promises);
+    const medicamentos = pedido.medicamento;
+    const quantidades = pedido.quantidade;
 
     for (let i = 0; i < medicamentos.length; i++) {
       const medicamento = medicamentos[i].split(' - ')[0];
       const composto = medicamentos[i].split(' - ')[1];
       const quantidade = quantidades[i];
-      const tipoMedicamento = tiposMedicamento[i];
 
       const result = await client.query(
-        'SELECT ' +
+        'SELECT id,' +
           'CASE ' +
           "  WHEN $1 = 'COMPRIMIDO' THEN SUM(qtd_total) " +
           "  WHEN $1 = 'GOTAS' THEN SUM(qtd_cx) " +
           'END AS total ' +
           'FROM medicamentos ' +
-          'WHERE medicamento ILIKE $2 AND composto ILIKE $3',
+          'WHERE medicamento ILIKE $2 AND composto ILIKE $3 GROUP BY id',
         [tipoMedicamento, `%${medicamento}%`, `%${composto}%`]
       );
+      const medicineId = result.rows[0].id;
       const totalDisponivel = result.rows[0].total;
+
       if (parseInt(totalDisponivel) >= parseInt(quantidade)) {
-        return {
-          success: true,
-          message: `Medicamento ${medicamento} - ${composto} disponível.`,
-        };
-      }
-      if (
+        requestedMedicines.push({
+          id: medicineId,
+          medicamento: medicamento,
+          composto: composto,
+          quantidade: quantidade,
+        });
+        const updateQuery = `
+          UPDATE medicamentos
+          SET ${
+            tipoMedicamento == 'COMPRIMIDO'
+              ? `qtd_total = qtd_total - ${quantidade}`
+              : `qtd_cx = qtd_cx - ${quantidade}`
+          }
+          WHERE id = $1;
+        `;
+        await client.query(updateQuery, [medicineId]);
+      } else if (
         parseInt(totalDisponivel) <= parseInt(quantidade) &&
         totalDisponivel > 0
       ) {
+        await client.query('ROLLBACK');
         return {
           success: false,
           message: `Medicamento ${medicamento} - ${composto} disponível em quantidade insuficiente, ${
-            tipoMedicamento == 'COMPRIMIDO' ?
-              `${totalDisponivel === 1 ? '1 comprimido' : `${totalDisponivel} comprimidos`}` :
-              `${totalDisponivel === 1 ? '1 caixa' : `${totalDisponivel} caixas`}`
+            tipoMedicamento == 'COMPRIMIDO'
+              ? `${
+                  totalDisponivel === 1
+                    ? '1 comprimido'
+                    : `${totalDisponivel} comprimidos`
+                }`
+              : `${
+                  totalDisponivel === 1
+                    ? '1 caixa'
+                    : `${totalDisponivel} caixas`
+                }`
           } disponíveis.`,
+          medicineId: medicineId,
         };
-      } else {
+      } else if (parseInt(totalDisponivel) === 0) {
+        await client.query('ROLLBACK');
         return {
           success: false,
           message: `Medicamento ${medicamento} - ${composto} não disponível.`,
+          medicineId: medicineId,
         };
       }
     }
+
+    await client.query('COMMIT');
+    return {
+      success: true,
+      requestedMedicines: requestedMedicines,
+    };
   } catch (error) {
+    await client.query('ROLLBACK');
     console.error('Erro ao verificar disponibilidade:', error);
     return { success: false };
   } finally {
@@ -76,8 +98,9 @@ async function checkAvailability(pedido) {
   }
 }
 
-async function insertPedido(pedido) {
+async function insertPedido(pedido, requestedMedicines) {
   const client = await pool.connect();
+
   try {
     await client.query('BEGIN');
 
@@ -85,7 +108,7 @@ async function insertPedido(pedido) {
       INSERT INTO pedidos(nome_beneficiado, cim, id_loja, estado)
       VALUES($1, $2, $3, $4)
       RETURNING id;
-  `;
+    `;
     const pedidoValues = [
       pedido.beneficiado,
       pedido.cim,
@@ -95,16 +118,13 @@ async function insertPedido(pedido) {
     const pedidoResult = await client.query(pedidoQuery, pedidoValues);
     const pedidoId = pedidoResult.rows[0].id;
 
-    const medicamentos = pedido.medicamento;
-    const quantidades = pedido.quantidade;
-
-    for (let i = 0; i < medicamentos.length; i++) {
-      const medicamento = medicamentos[i];
-      const quantidade = quantidades[i];
+    for (let i = 0; i < requestedMedicines.length; i++) {
+      const medicamento = requestedMedicines[i].id;
+      const quantidade = requestedMedicines[i].quantidade;
 
       const medicamentoQuery = `
-          INSERT INTO pedidos_medicamentos(pedido_id, medicamento_composto, quantidade)
-          VALUES($1, $2, $3);
+        INSERT INTO pedidos_medicamentos(pedido_id, medicamento_id, quantidade)
+        VALUES($1, $2, $3);
       `;
       await client.query(medicamentoQuery, [pedidoId, medicamento, quantidade]);
     }
@@ -112,13 +132,16 @@ async function insertPedido(pedido) {
     await client.query('COMMIT');
     return {
       success: true,
-      message: 'Pedido criado com successo.',
+      message: 'Pedido criado com sucesso.',
       pedidoId: pedidoId,
     };
   } catch (error) {
     await client.query('ROLLBACK');
-    console.error('Error processing pedido', error);
-    return { success: false, message: 'Erro ao processar pedido.' };
+    console.error('Erro ao processar pedido:', error);
+    return {
+      success: false,
+      message: 'Erro ao processar pedido.',
+    };
   } finally {
     client.release();
   }
