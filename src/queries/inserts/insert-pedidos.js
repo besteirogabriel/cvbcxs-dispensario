@@ -22,6 +22,12 @@ async function checkAvailability(pedido) {
       const composto = medicamentos[i].split(' - ')[1];
       const quantidade = quantidades[i];
 
+      const tipoMedicamentoResult = await client.query(
+        'SELECT tipo_medicamento FROM medicamentos WHERE medicamento ILIKE $1 AND composto ILIKE $2',
+        [`%${medicamento}%`, `%${composto}%`]
+      );
+      const tipoMedicamento = tipoMedicamentoResult.rows[0].tipo_medicamento;
+
       const result = await client.query(
         'SELECT id,' +
           'CASE ' +
@@ -83,7 +89,6 @@ async function checkAvailability(pedido) {
         };
       }
     }
-
     await client.query('COMMIT');
     return {
       success: true,
