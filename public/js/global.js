@@ -63,26 +63,60 @@ $(function() {
       });
     }
   });
+
+  //preenche os campos com base no medicamento selecionado
+  $('#medicamento-estoque').on('change', function() {
+    var medicamentoId = $(this).val();
+    console.log('medicamentoId:', medicamentoId)
+    var form = $(this).closest('form');
+    if (medicamentoId) {
+      $.ajax({
+          url: '/medicamento-cadastrar/' + medicamentoId,
+          method: 'GET',
+          success: function(response) {
+            // Preenche os campos de endereço com os dados retornados
+            $(form).find('#composto').val(response.composto);
+            $(form).find('#laboratorio').val(response.laboratorio);
+            $(form).find('#unidades-cx').val(response.unidades_cx);
+          },
+          error: function(error) {
+            console.error('Erro ao buscar medicamento:', error);
+          }
+      });
+    }
+  });
+
+// Adiciona evento de clique ao botão "Alterar Status" dentro do modal
+$('.modal-content').on('click', '.alterar-status', function() {
+  var novoStatus = $('#status-select').val();
+  
+  var conteudoModal = $('.modal-content').html();
+
+  // regex p encontrar o ID do pedido
+  var idPedidoRegex = /<strong>ID Pedido:<\/strong>\s*(\d+)/;
+  var idPedidoMatch = conteudoModal.match(idPedidoRegex);
+
+  if (idPedidoMatch) {
+      var idPedido = idPedidoMatch[1];
+      console.log('ID do Pedido:', idPedido);
+
+      // $.ajax({
+      //   url: '/pedidos/alterar-status/' + idPedido,
+      //   method: 'POST',
+      //   data: { status: novoStatus },
+      //   success: function(response) {
+      //     console.log('Status alterado com sucesso:', response);
+      //     location.reload();
+      //   },
+      //   error: function(error) {
+      //     console.error('Erro ao alterar status do pedido:', error);
+      //   }
+      // });
+  } else {
+      console.log('ID do Pedido não encontrado.');
+  }
 });
 
-//preenche os campos com base no medicamento selecionado
-$('#medicamento-estoque').on('change', function() {
-  var medicamentoId = $(this).val();
-  console.log('medicamentoId:', medicamentoId)
-  var form = $(this).closest('form');
-  if (medicamentoId) {
-    $.ajax({
-        url: '/medicamento-cadastrar/' + medicamentoId,
-        method: 'GET',
-        success: function(response) {
-          // Preenche os campos de endereço com os dados retornados
-          $(form).find('#composto').val(response.composto);
-          $(form).find('#laboratorio').val(response.laboratorio);
-          $(form).find('#unidades-cx').val(response.unidades_cx);
-        },
-        error: function(error) {
-          console.error('Erro ao buscar medicamento:', error);
-        }
-    });
-  }
+
+
 });

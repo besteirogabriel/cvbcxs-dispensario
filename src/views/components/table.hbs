@@ -39,7 +39,7 @@
             {{#each item }}
               <li>{{ this }}</li>
             {{/each}}
-            <li><button class="button-1 alterar-status">Alterar status</button></li> <!-- Botão "Alterar status" -->
+            <li><button class="modal-button">Alterar status</button></li> <!-- Botão "Alterar status" -->
         </ul>
         {{/each}}
     </div>
@@ -51,7 +51,8 @@
         <!-- Aqui vamos inserir o conteúdo do modal dinamicamente -->
     </div>
     <div id="modal-status-select">
-        <label for="status-select">Novo Status:</label>
+        {{!-- <label for="status-select">Novo Status:</label> --}}
+        <p><strong>Novo status:</strong></p>
         <select id="status-select" style="margin-bottom: 10px;">
             <option value="EM PREPARAÇÃO">Em Preparação</option>
             <option value="SEPARADO">Separado</option>
@@ -73,12 +74,12 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     // Adicione um evento de clique a todos os botões "Alterar status"
-    var alterarStatusButtons = document.querySelectorAll('.alterar-status');
+    var alterarStatusButtons = document.querySelectorAll('.modal-button');
     alterarStatusButtons.forEach(function(button) {
         button.addEventListener('click', function() {
             // Obtenha as informações da linha clicada
             var rowContent = this.closest('.table-item').cloneNode(true); // Clone o elemento da linha
-            var buttonToRemove = rowContent.querySelector('.alterar-status'); // Encontre o botão dentro do clone
+            var buttonToRemove = rowContent.querySelector('.modal-button'); // Encontre o botão dentro do clone
             buttonToRemove.parentNode.removeChild(buttonToRemove); // Remova o botão do clone
 
             // Obtendo os títulos das colunas
@@ -136,6 +137,19 @@ document.addEventListener("DOMContentLoaded", function() {
     background-color: #d32f2f;
 }
 
+.modal-button {
+    background-color: #4285f4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+.modal-button:hover {
+    background-color: #357ae8;
+}
 /* Estilos para os botões "Imprimir Pedido" e "Alterar Status" */
 .button-3, .alterar-status {
     background-color: #4285f4;
@@ -177,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
 #modal-status-select {
-  margin-bottom: 20px;
+  margin: 20px 0 20px 0;
 }
   /* Estilos para o botão de fechar */
   .close {

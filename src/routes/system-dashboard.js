@@ -27,6 +27,7 @@ router.get('/', async function (req, res, next) {
   var tableHeaders = {};
   if (req.user.admin) {
     tableHeaders = {
+      id_pedido: 'ID Pedido',
       loja: 'Loja',
       cim: 'CIM',
       //email: 'Email',

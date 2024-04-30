@@ -34,8 +34,8 @@ async function fetchOrdersData(userId, isAdmin = false) {
   let formattedOrders;
 
   if (isAdmin) {
-    console.log('IF', isAdmin);
     formattedOrders = ordersFromDB.map((order) => ({
+      id_pedido: order.pedido_id,
       loja: order.loja,
       cim: order.cim,
       beneficiado: order.nome_beneficiado,
@@ -44,7 +44,6 @@ async function fetchOrdersData(userId, isAdmin = false) {
     }));
     return formattedOrders;
   } else {
-    console.log('ELSE', isAdmin);
     formattedOrders = ordersFromDB.map((order) => ({
       cim: order.cim,
       beneficiado: order.nome_beneficiado,
