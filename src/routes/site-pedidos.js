@@ -69,7 +69,10 @@ router.post('/', async (req, res) => {
     const pedido = req.body;
     const isAvailable = await checkAvailability(pedido);
     if (isAvailable.success) {
-      const pedidoId = await insertPedido(pedido, isAvailable.requestedMedicines);
+      const pedidoId = await insertPedido(
+        pedido,
+        isAvailable.requestedMedicines
+      );
     }
     const message = {
       type: isAvailable.success ? 'success' : 'error',
@@ -98,6 +101,35 @@ router.post('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Erro ao enviar pedido:', error);
+  }
+});
+
+router.post('/alterar-status/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    await pool.query('BEGIN');
+
+    const query = `
+      UPDATE pedidos
+      SET estado = $1
+      WHERE id = $2;
+    `;
+
+    await pool.query(query, [status, id]);
+
+    await pool.query('COMMIT');
+
+    console.log(`O estado do pedido ${id} foi atualizado para ${status}.`);
+    // res.status(200).send(`O estado do pedido ${id} foi atualizado para ${status}.`);
+    res.redirect('/dashboard');
+
+  } catch (error) {
+    await pool.query('ROLLBACK');
+
+    console.error('Erro ao atualizar o estado do pedido:', error);
+    res.status(500).send('Erro ao atualizar o estado do pedido.');
   }
 });
 

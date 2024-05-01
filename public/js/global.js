@@ -89,7 +89,7 @@ $(function() {
 // Adiciona evento de clique ao botão "Alterar Status" dentro do modal
 $('.modal-content').on('click', '.alterar-status', function() {
   var novoStatus = $('#status-select').val();
-  
+
   var conteudoModal = $('.modal-content').html();
 
   // regex p encontrar o ID do pedido
@@ -100,18 +100,18 @@ $('.modal-content').on('click', '.alterar-status', function() {
       var idPedido = idPedidoMatch[1];
       console.log('ID do Pedido:', idPedido);
 
-      // $.ajax({
-      //   url: '/pedidos/alterar-status/' + idPedido,
-      //   method: 'POST',
-      //   data: { status: novoStatus },
-      //   success: function(response) {
-      //     console.log('Status alterado com sucesso:', response);
-      //     location.reload();
-      //   },
-      //   error: function(error) {
-      //     console.error('Erro ao alterar status do pedido:', error);
-      //   }
-      // });
+      $.ajax({
+        url: '/pedidos/alterar-status/' + idPedido,
+        method: 'POST',
+        data: { status: novoStatus },
+        success: function(response) {
+          console.log('Status alterado com sucesso:', response);
+          location.reload();
+        },
+        error: function(error) {
+          console.error('Erro ao alterar status do pedido:', error);
+        }
+      });
   } else {
       console.log('ID do Pedido não encontrado.');
   }

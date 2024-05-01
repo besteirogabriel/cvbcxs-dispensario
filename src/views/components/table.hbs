@@ -55,9 +55,9 @@
         <p><strong>Novo status:</strong></p>
         <select id="status-select" style="margin-bottom: 10px;">
             <option value="EM PREPARAÇÃO">Em Preparação</option>
-            <option value="SEPARADO">Separado</option>
-            <option value="ENVIADO">Enviado</option>
-            <option value="FINALIZADO">Finalizado</option>
+            <option value="EM ROTA DE ENTREGA">Em Rota de Entrega</option>
+            <option value="FINALIZADO COM SUCESSO">Finalizado Com Sucesso</option>
+            <option value="ENCERRADO">Encerrado</option>
         </select>
     </div>
     <div id="modal-buttons">
@@ -158,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function() {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 10px;
 }
 
 .button-3:hover, .alterar-status:hover {
@@ -233,7 +232,6 @@ document.addEventListener("DOMContentLoaded", function() {
     border-radius: 5px;
     cursor: pointer;
     margin-top: 20px;
-    margin-left: 10px; /* Adicionado espaço entre os botões */
   }
 
   .alterar-status:hover {
