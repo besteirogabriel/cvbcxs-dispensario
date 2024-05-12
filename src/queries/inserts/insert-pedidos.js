@@ -23,7 +23,7 @@ async function checkAvailability(pedido) {
       const quantidade = quantidades[i];
 
       const tipoMedicamentoResult = await client.query(
-        'SELECT tipo_medicamento FROM medicamentos WHERE medicamento ILIKE $1 AND composto ILIKE $2',
+        'SELECT tipo_medicamento FROM medicamentos WHERE ativo = true AND medicamento ILIKE $1 AND composto ILIKE $2',
         [`%${medicamento}%`, `%${composto}%`]
       );
       const tipoMedicamento = tipoMedicamentoResult.rows[0].tipo_medicamento;
@@ -35,7 +35,7 @@ async function checkAvailability(pedido) {
           "  WHEN $1 = 'GOTAS' THEN SUM(qtd_cx) " +
           'END AS total ' +
           'FROM medicamentos ' +
-          'WHERE medicamento ILIKE $2 AND composto ILIKE $3 GROUP BY id',
+          'WHERE ativo = true AND medicamento ILIKE $2 AND composto ILIKE $3 GROUP BY id',
         [tipoMedicamento, `%${medicamento}%`, `%${composto}%`]
       );
       const medicineId = result.rows[0].id;

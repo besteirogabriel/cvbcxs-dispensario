@@ -16,7 +16,7 @@ const pool = new Pool({
 // const selectQuery = "SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) FROM medicamentos GROUP BY  medicamento, composto, laboratorio, fabricacao, validade;";
 
 var selectQuery =
-  "SELECT id, medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN SUM(qtd_total) WHEN tipo_medicamento = 'GOTAS' THEN SUM(qtd_cx) ELSE NULL END AS quantidade_total FROM medicamentos GROUP BY id, medicamento, composto, laboratorio,fabricacao, validade, tipo_medicamento;";
+  "SELECT id, medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN SUM(qtd_total) WHEN tipo_medicamento = 'GOTAS' THEN SUM(qtd_cx) ELSE NULL END AS quantidade_total FROM medicamentos WHERE ativo = true GROUP BY id, medicamento, composto, laboratorio,fabricacao, validade, tipo_medicamento;";
 
 router.get('/', async function (req, res, next) {
   jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
@@ -39,7 +39,7 @@ router.get('/', async function (req, res, next) {
       fabricacao: 'Fabricação',
       validade: 'Validade',
       quantidade_total: 'Quantidade Total',
-      // buttons: 'Ações',
+      buttons: 'Ações',
     };
   } else {
     tableHeaders = {
@@ -66,7 +66,7 @@ router.get('/', async function (req, res, next) {
     // Check if there's a search query
     if (searchQuery) {
       // Modify the query to include the search condition
-      query = `SELECT id, medicamento, composto, laboratorio, lote, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN qtd_total WHEN tipo_medicamento = 'GOTAS' THEN qtd_cx ELSE NULL END AS quantidade FROM medicamentos WHERE medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%'`;
+      query = `SELECT id, medicamento, composto, laboratorio, lote, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN qtd_total WHEN tipo_medicamento = 'GOTAS' THEN qtd_cx ELSE NULL END AS quantidade FROM medicamentos WHERE ativo = true AND (medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%')`;
     }
 
     // Execute the query

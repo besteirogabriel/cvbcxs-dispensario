@@ -22,7 +22,7 @@ async function fetchMedicineFromDatabase(query) {
 
 async function basicMedicineData() {
   // const medicineFromDB = await fetchMedicineFromDatabase("SELECT medicamento, composto, laboratorio FROM medicamentos GROUP BY  medicamento, composto, laboratorio;"  );
-  const medicineFromDB = await fetchMedicineFromDatabase(`SELECT medicamento, composto, laboratorio, SUM(CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN qtd_total WHEN tipo_medicamento = 'GOTAS' THEN qtd_cx ELSE 0 END) AS quantidade FROM medicamentos WHERE (tipo_medicamento = 'COMPRIMIDO' AND qtd_total > 0) OR (tipo_medicamento = 'GOTAS' AND qtd_cx > 0) GROUP BY medicamento, composto, laboratorio`);
+  const medicineFromDB = await fetchMedicineFromDatabase(`SELECT medicamento, composto, laboratorio, SUM(CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN qtd_total WHEN tipo_medicamento = 'GOTAS' THEN qtd_cx ELSE 0 END) AS quantidade FROM medicamentos WHERE ativo = true AND (tipo_medicamento = 'COMPRIMIDO' AND qtd_total > 0) OR (tipo_medicamento = 'GOTAS' AND qtd_cx > 0) GROUP BY medicamento, composto, laboratorio`);
   const formattedMedicine = medicineFromDB.map((medicine) => ({
     // id: medicine.id,
     medicamento_composto: `${medicine.medicamento} - ${medicine.composto}`,
@@ -38,7 +38,7 @@ async function basicMedicineData() {
 }
 
 async function medicineData() {
-  const medicineFromDB = await fetchMedicineFromDatabase("SELECT id, medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) AS qtd_total_cx FROM medicamentos GROUP BY  id, medicamento, composto, laboratorio, fabricacao, validade;"  );
+  const medicineFromDB = await fetchMedicineFromDatabase("SELECT id, medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) AS qtd_total_cx FROM medicamentos WHERE ativo = true GROUP BY ativo, id, medicamento, composto, laboratorio, fabricacao, validade;"  );
   const formattedMedicine = medicineFromDB.map((medicine) => ({
     id: medicine.id,
     medicamento: medicine.medicamento,
@@ -53,7 +53,7 @@ async function medicineData() {
 }
 
 async function medicineDataAggregate() {
-  const medicineFromDB = await fetchMedicineFromDatabase("SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) AS qtd_total_cx FROM medicamentos GROUP BY  medicamento, composto, laboratorio, fabricacao, validade;"  );
+  const medicineFromDB = await fetchMedicineFromDatabase("SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) AS qtd_total_cx FROM medicamentos WHERE ativo = true GROUP BY ativo, medicamento, composto, laboratorio, fabricacao, validade;"  );
   const formattedMedicine = medicineFromDB.map((medicine) => ({
     medicamento: medicine.medicamento,
     composto: medicine.composto,
