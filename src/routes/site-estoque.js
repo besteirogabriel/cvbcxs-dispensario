@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const jwt = require('jsonwebtoken');
 const { Pool } = require('pg');
 
 // Connection pool configuration
@@ -28,6 +29,14 @@ var tableHeaders = {
 const selectQuery = "SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN SUM(qtd_total) WHEN tipo_medicamento = 'GOTAS' THEN SUM(qtd_cx) ELSE NULL END AS quantidade_total FROM medicamentos GROUP BY medicamento, composto, laboratorio,fabricacao, validade, tipo_medicamento;";
 
 router.get('/', async function(req, res, next){
+    jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
+        if (err) {
+          return res.status(401).json({ message: 'Token inválido' });
+        } else {
+          req.user = decoded;
+        }
+      })
+
     try {
         // Get the search query from the request
         const searchQuery = req.query.search;
@@ -59,14 +68,17 @@ router.get('/', async function(req, res, next){
 
         // Render the template with the retrieved data
         res.render('site-estoque', { 
+            user: req.user,
             title: 'Estoque - CVBCXS dispensário', 
             page: 'estoque', 
             bodyClass: 'table',
+            system: req.system,
             data: { 
+                system: req.system,
                 tableHeaders: tableHeaders, 
                 tableBody: tableBody, // Pass the retrieved data here
                 tablePageHeader: {
-                    title: 'Estoque',
+                    title: req.system ? 'Gerenciar Estoque' : 'Estoque',
                     tableActions: {
                         search: {
                             placeholder: 'Pesquisar medicamento ou composto'

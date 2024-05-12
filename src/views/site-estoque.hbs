@@ -1,4 +1,8 @@
-<section class="estoque-table">
+{{#if data.system}}
+    <section class="estoque-table" style="margin-top: -100vh;">
+{{else}}
+    <section class="estoque-table">
+{{/if}}
     <div class="container">
         {{> table }}
     </div>

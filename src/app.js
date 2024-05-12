@@ -61,6 +61,18 @@ app.use(cookieParser());
 //routes init
 app.use('/', routes);
 app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
+app.use('/estoque-admin', verifyToken, async (req, res, next) => {
+  try {
+    req.estoque = estoque;
+    req.system = true;
+    // req.estoque = await medicineData();
+    next();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+, siteEstoque);
 app.use('/pedidos', verifyToken, async (req, res, next) => {
   try {
     const idDoCookie = req?.cookies?.id || null;
