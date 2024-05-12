@@ -22,7 +22,7 @@
         {{/if}}
     </div>
     {{/if}}
-    
+
     {{!-- conteúdo da tabela --}}
     <div class="table-columns">
         {{!-- colunas da tabela --}}
@@ -33,13 +33,218 @@
         </ul>
     </div>
     {{!-- conteúdo dos itens --}}
-    <div class="table-body">
-        {{#each data.tableBody as |item|}}   
-        <ul class="table-item">
-            {{#each item }}
-                <li> {{ this }} </li>       
-            {{/each}}    
-        </ul>
+<div class="table-body">
+    {{#each data.tableBody as |item|}}   
+    <ul class="table-item">
+        {{#each item }}
+          <li>{{ this }}</li>
         {{/each}}
-    </div>
+        {{#if item.id_pedido}}
+          <li><button class="modal-button">Ver Detalhes</button></li> <!-- Botão "Alterar status" -->
+        {{/if}}
+    </ul>
+    {{/each}}
 </div>
+
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="modal-content">
+        <!-- Aqui vamos inserir o conteúdo do modal dinamicamente -->
+    </div>
+    <div id="modal-status-select">
+        {{!-- <label for="status-select">Novo Status:</label> --}}
+        <p><strong>Novo status:</strong></p>
+        <select id="status-select" style="margin-bottom: 10px;">
+            <option value="EM PREPARAÇÃO">Em Preparação</option>
+            <option value="EM ROTA DE ENTREGA">Em Rota de Entrega</option>
+            <option value="FINALIZADO COM SUCESSO">Finalizado Com Sucesso</option>
+            <option value="ENCERRADO">Encerrado</option>
+        </select>
+    </div>
+    <div id="modal-buttons">
+        <button class="button-2">Cancelar Pedido</button>
+        <span class="right-buttons">
+        <button class="button-3">Imprimir Pedido</button>
+        <button class="alterar-status">Alterar Status</button>
+        </span>
+        {{!-- <br> --}}
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Adicione um evento de clique a todos os botões "Alterar status"
+    var alterarStatusButtons = document.querySelectorAll('.modal-button');
+    alterarStatusButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Obtenha as informações da linha clicada
+            var rowContent = this.closest('.table-item').cloneNode(true); // Clone o elemento da linha
+            var buttonToRemove = rowContent.querySelector('.modal-button'); // Encontre o botão dentro do clone
+            buttonToRemove.parentNode.removeChild(buttonToRemove); // Remova o botão do clone
+
+            // Obtendo os títulos das colunas
+            var columnTitles = document.querySelectorAll('.table-columns ul li');
+            var modalContentHTML = '';
+            columnTitles.forEach(function(title, index) {
+                if (title.textContent !== "Ações") { // Verifica se o título não é "Ações"
+                    modalContentHTML += '<p><strong>' + title.textContent + ':</strong> ' + rowContent.querySelectorAll('li')[index].textContent + '</p>';
+                }
+            });
+
+            // Exiba as informações no modal
+            document.getElementById('modal-content').innerHTML = modalContentHTML;
+            document.getElementById('myModal').style.display = 'flex'; // Mostrar o modal
+        });
+    });
+
+    // Quando o usuário clicar no botão de fechar (X), feche o modal
+    var closeButton = document.querySelector('.close');
+    closeButton.addEventListener('click', function() {
+      document.getElementById('myModal').style.display = 'none'; // Esconder o modal
+    });
+
+    // Quando o usuário clicar fora do modal, feche-o
+    window.addEventListener('click', function(event) {
+      var modal = document.getElementById('myModal');
+      if (event.target == modal) {
+        modal.style.display = 'none'; // Esconder o modal
+      }
+    });
+  });
+</script>
+
+<style>
+  /* Estilos para o modal */
+  #modal-buttons {
+    margin-top: 20px;
+}
+
+.right-buttons {
+  float: right;
+  margin-left: 20px;
+}
+/* Estilos para o botão "Cancelar Pedido" */
+.button-2 {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-2:hover {
+    background-color: #d32f2f;
+}
+
+.modal-button {
+    background-color: #4285f4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+.modal-button:hover {
+    background-color: #357ae8;
+}
+/* Estilos para os botões "Imprimir Pedido" e "Alterar Status" */
+.button-3, .alterar-status {
+    background-color: #4285f4;
+    color: white;
+    padding: 10px 20px !important;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-3:hover, .alterar-status:hover {
+    background-color: #357ae8;
+}
+
+  .modal {
+    display: none; /* Ocultar o modal por padrão */
+    position: fixed; /* Posição fixa para manter o modal no topo */
+    z-index: 1; /* Definir a ordem de empilhamento para garantir que o modal esteja acima do conteúdo */
+    left: 0;
+    top: 0;
+    width: 100%; /* Cobrir toda a largura da tela */
+    height: 100%; /* Cobrir toda a altura da tela */
+    overflow: auto; /* Adicionar rolagem se necessário */
+    background-color: rgba(0,0,0,0.4); /* Fundo semitransparente para destacar o modal */
+    align-items: center; /* Centralizar verticalmente */
+    justify-content: center; /* Centralizar horizontalmente */
+    list-style-type: none !important;
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Definir a largura do modal */
+    max-width: 600px; /* Definir a largura máxima do modal */
+    border-radius: 5px;
+    /* text-align: center; Centralizar o conteúdo do modal */
+  }
+
+#modal-status-select {
+  margin: 20px 0 20px 0;
+}
+  /* Estilos para o botão de fechar */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Estilos para o botão "Cancelar Pedido" */
+  .button-2 {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  .button-2:hover {
+    background-color: #d32f2f;
+  }
+
+  /* Estilos para o botão "Alterar Status" */
+  .alterar-status {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  .alterar-status:hover {
+    background-color: #45a049;
+  }
+
+  /* Remover estilo de lista */
+  .table-item li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>
