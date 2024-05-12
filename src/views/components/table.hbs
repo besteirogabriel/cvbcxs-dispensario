@@ -22,7 +22,7 @@
         {{/if}}
     </div>
     {{/if}}
-    
+
     {{!-- conteúdo da tabela --}}
     <div class="table-columns">
         {{!-- colunas da tabela --}}
@@ -33,16 +33,19 @@
         </ul>
     </div>
     {{!-- conteúdo dos itens --}}
-    <div class="table-body">
-        {{#each data.tableBody as |item|}}   
-        <ul class="table-item">
-            {{#each item }}
-              <li>{{ this }}</li>
-            {{/each}}
-            <li><button class="modal-button">Alterar status</button></li> <!-- Botão "Alterar status" -->
-        </ul>
+<div class="table-body">
+    {{#each data.tableBody as |item|}}   
+    <ul class="table-item">
+        {{#each item }}
+          <li>{{ this }}</li>
         {{/each}}
-    </div>
+        {{#if item.id_pedido}}
+          <li><button class="modal-button">Ver Detalhes</button></li> <!-- Botão "Alterar status" -->
+        {{/if}}
+    </ul>
+    {{/each}}
+</div>
+
 
 <div id="myModal" class="modal">
   <div class="modal-content">

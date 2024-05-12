@@ -119,15 +119,12 @@ router.get('/', async function (req, res, next) {
 
   // Se o usuário for administrador, adiciona a coluna de botões
   if (req.user.admin) {
-    console.log('Usuário é administrador');
+    console.log('é admin')
     tableHeaders.buttons = 'Ações';
   }
+  console.log('isAdmin', req.user.admin); 
+  console.log('route', 'systemDashboard');
 
-  console.log('pedidosAll', pedidosAll);
-
-  // Renderiza a página com os dados fictícios
-  console.log('user: ', req.user);
-  console.log('tableHeaders: ', tableHeaders);
   res.render('system-dashboard', {
     user: req.user,
     title: 'Dashboard - CVBCXS dispensário',
@@ -136,6 +133,9 @@ router.get('/', async function (req, res, next) {
     system: true,
     prefix: 'system',
     data: {
+      isAdmin: true,
+      // isAdmin: req.user.admin,
+      route: 'systemDashboard',
       tableHeaders: tableHeaders,
       tableBody: pedidosAll,
       tablePageHeader: {
