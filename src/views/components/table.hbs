@@ -40,7 +40,10 @@
           <li>{{ this }}</li>
         {{/each}}
         {{#if item.id_pedido}}
-          <li><button class="modal-button">Ver Detalhes</button></li> <!-- Botão "Alterar status" -->
+          <li><button class="modal-button">Ver Detalhes</button></li>
+        {{/if}}
+        {{#if item.id}}
+          <li><button class="modal-button">Ver Detalhes</button></li>
         {{/if}}
     </ul>
     {{/each}}
