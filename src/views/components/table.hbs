@@ -43,7 +43,7 @@
           <li><button class="modal-button">Ver Detalhes</button></li>
         {{/if}}
         {{#if item.id}}
-          <li><button class="modal-button">Ver Detalhes</button></li>
+          <li><button class="inventory-modal-button">Ver Detalhes</button></li>
         {{/if}}
     </ul>
     {{/each}}
@@ -78,45 +78,75 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Adicione um evento de clique a todos os botões "Alterar status"
-    var alterarStatusButtons = document.querySelectorAll('.modal-button');
-    alterarStatusButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            // Obtenha as informações da linha clicada
-            var rowContent = this.closest('.table-item').cloneNode(true); // Clone o elemento da linha
-            var buttonToRemove = rowContent.querySelector('.modal-button'); // Encontre o botão dentro do clone
-            buttonToRemove.parentNode.removeChild(buttonToRemove); // Remova o botão do clone
 
-            // Obtendo os títulos das colunas
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Adicione um evento de clique a todos os botões "Ver Detalhes"
+    var detailButtons = document.querySelectorAll('.modal-button, .inventory-modal-button');
+    detailButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var inventoryActions = this.classList.contains('inventory-modal-button');
+            var modalButtonsContainer = document.getElementById('modal-buttons');
+            modalButtonsContainer.innerHTML = ''; // Limpar o conteúdo anterior dos botões
+
+            // Exibir ou ocultar o seletor de status com base no tipo de ação
+            var statusSelect = document.getElementById('modal-status-select');
+            statusSelect.style.display = inventoryActions ? 'none' : 'block';
+
+            // Adicionar botões com base no tipo de ação
+            if (inventoryActions) {
+                modalButtonsContainer.innerHTML += `
+                    <button class="button-2">EXCLUIR</button>
+                    <span class="right-buttons">
+                    <button class="alterar-status">EDITAR MEDICAMENTO</button>
+                    </span>
+                `;
+            } else {
+                modalButtonsContainer.innerHTML += `
+                    <button class="button-2">Cancelar Pedido</button>
+                    <span class="right-buttons">
+                        <button class="button-3">Imprimir Pedido</button>
+                        <button class="alterar-status">Alterar Status</button>
+                    </span>
+                `;
+            }
+
+            var rowContent = this.closest('.table-item').cloneNode(true); 
+            var buttonToRemove = rowContent.querySelector('.modal-button'); 
+            if (buttonToRemove) {
+                buttonToRemove.parentNode.removeChild(buttonToRemove); 
+            }
+
             var columnTitles = document.querySelectorAll('.table-columns ul li');
             var modalContentHTML = '';
             columnTitles.forEach(function(title, index) {
-                if (title.textContent !== "Ações") { // Verifica se o título não é "Ações"
+                if (title.textContent !== "Ações") {
                     modalContentHTML += '<p><strong>' + title.textContent + ':</strong> ' + rowContent.querySelectorAll('li')[index].textContent + '</p>';
                 }
             });
 
-            // Exiba as informações no modal
             document.getElementById('modal-content').innerHTML = modalContentHTML;
-            document.getElementById('myModal').style.display = 'flex'; // Mostrar o modal
+            document.getElementById('myModal').style.display = 'flex'; 
         });
     });
 
     // Quando o usuário clicar no botão de fechar (X), feche o modal
     var closeButton = document.querySelector('.close');
     closeButton.addEventListener('click', function() {
-      document.getElementById('myModal').style.display = 'none'; // Esconder o modal
+      document.getElementById('myModal').style.display = 'none'; 
     });
 
     // Quando o usuário clicar fora do modal, feche-o
     window.addEventListener('click', function(event) {
       var modal = document.getElementById('myModal');
       if (event.target == modal) {
-        modal.style.display = 'none'; // Esconder o modal
+        modal.style.display = 'none'; 
       }
     });
-  });
+});
+
+
+
 </script>
 
 <style>
@@ -129,59 +159,33 @@ document.addEventListener("DOMContentLoaded", function() {
   float: right;
   margin-left: 20px;
 }
-/* Estilos para o botão "Cancelar Pedido" */
-.button-2 {
-    background-color: #f44336;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
-.button-2:hover {
-    background-color: #d32f2f;
-}
-
-.modal-button {
+/* Estilos para os botões */
+.button-2, .button-3, .alterar-status {
     background-color: #4285f4;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-
 }
 
-.modal-button:hover {
-    background-color: #357ae8;
-}
-/* Estilos para os botões "Imprimir Pedido" e "Alterar Status" */
-.button-3, .alterar-status {
-    background-color: #4285f4;
-    color: white;
-    padding: 10px 20px !important;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.button-3:hover, .alterar-status:hover {
+.button-2:hover, .button-3:hover, .alterar-status:hover {
     background-color: #357ae8;
 }
 
   .modal {
-    display: none; /* Ocultar o modal por padrão */
-    position: fixed; /* Posição fixa para manter o modal no topo */
-    z-index: 1; /* Definir a ordem de empilhamento para garantir que o modal esteja acima do conteúdo */
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
     left: 0;
     top: 0;
-    width: 100%; /* Cobrir toda a largura da tela */
-    height: 100%; /* Cobrir toda a altura da tela */
-    overflow: auto; /* Adicionar rolagem se necessário */
-    background-color: rgba(0,0,0,0.4); /* Fundo semitransparente para destacar o modal */
-    align-items: center; /* Centralizar verticalmente */
-    justify-content: center; /* Centralizar horizontalmente */
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4); 
+    align-items: center; 
+    justify-content: center; 
     list-style-type: none !important;
   }
 
@@ -189,16 +193,15 @@ document.addEventListener("DOMContentLoaded", function() {
     background-color: #fefefe;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Definir a largura do modal */
-    max-width: 600px; /* Definir a largura máxima do modal */
+    width: 80%; 
+    max-width: 600px; 
     border-radius: 5px;
-    /* text-align: center; Centralizar o conteúdo do modal */
   }
 
 #modal-status-select {
   margin: 20px 0 20px 0;
 }
-  /* Estilos para o botão de fechar */
+
   .close {
     color: #aaa;
     float: right;
@@ -212,36 +215,6 @@ document.addEventListener("DOMContentLoaded", function() {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  }
-
-  /* Estilos para o botão "Cancelar Pedido" */
-  .button-2 {
-    background-color: #f44336;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-
-  .button-2:hover {
-    background-color: #d32f2f;
-  }
-
-  /* Estilos para o botão "Alterar Status" */
-  .alterar-status {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-
-  .alterar-status:hover {
-    background-color: #45a049;
   }
 
   /* Remover estilo de lista */

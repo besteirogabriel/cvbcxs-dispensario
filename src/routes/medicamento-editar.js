@@ -19,7 +19,7 @@ const pool = new Pool({
 
 var abas = [
   {
-    name: 'Cadastrar Medicamento',
+    name: 'Editar Medicamento',
     url: 'medicamento-cadastrar',
     icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9.602 3.7c-1.154 1.937-.635 5.227 1.424 9.025.93 1.712.697 3.02.338 3.815-.982 2.178-3.675 2.799-6.525 3.456-1.964.454-1.839.87-1.839 4.004h-1.995l-.005-1.241c0-2.52.199-3.975 3.178-4.663 3.365-.777 6.688-1.473 5.09-4.418-4.733-8.729-1.35-13.678 3.732-13.678 3.321 0 5.97 2.117 5.97 6.167 0 3.555-1.949 6.833-2.383 7.833h-2.115c.392-1.536 2.499-4.366 2.499-7.842 0-5.153-5.867-4.985-7.369-2.458zm13.398 15.3h-3v-3h-2v3h-3v2h3v3h2v-3h3v-2z"/></svg>',
     class: 'active',
@@ -32,24 +32,6 @@ var abas = [
 ];
 
 //buscar dados do medicamento
-router.get('/medicamento-cadastrar/:id', async (req, res) => {
-  const { id } = req.params;
-  console.log('cadastrar/id:', id)
-  const medicamento = await basicMedicineData();
-  const medicamentoSelecionado = medicamento.find(
-    (medicamento) => medicamento.id === parseInt(id)
-  );
-  if (medicamentoSelecionado) {
-    const medicamento = {
-      composto: medicamentoSelecionado.composto,
-      laboratorio: medicamentoSelecionado.laboratorio,
-      unidades_cx: medicamentoSelecionado.unidades_cx,
-    };
-    res.json(medicamento);
-  } else {
-    res.status(404).json({ error: 'Medicamento não encontrado.' });
-  }
-});
 
 router.post('/', async (req, res) => {
   const client = await pool.connect();
@@ -88,23 +70,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-//chama o template
-router.get('/', function (req, res, next) {
-  jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: 'Token inválido' });
-    } else {
-      req.user = decoded;
-    }
-  });
-  res.render('medicamento-cadastrar', {
-    user: req.user,
-    system: true,
-    title: 'Cadastrar Medicamento - CVBCXS dispensário',
-    page: 'medicamento-cadastrar',
-    data: { abas: abas, estoque: req.estoque },
-  });
-});
 
 router.post('/', async (req, res) => {
   console.log('req.body:', req.body);
@@ -112,7 +77,7 @@ router.post('/', async (req, res) => {
 });
 
 // make a GET that pre fills the form with the data from the selected medicine, for editing
-router.get('/:id', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   console.log('req.params (/editar/id):', req.params);
   jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
     if (err) {
@@ -125,16 +90,15 @@ router.get('/:id', async (req, res, next) => {
   try {
     const medicamento = await medicineData();
     const medicamentoSelecionado = medicamento.find(
-      (medicamento) => medicamento.id === parseInt(id)
+      (medicamento) => medicamento.id === 534 //parseInt(id)
     );
     console.log('medicamentoSelecionado:', medicamentoSelecionado)
     if (medicamentoSelecionado) {
-      console.log('if')
-      res.render('medicamento-cadastrar', {
+      res.render('medicamento-editar', {
         user: req.user,
         system: true,
         title: 'Editar Medicamento - CVBCXS dispensário',
-        page: 'medicamento-cadastrar',
+        page: 'medicamento-editar',
         data: { abas: abas, medicamento: medicamentoSelecionado },
       });
     } else {
