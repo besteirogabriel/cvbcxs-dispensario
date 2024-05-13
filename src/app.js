@@ -29,7 +29,8 @@ var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
   //administrativo
 var adminLogin = require('./routes/admin-login');
-var medicamentoCadastrar = require('./routes/medicamento-cadastrar');  
+var medicamentoCadastrar = require('./routes/medicamento-cadastrar');
+var medicamentoEditar = require('./routes/medicamento-editar');
 //system
 var dashboard = require('./routes/system-dashboard');
 
@@ -38,7 +39,7 @@ var port = 3000;
 
 // Configure o body-parser para analisar solicitações JSON e codificadas URL
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 
 // Configure Handlebars engine
 app.engine('hbs', exphbs({
@@ -103,9 +104,9 @@ app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, ad
     },
     dashboard
   );
-  //cadastrar medicamento
+  //cadastrar medicamento (id is optional for editing)
   app.use('/medicamento-cadastrar', //verifyToken,
-   async (req, res, next) => {
+  async (req, res, next) => {
     try {
       req.estoque = await basicMedicineData();
       next();
@@ -114,6 +115,18 @@ app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, ad
       res.status(500).send('Internal Server Error');
     }
   }, medicamentoCadastrar);
+
+  app.use('/medicamento-editar', //verifyToken,
+  async (req, res, next) => {
+    try {
+      console.log('medicamento-editar')
+      req.estoque = await basicMedicineData();
+      next();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  }, medicamentoEditar);
 
 //rota protegida - verifica a autenticação do login
 app.get('/protected-route', verifyToken, (req, res) => {

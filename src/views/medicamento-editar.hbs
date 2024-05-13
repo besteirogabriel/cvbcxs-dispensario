@@ -1,0 +1,100 @@
+<section class="container medicamento-card"  style="margin-top: -100vh; margin-left: 320px;">
+    <div class="card-abas-container">
+        <div class="card-abas">
+            {{> abas }}
+            <div class="card-abas-content">
+                <!-- formulário de cadastro de medicamento -->
+                <form action="" method="post">
+                    <fieldset>
+                        <input type="date" name="fabricacao" id="fabricacao" required>
+                        <label> Data de Fabricação*</label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="date" name="validade" id="validade" required>
+                        <label> Data de Validade*</label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="number" name="qtd_cx" id="qtd_cx" required>
+                        <label>Quantidade de caixas*</label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="number" name="unidades_cx" id="unidades_cx">
+                        <label> Unidades por caixa</label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="text" name="composto" id="composto" required>
+                        <label> Composto*</label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="text" name="laboratorio" id="laboratorio" required>
+                        <label> Laboratório*</label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="text" name="lote" id="lote" required>
+                        <label> Lote*</label>
+                    </fieldset>
+                    <fieldset>
+                        <input type="text" name="medicamento" id="medicamento" required>
+                        <label> Nome Medicamento*</label>
+                    </fieldset>
+                    <fieldset>
+                        <select name="tipo_medicamento" id="tipo_medicamento"   class="js-select2" required>
+                            <option value="comprimido">comprimido</option>
+                            <option value="gotas">gotas</option>
+                        </select>
+                        <label> Tipo de Medicamento*</label>
+                    </fieldset>
+                    <button type="submit" class="button-1">Cadastrar</button>
+                    <p class="info">Ao enviar o formulário, você automaticamente concorda com nossa <a href="">política de privacidade</a> e <a href="">termos de uso</a></p>
+                </form>
+            </div>
+        </div>
+        <div class="card-abas-introducao">
+            <h1> EDITAR MEDICAMENTO </h1>
+            <img src="/images/register-illustration.svg" alt="Ilustração representando o cadastro de um medicamento">
+        </div>
+    </div>
+</section>
+<script>
+    // validate form data and submit form if all data is valid
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fabricacao = document.querySelector('#fabricacao').value;
+        const validade = document.querySelector('#validade').value;
+        const qtd_cx = document.querySelector('#qtd_cx').value;
+        const unidades_cx = document.querySelector('#unidades_cx').value;
+        const composto = document.querySelector('#composto').value;
+        const laboratorio = document.querySelector('#laboratorio').value;
+        const lote = document.querySelector('#lote').value;
+        const medicamento = document.querySelector('#medicamento').value;
+        const tipo_medicamento = document.querySelector('#tipo_medicamento').value;
+        const fabricacaoDate = new Date(fabricacao);
+        const validadeDate = new Date(validade);
+        const today = new Date();
+
+        if (fabricacao && validade && qtd_cx && composto && laboratorio && lote && medicamento && tipo_medicamento &&
+            !isNaN(fabricacaoDate) && !isNaN(validadeDate) && fabricacaoDate <= today && fabricacaoDate < validadeDate && validadeDate >= today) {
+            form.submit();
+        } else {
+            if (tipo_medicamento === 'comprimido' && !unidades_cx) {
+                alert('Preencha o campo de unidades por caixa.');
+            }
+            if (!fabricacao || !validade) {
+                alert('Preencha as datas de fabricação e validade.');
+            } else if (isNaN(fabricacaoDate)) {
+                alert('A data de fabricação é inválida.');
+            } else if (isNaN(validadeDate)) {
+                alert('A data de validade é inválida.');
+            } else if (fabricacaoDate > today) {
+                alert('A data de fabricação não pode ser futura.');
+            } else if (validadeDate < today) {
+                alert('A data de validade não pode ser inferior à hoje.');
+            } else if (fabricacaoDate >= validadeDate) {
+                alert('A data de validade deve ser posterior à data de fabricação.');
+            } else {
+                alert('Preencha todos os campos obrigatórios.');
+            }
+        }
+    });
+</script>
