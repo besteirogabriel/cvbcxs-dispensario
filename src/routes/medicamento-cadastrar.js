@@ -10,11 +10,14 @@ const {
 const jwt = require('jsonwebtoken');
 
 const pool = new Pool({
-  user: 'cvbcxs',
-  host: '172.16.10.33',
-  database: 'cvbcxcs_dispensario_gob',
-  password: 'l_W[x1a2e~t0)',
-  port: 5433, //
+  user: 'dispensario',
+  host: 'asa1prd-db-gob01.crcsao6misme.sa-east-1.rds.amazonaws.com',
+  database: 'dispensario',
+  password: 'Ai.g4aex.',
+  port: 5432, 
+  ssl: {
+    rejectUnauthorized: false,
+  }, //
 });
 
 var abas = [
