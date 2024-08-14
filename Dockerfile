@@ -15,7 +15,7 @@ RUN npm install pg
 COPY . .
 
 # Expondo a porta que o aplicativo usará
-EXPOSE 3000
+EXPOSE 443
 
 # Comando para iniciar o aplicativo
 CMD ["npm", "start"]
