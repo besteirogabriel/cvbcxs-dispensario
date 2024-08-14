@@ -11,11 +11,11 @@ router.get('/', async function (req, res, next) {
       req.user = decoded;
     }
   });
-  //  var pedidosAll = pedidos.getPedidos({ id: req.user.id, type: req.user.type });
-  const pedidosAll = await fetchOrdersData(req.user.id, req.user.admin);
+
+  const pedidosAll = await fetchOrdersData(req.user.id, (req.user.role == 'ADMIN' || req.user.role == 'OPERADOR' ));
 
   var tableHeaders = {};
-  if (req.user.admin) {
+  if (req.user.role == 'ADMIN' || req.user.role == 'OPERADOR' ) {
     tableHeaders = {
       id_pedido: 'ID Pedido',
       loja: 'Loja',
@@ -37,7 +37,7 @@ router.get('/', async function (req, res, next) {
   }
 
   // Se o usuário for administrador, adiciona a coluna de botões
-  if (req.user.admin) {
+  if (req.user.role == 'ADMIN' || req.user.role == 'OPERADOR' ) {
     tableHeaders.buttons = 'Ações';
   }
   res.render('system-dashboard', {

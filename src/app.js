@@ -6,6 +6,19 @@ const $ = require('jquery');
 const cookieParser = require('cookie-parser'); //cookies 
 const axios = require('axios'); //autocomplete CEP
 
+// // certificate STUFF
+// const https = require('https');
+// const fs = require('fs');
+
+// const options = {
+//   key: fs.readFileSync('./certbot/privkey.pem'),
+//   cert: fs.readFileSync('./certbot/fullchain.pem')
+// };
+
+// https.createServer(options, app).listen(443, () => {
+//   console.log('Servidor HTTPS rodando na porta 443');
+// });
+
 // MOCKS
 const lojas = require('./mocks/lojas');
 const formatLojasData = require('./queries/selects/select-lojas');
@@ -18,16 +31,14 @@ const pedidos = require('./mocks/pedidos');
 
 // Routes
 var verifyToken = require('./routes/authMiddleware');
-var handlebarsHelpers  = require('./routes/handlebars-helpers');
-  //site
 var routes = require('./routes/site-home');
 var siteEstoque = require('./routes/site-estoque');
 var sitePedidos = require('./routes/site-pedidos');
 var sitePedidoAcompanhar = require('./routes/site-pedido-acompanhar');
-  //loja
+//loja
 var lojaLogin = require('./routes/loja-login');
 var lojaCadastrar = require('./routes/loja-cadastrar');
-  //administrativo
+//administrativo
 var adminLogin = require('./routes/admin-login');
 var medicamentoCadastrar = require('./routes/medicamento-cadastrar');
 var medicamentoEditar = require('./routes/medicamento-editar');
@@ -36,10 +47,24 @@ var dashboard = require('./routes/system-dashboard');
 
 var app = express();
 var port = 3000;
+// var port = 443;
 
 // Configure o body-parser para analisar solicitações JSON e codificadas URL
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
+
+// Define custom helpers
+var hbsHelpers = {
+  eq: function (a, b) {
+    return a == b;
+  },
+  or: function () {
+    const args = Array.from(arguments);
+    args.pop(); // Remove the last argument (Handlebars options object)
+    return args.some(Boolean);
+  }
+  // Add more helpers here as needed
+};
 
 // Configure Handlebars engine
 app.engine('hbs', exphbs({
@@ -47,7 +72,7 @@ app.engine('hbs', exphbs({
   defaultLayout: 'index',
   layoutsDir: __dirname + '/views/layouts',
   partialsDir: __dirname + '/views/components',
-  helpers: handlebarsHelpers
+  helpers: hbsHelpers  // Pass the helpers here
 }));
 
 app.set('views', path.join(__dirname, 'views'));
@@ -66,14 +91,13 @@ app.use('/estoque-admin', verifyToken, async (req, res, next) => {
   try {
     req.estoque = estoque;
     req.system = true;
-    // req.estoque = await medicineData();
     next();
   } catch (error) {
     console.error('Error fetching data:', error);
     res.status(500).send('Internal Server Error');
   }
 }
-, siteEstoque);
+  , siteEstoque);
 app.use('/pedidos', verifyToken, async (req, res, next) => {
   try {
     const idDoCookie = req?.cookies?.id || null;
@@ -86,26 +110,26 @@ app.use('/pedidos', verifyToken, async (req, res, next) => {
     res.status(500).send('Internal Server Error');
   }
 }, sitePedidos);
-// app.use('/pedidos', (req, res, next) => { req.lojas = formatLojasData(); req.estoque = estoque; req.pedidos = pedidos; next(); }, sitePedidos);
+
 app.use('/pedido-acompanhar', sitePedidoAcompanhar);
-  //lojas
+//lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);
-  //admin
+//admin
 app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, adminLogin);
-  //system
-  app.use(
-    '/dashboard',
-    verifyToken,
-    (req, res, next) => {
-      req.token = req.cookies.token;
-      req.secretKey = req.cookies.secretKey;
-      next();
-    },
-    dashboard
-  );
-  //cadastrar medicamento (id is optional for editing)
-  app.use('/medicamento-cadastrar', //verifyToken,
+//system
+app.use(
+  '/dashboard',
+  verifyToken,
+  (req, res, next) => {
+    req.token = req.cookies.token;
+    req.secretKey = req.cookies.secretKey;
+    next();
+  },
+  dashboard
+);
+//cadastrar medicamento (id is optional for editing)
+app.use('/medicamento-cadastrar',
   async (req, res, next) => {
     try {
       req.estoque = await basicMedicineData();
@@ -116,10 +140,9 @@ app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, ad
     }
   }, medicamentoCadastrar);
 
-  app.use('/medicamento-editar', //verifyToken,
+app.use('/medicamento-editar',
   async (req, res, next) => {
     try {
-      console.log('medicamento-editar')
       req.estoque = await basicMedicineData();
       next();
     } catch (error) {
@@ -147,7 +170,6 @@ app.get('/buscar-endereco/:cep', async (req, res) => {
 
 //logout sistema
 app.get('/logout', (req, res) => {
-  // clear all cookies
   res.clearCookie('id');
   res.clearCookie('token');
   res.clearCookie('secretKey');
@@ -157,4 +179,3 @@ app.get('/logout', (req, res) => {
 app.listen(port, () => {
   console.log(`Aplicativo rodando em http://localhost:${port}`);
 });
-

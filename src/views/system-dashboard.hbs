@@ -3,3 +3,38 @@
         {{> table }}
     </div>
 </section>
+
+<script>
+    const listItems = document.querySelectorAll('ul.table-item li');
+
+    listItems.forEach(function (li) {
+        const text = li.textContent.trim();
+
+        if (text === "FINALIZADO COM SUCESSO") {
+            li.style.backgroundColor = '#d4edda';  // Verde claro
+            li.style.color = '#155724';            // Verde escuro
+            li.style.border = '1px solid #c3e6cb';
+            li.style.padding = '5px';
+            li.style.borderRadius = '4px';
+        } else if (text === "EM PREPARAÇÃO") {
+            li.style.backgroundColor = '#fff3cd';  // Amarelo claro
+            li.style.color = '#856404';            // Amarelo escuro
+            li.style.border = '1px solid #ffeeba';
+            li.style.padding = '5px';
+            li.style.borderRadius = '4px';
+        } else if (text === "EM ROTA DE ENTREGA") {
+            li.style.backgroundColor = '#cce5ff';  // Azul claro
+            li.style.color = '#004085';            // Azul escuro
+            li.style.border = '1px solid #b8daff';
+            li.style.padding = '5px';
+            li.style.borderRadius = '4px';
+        } else if (text === "ENCERRADO") {
+            li.style.backgroundColor = '#f8d7da';  // Vermelho claro
+            li.style.color = '#721c24';            // Vermelho escuro
+            li.style.border = '1px solid #f5c6cb';
+            li.style.padding = '5px';
+            li.style.borderRadius = '4px';
+        }
+    });
+
+</script>

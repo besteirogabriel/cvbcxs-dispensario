@@ -1,10 +1,10 @@
-<section class="container medicamento-card"  style="margin-top: -100vh; margin-left: 320px;">
+<section class="container medicamento-card" style="margin-top: -100vh; margin-left: 320px;">
     <div class="card-abas-container">
         <div class="card-abas">
             {{> abas }}
             <div class="card-abas-content">
                 <!-- formulário de cadastro de medicamento -->
-                <form action="" method="post">
+                <form id="medicamento-form" action="" method="post">
                     <fieldset>
                         <input type="date" name="fabricacao" id="fabricacao" required>
                         <label> Data de Fabricação*</label>
@@ -21,10 +21,38 @@
                         <input type="number" name="unidades_cx" id="unidades_cx">
                         <label> Unidades por caixa</label>
                     </fieldset>
-                    <fieldset>
-                        <input type="text" name="composto" id="composto" required>
-                        <label> Composto*</label>
-                    </fieldset>
+
+                    <!-- Container para múltiplos compostos -->
+                    <div id="compostos-container">
+                        <div class="composto-group">
+                            <fieldset>
+                                <input type="text" name="composto[]" class="composto" required>
+                                <label> Composto*</label>
+                            </fieldset>
+                            <fieldset>
+                                <input type="text" name="gramatura[]" class="gramatura" required>
+                                <label> Gramatura*</label>
+                            </fieldset>
+                            <fieldset>
+                                <select name="unidade_medida[]" class="unidade_medida" required>
+                                    <option value="mg">mg</option>
+                                    <option value="g">g</option>
+                                    <option value="mcg">mcg</option>
+                                    <option value="mEc">mEc</option>
+                                    <option value="mL">mL</option>
+                                    <option value="L">L</option>
+                                    <option value="mg/mL">mg/mL</option>
+                                    <option value="g/mL">g/mL</option>
+                                    <option value="gotas">gotas</option>
+                                    <option value="mL">mL</option>
+                                </select>
+                                <label> Unidade de Medida*</label>
+                            </fieldset>
+                            <button type="button" class="remove-composto button-1" style="margin-top: 10px;">Remover</button>
+                        </div>
+                    </div>
+                    <button type="button" id="add-composto" class="button-1" style="margin-top: 10px;">Adicionar Composto</button>
+
                     <fieldset>
                         <input type="text" name="laboratorio" id="laboratorio" required>
                         <label> Laboratório*</label>
@@ -38,9 +66,15 @@
                         <label> Nome Medicamento*</label>
                     </fieldset>
                     <fieldset>
-                        <select name="tipo_medicamento" id="tipo_medicamento"   class="js-select2" required>
-                            <option value="comprimido">comprimido</option>
-                            <option value="gotas">gotas</option>
+                        <select name="tipo_medicamento" id="tipo_medicamento" class="js-select2" required>
+                            <option value="comprimido">Comprimido</option>
+                            <option value="liquidis">Liquidis</option>
+                            <option value="gotas">Gotas</option>
+                            <option value="xarope">Xarope</option>
+                            <option value="ampola">Ampola</option>
+                            <option value="frascos">Frascos</option>
+                            <option value="pomada">Pomada</option>
+                            <option value="supositorio">Supositório</option>
                         </select>
                         <label> Tipo de Medicamento*</label>
                     </fieldset>
@@ -56,45 +90,91 @@
     </div>
 </section>
 <script>
-    // validate form data and submit form if all data is valid
-    const form = document.querySelector('form');
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fabricacao = document.querySelector('#fabricacao').value;
-        const validade = document.querySelector('#validade').value;
-        const qtd_cx = document.querySelector('#qtd_cx').value;
-        const unidades_cx = document.querySelector('#unidades_cx').value;
-        const composto = document.querySelector('#composto').value;
-        const laboratorio = document.querySelector('#laboratorio').value;
-        const lote = document.querySelector('#lote').value;
-        const medicamento = document.querySelector('#medicamento').value;
-        const tipo_medicamento = document.querySelector('#tipo_medicamento').value;
-        const fabricacaoDate = new Date(fabricacao);
-        const validadeDate = new Date(validade);
-        const today = new Date();
+    document.addEventListener('DOMContentLoaded', function() {
+        const compostosContainer = document.getElementById('compostos-container');
+        const addCompostoButton = document.getElementById('add-composto');
 
-        if (fabricacao && validade && qtd_cx && composto && laboratorio && lote && medicamento && tipo_medicamento &&
-            !isNaN(fabricacaoDate) && !isNaN(validadeDate) && fabricacaoDate <= today && fabricacaoDate < validadeDate && validadeDate >= today) {
-            form.submit();
-        } else {
-            if (tipo_medicamento === 'comprimido' && !unidades_cx) {
-                alert('Preencha o campo de unidades por caixa.');
-            }
-            if (!fabricacao || !validade) {
-                alert('Preencha as datas de fabricação e validade.');
-            } else if (isNaN(fabricacaoDate)) {
-                alert('A data de fabricação é inválida.');
-            } else if (isNaN(validadeDate)) {
-                alert('A data de validade é inválida.');
-            } else if (fabricacaoDate > today) {
-                alert('A data de fabricação não pode ser futura.');
-            } else if (validadeDate < today) {
-                alert('A data de validade não pode ser inferior à hoje.');
-            } else if (fabricacaoDate >= validadeDate) {
-                alert('A data de validade deve ser posterior à data de fabricação.');
+        // Função para adicionar um novo conjunto de campos de composto, gramatura e unidade de medida
+        addCompostoButton.addEventListener('click', function() {
+            const novoComposto = document.createElement('div');
+            novoComposto.classList.add('composto-group');
+            novoComposto.innerHTML = `
+                <fieldset>
+                    <input type="text" name="composto[]" class="composto" required>
+                    <label> Composto*</label>
+                </fieldset>
+                <fieldset>
+                    <input type="text" name="gramatura[]" class="gramatura" required>
+                    <label> Gramatura*</label>
+                </fieldset>
+                <fieldset>
+                    <select name="unidade_medida[]" class="unidade_medida" required>
+                        <option value="mg">mg</option>
+                        <option value="g">g</option>
+                        <option value="mcg">mcg</option>
+                        <option value="mEc">mEc</option>
+                        <option value="mL">mL</option>
+                        <option value="L">L</option>
+                        <option value="mg/mL">mg/mL</option>
+                        <option value="g/mL">g/mL</option>
+                        <option value="gotas">gotas</option>
+                        <option value="mL">mL</option>
+                    </select>
+                    <label> Unidade de Medida*</label>
+                </fieldset>
+                <button type="button" class="remove-composto button-1" style="margin-top: 10px;">Remover</button>
+            `;
+            compostosContainer.appendChild(novoComposto);
+
+            // Adicionar funcionalidade de remoção ao novo botão "Remover"
+            novoComposto.querySelector('.remove-composto').addEventListener('click', function() {
+                compostosContainer.removeChild(novoComposto);
+            });
+        });
+
+        // Funcionalidade de remoção para o primeiro grupo (se necessário)
+        document.querySelector('.remove-composto').addEventListener('click', function(e) {
+            e.target.closest('.composto-group').remove();
+        });
+
+        // Validação do formulário antes de submeter
+        const form = document.getElementById('medicamento-form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const fabricacao = document.querySelector('#fabricacao').value;
+            const validade = document.querySelector('#validade').value;
+            const qtd_cx = document.querySelector('#qtd_cx').value;
+            const unidades_cx = document.querySelector('#unidades_cx').value;
+            const laboratorio = document.querySelector('#laboratorio').value;
+            const lote = document.querySelector('#lote').value;
+            const medicamento = document.querySelector('#medicamento').value;
+            const tipo_medicamento = document.querySelector('#tipo_medicamento').value;
+            const fabricacaoDate = new Date(fabricacao);
+            const validadeDate = new Date(validade);
+            const today = new Date();
+
+            if (fabricacao && validade && qtd_cx && laboratorio && lote && medicamento && tipo_medicamento &&
+                !isNaN(fabricacaoDate) && !isNaN(validadeDate) && fabricacaoDate <= today && fabricacaoDate < validadeDate && validadeDate >= today) {
+                // Concatenar todos os compostos, gramaturas e unidades de medida em strings separadas por +
+                const compostosCompletos = Array.from(document.querySelectorAll('.composto')).map((_, i) => {
+                    const composto = document.querySelectorAll('.composto')[i].value;
+                    const gramatura = document.querySelectorAll('.gramatura')[i].value;
+                    const unidadeMedida = document.querySelectorAll('.unidade_medida')[i].value;
+                    return `${composto} ${gramatura}${unidadeMedida}`;
+                }).join(' + ');
+
+                // Criar um campo hidden para enviar esses valores concatenados
+                const compostosInput = document.createElement('input');
+                compostosInput.type = 'hidden';
+                compostosInput.name = 'compostos';
+                compostosInput.value = compostosCompletos;
+                form.appendChild(compostosInput);
+
+                form.submit();
             } else {
                 alert('Preencha todos os campos obrigatórios.');
             }
-        }
+        });
     });
 </script>
