@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
     const client = await pool.connect();
 
     const userQuery =
-      'SELECT * FROM usuarios WHERE email = $1 AND role = \'ADMIN\'';
+      'SELECT * FROM usuarios WHERE email = $1 AND role != \'LOJA\'';
     const { rows } = await client.query(userQuery, [email]);
     const user = rows[0];
 
@@ -44,6 +44,7 @@ router.post('/', async (req, res) => {
     }
 
     const secretKey = crypto.randomBytes(64).toString('hex');
+    console.log(user)
     const token = jwt.sign(
       {
         nome: user.nome,
