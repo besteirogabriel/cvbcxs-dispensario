@@ -7,13 +7,13 @@ const { Pool } = require('pg');
 
 const pool = new Pool({
   user: 'dispensario',
-  host: 'asa1prd-db-gob01.crcsao6misme.sa-east-1.rds.amazonaws.com',
+  host: '172.18.0.1',
   database: 'dispensario',
   password: 'Ai.g4aex.',
-  port: 5432, 
+  port: 5432,
   ssl: {
     rejectUnauthorized: false,
-  }, //
+  },
 });
 
 router.post('/', async (req, res) => {
@@ -23,12 +23,12 @@ router.post('/', async (req, res) => {
     const client = await pool.connect();
 
     const userQuery =
-      'SELECT * FROM usuarios WHERE email = $1 AND admin = true';
+      'SELECT * FROM usuarios WHERE email = $1 AND role = \'ADMIN\'';
     const { rows } = await client.query(userQuery, [email]);
     const user = rows[0];
 
     if (!user) {
-      return res.status(401).json({ message: 'Loja não encontrada' });
+      return res.status(401).json({ message: 'Usuário não encontrado' });
     }
 
     const passwordHash = crypto
@@ -36,7 +36,9 @@ router.post('/', async (req, res) => {
       .update(password)
       .digest('hex');
 
-    const validPassword = passwordHash === user.senha;
+    // TODO: update password validation
+    // const validPassword = await bcrypt.compare(password, user.senha);
+    const validPassword = user.senha === passwordHash;
     if (!validPassword) {
       return res.status(401).json({ message: 'Senha incorreta' });
     }
@@ -47,8 +49,7 @@ router.post('/', async (req, res) => {
         nome: user.nome,
         email: user.email,
         id: user.id,
-        admin: user.admin,
-        type: user.admin ? 1 : 2,
+        role: user.role
       },
       secretKey,
       { expiresIn: '1h' }
@@ -86,28 +87,5 @@ router.get('/', function (req, res, next) {
     data: { abas, abaGhost: true },
   });
 });
-
-// Login route
-// router.post('/', (req, res) => {
-//     const { email, password } = req.body; //pega os dados do formulário enviado
-//     const admin = req.admins.find(admin => admin.email === email); //confere se o email existe na base de dados
-
-//     if (!admin) { //se o email não existir na base de dados
-//         return res.status(401).json({ message: 'Usuário não encontrado' });
-//     }
-
-//     if (!bcrypt.compareSync(password, admin.password)) { //se a senha for inválida
-//         return res.status(401).json({ message: 'Senha incorreta' });
-//     }
-//     const secretKey = crypto.randomBytes(64).toString('hex');
-//     admin.secretKey = secretKey;
-
-//     const token = jwt.sign({ nome: admin.name, email: admin.email, id: admin.id, type: admin.admin ? 1 : 2, admin: admin.admin }, secretKey, { expiresIn: '1h' }); //gera um token com expiração de 1h
-
-//     res.cookie('secretKey', secretKey, { httpOnly: true });
-//     res.cookie('token', token, { httpOnly: true });
-
-//     res.redirect('/dashboard'); //redireciona para o dashboard se usuário autenticado
-// });
 
 module.exports = router;
