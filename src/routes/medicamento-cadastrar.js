@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 
 const pool = new Pool({
   user: 'dispensario',
-  host: 'asa1prd-db-gob01.crcsao6misme.sa-east-1.rds.amazonaws.com',
+  host: '172.18.0.1',
   database: 'dispensario',
   password: 'Ai.g4aex.',
   port: 5432,

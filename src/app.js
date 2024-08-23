@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var path = require('path');
 const $ = require('jquery');
-const cookieParser = require('cookie-parser'); // cookies 
-const axios = require('axios'); // autocomplete CEP
+const cookieParser = require('cookie-parser'); //cookies 
+const axios = require('axios'); //autocomplete CEP
 
 // SSL Certificate setup
 const https = require('https');
@@ -16,11 +16,34 @@ const options = {
   cert: fs.readFileSync('./certbot/fullchain.pem')
 };
 
-// Initialize the express app
-var app = express();
-var port = 443; // HTTPS port
+// MOCKS
+const lojas = require('./mocks/lojas');
+const formatLojasData = require('./queries/selects/select-lojas');
+const { medicineData, basicMedicineData, medicineDataAggregate } = require('./queries/selects/select-estoque');
+const admins = require('./mocks/admins');
+const estoque = require('./mocks/estoque');
+const pedidos = require('./mocks/pedidos');
 
-// Configure body-parser for JSON and URL encoded data
+// Routes
+var verifyToken = require('./routes/authMiddleware');
+var routes = require('./routes/site-home');
+var siteEstoque = require('./routes/site-estoque');
+var sitePedidos = require('./routes/site-pedidos');
+var sitePedidoAcompanhar = require('./routes/site-pedido-acompanhar');
+//loja
+var lojaLogin = require('./routes/loja-login');
+var lojaCadastrar = require('./routes/loja-cadastrar');
+//administrativo
+var adminLogin = require('./routes/admin-login');
+var medicamentoCadastrar = require('./routes/medicamento-cadastrar');
+var medicamentoEditar = require('./routes/medicamento-editar');
+//system
+var dashboard = require('./routes/system-dashboard');
+
+var app = express();
+var port = 3000;
+
+// Configure o body-parser para analisar solicitações JSON e codificadas URL
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -49,32 +72,13 @@ app.engine('hbs', exphbs({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-// Serve static files from the 'public' directory
+// Static files
 app.use(express.static('public'));
 
-// Configure cookies
+//configuração cookies 
 app.use(cookieParser());
 
-// Define routes
-var verifyToken = require('./routes/authMiddleware');
-var routes = require('./routes/site-home');
-var siteEstoque = require('./routes/site-estoque');
-var sitePedidos = require('./routes/site-pedidos');
-var sitePedidoAcompanhar = require('./routes/site-pedido-acompanhar');
-
-// loja routes
-var lojaLogin = require('./routes/loja-login');
-var lojaCadastrar = require('./routes/loja-cadastrar');
-
-// administrativo routes
-var adminLogin = require('./routes/admin-login');
-var medicamentoCadastrar = require('./routes/medicamento-cadastrar');
-var medicamentoEditar = require('./routes/medicamento-editar');
-
-// system routes
-var dashboard = require('./routes/system-dashboard');
-
-// Register routes with app
+//routes init
 app.use('/', routes);
 app.use('/estoque', (req, res, next) => { req.estoque = estoque; next(); }, siteEstoque);
 app.use('/estoque-admin', verifyToken, async (req, res, next) => {
@@ -86,8 +90,8 @@ app.use('/estoque-admin', verifyToken, async (req, res, next) => {
     console.error('Error fetching data:', error);
     res.status(500).send('Internal Server Error');
   }
-}, siteEstoque);
-
+}
+, siteEstoque);
 app.use('/pedidos', verifyToken, async (req, res, next) => {
   try {
     const idDoCookie = req?.cookies?.id || null;
@@ -102,15 +106,12 @@ app.use('/pedidos', verifyToken, async (req, res, next) => {
 }, sitePedidos);
 
 app.use('/pedido-acompanhar', sitePedidoAcompanhar);
-
-// loja routes
+//lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);
-
-// admin routes
+//admin
 app.use('/admin-login', (req, res, next) => { req.admins = admins; next(); }, adminLogin);
-
-// system routes
+//system
 app.use(
   '/dashboard',
   verifyToken,
@@ -121,8 +122,7 @@ app.use(
   },
   dashboard
 );
-
-// Medicamento routes
+//cadastrar medicamento (id is optional for editing)
 app.use('/medicamento-cadastrar',
   async (req, res, next) => {
     try {
@@ -145,12 +145,12 @@ app.use('/medicamento-editar',
     }
   }, medicamentoEditar);
 
-// Protected route example
+//rota protegida - verifica a autenticação do login
 app.get('/protected-route', verifyToken, (req, res) => {
   res.sendStatus(200);
 });
 
-// CEP lookup route
+//busca endereço por CEP
 app.get('/buscar-endereco/:cep', async (req, res) => {
   const { cep } = req.params;
   try {
@@ -162,7 +162,7 @@ app.get('/buscar-endereco/:cep', async (req, res) => {
   }
 });
 
-// Logout route
+//logout sistema
 app.get('/logout', (req, res) => {
   res.clearCookie('id');
   res.clearCookie('token');
@@ -170,7 +170,11 @@ app.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-// Start the HTTPS server
-https.createServer(options, app).listen(port, () => {
-  console.log(`Servidor HTTPS rodando na porta ${port}`);
+// Start the HTTPS server and keep HTTP server running for local development or fallback
+https.createServer(options, app).listen(443, () => {
+  console.log('Servidor HTTPS rodando na porta 443');
+});
+
+app.listen(port, () => {
+  console.log(`Aplicativo rodando em http://localhost:${port}`);
 });
