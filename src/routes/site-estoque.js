@@ -9,17 +9,17 @@ const pool = new Pool({
   host: '172.18.0.1',
   database: 'dispensario',
   password: 'Ai.g4aex.',
-  port: 5432, 
+  port: 5432,
   ssl: {
     rejectUnauthorized: false,
   },
 });
 
-// SQL query to select data from the medicamentos table
-// const selectQuery = "SELECT medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, SUM(qtd_cx) FROM medicamentos GROUP BY  medicamento, composto, laboratorio, fabricacao, validade;";
 
+// var selectQuery =
+// "SELECT id, medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN SUM(qtd_total) WHEN tipo_medicamento = 'GOTAS' THEN SUM(qtd_cx) ELSE NULL END AS quantidade_total FROM medicamentos WHERE ativo = true GROUP BY id, medicamento, composto, laboratorio,fabricacao, validade, tipo_medicamento;";
 var selectQuery =
-  "SELECT id, medicamento, composto, laboratorio, STRING_AGG(lote, ', ') AS lotes, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN SUM(qtd_total) WHEN tipo_medicamento = 'GOTAS' THEN SUM(qtd_cx) ELSE NULL END AS quantidade_total FROM medicamentos WHERE ativo = true GROUP BY id, medicamento, composto, laboratorio,fabricacao, validade, tipo_medicamento;";
+  "SELECT id, medicamento, composto, laboratorio, lote, fabricacao, validade, CASE WHEN tipo_medicamento IN ('COMPRIMIDO', 'AMPOLA', 'SUPOSITÓRIO') THEN qtd_total WHEN tipo_medicamento IN ('GOTAS', 'XAROPE', 'LIQUIDO', 'FRASCOS', 'POMADA') THEN qtd_cx ELSE NULL END AS quantidade FROM medicamentos WHERE ativo = true;";
 
 router.get('/', async function (req, res, next) {
   jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
@@ -68,8 +68,9 @@ router.get('/', async function (req, res, next) {
 
     // Check if there's a search query
     if (searchQuery) {
+      "SELECT id, medicamento, composto, laboratorio, lote, fabricacao, validade, CASE WHEN tipo_medicamento IN ('COMPRIMIDO', 'AMPOLA', 'SUPOSITÓRIO') THEN qtd_total WHEN tipo_medicamento IN ('GOTAS', 'XAROPE', 'LIQUIDO', 'FRASCOS', 'POMADA') THEN qtd_cx ELSE NULL END AS quantidade FROM medicamentos WHERE ativo = true AND (medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%');";
       // Modify the query to include the search condition
-      query = `SELECT id, medicamento, composto, laboratorio, lote, fabricacao, validade THEN qtd_cx ELSE NULL END AS quantidade FROM medicamentos WHERE ativo = true AND (medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%')`;
+      // query = `SELECT id, medicamento, composto, laboratorio, lote, fabricacao, validade THEN qtd_cx ELSE NULL END AS quantidade FROM medicamentos WHERE ativo = true AND (medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%')`;
     }
 
     // Execute the query

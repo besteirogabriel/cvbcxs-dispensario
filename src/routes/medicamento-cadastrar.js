@@ -54,10 +54,18 @@ router.post('/', async (req, res) => {
   const medicamento = req.body;
 
   try {
+    // let qtd_total = null;
+    // if (medicamento.tipo_medicamento === 'comprimido') {
+    //   qtd_total = medicamento.qtd_cx * medicamento.unidades_cx;
+    // }
+
     let qtd_total = null;
-    if (medicamento.tipo_medicamento === 'comprimido') {
+    if (['gotas', 'xarope', 'liquido', 'frascos', 'pomada'].includes(medicamento.tipo_medicamento)) {
+      qtd_total = medicamento.qtd_total;
+    } else if (['comprimido', 'ampola', 'supositório'].includes(medicamento.tipo_medicamento)) {
       qtd_total = medicamento.qtd_cx * medicamento.unidades_cx;
     }
+
 
     const medicamentoInsertQuery = `
       INSERT INTO MEDICAMENTOS
@@ -79,7 +87,7 @@ router.post('/', async (req, res) => {
     ];
 
     await client.query(medicamentoInsertQuery, medicamentoData);
-    res.redirect('/estoque?cadastrado=true');
+    res.redirect('/medicamento-cadastrar');
   } catch (error) {
     console.error('Error inserting data:', error);
     res.status(500).send('Internal Server Error');
