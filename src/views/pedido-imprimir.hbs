@@ -1,0 +1,48 @@
+<section class="pedido-imprimir-page">
+    <div class="pedido-imprimir-page .document-container">
+        <div class="pedido-imprimir-page .doc-title">
+            <h1>Detalhes do Pedido</h1>
+        </div>
+
+        <div class="pedido-imprimir-page .content">
+            <div class="pedido-imprimir-page .section-title">Informações do Beneficiado</div>
+            <div class="pedido-imprimir-page .info-row">
+                <p><strong>Nome:</strong> {{data.pedido.nome_beneficiado}}</p>
+                <p><strong>CIM:</strong> {{data.pedido.cim}}</p>
+            </div>
+
+            <div class="pedido-imprimir-page .section-title">Informações da Loja</div>
+            <div class="pedido-imprimir-page .info-row">
+                <p><strong>Loja:</strong> {{data.pedido.nome_loja}}</p>
+                <p><strong>Nome do Venerável:</strong> {{data.pedido.nome_veneravel}}</p>
+            </div>
+            <div class="pedido-imprimir-page .info-row">
+                <p><strong>CEP:</strong> {{data.pedido.cep}}</p>
+                <p><strong>Endereço:</strong> {{data.pedido.endereco}}</p>
+            </div>
+            <div class="pedido-imprimir-page .info-row">
+                <p><strong>Número:</strong> {{data.pedido.numero}}</p>
+                <p><strong>Cidade:</strong> {{data.pedido.cidade}}</p>
+                <p><strong>Estado:</strong> {{data.pedido.estado}}</p>
+            </div>
+            <div class="pedido-imprimir-page .info-row">
+                <p><strong>Telefone:</strong> {{data.pedido.telefone}}</p>
+            </div>
+
+            <div class="pedido-imprimir-page .section-title">Medicamentos</div>
+            {{#each data.pedido.medicamentos}}
+            <div class="pedido-imprimir-page .info-row">
+                <p><strong>Medicamento:</strong> {{this}}</p>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="pedido-imprimir-page .footer">
+            <p>Este é um documento gerado automaticamente e não requer assinatura.</p>
+        </div>
+    </div>
+
+    <div class="pedido-imprimir-page .print-button">
+        <button onclick="window.print()">Imprimir Pedido</button>
+    </div>
+</section>

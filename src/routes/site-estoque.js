@@ -69,7 +69,7 @@ router.get('/', async function (req, res, next) {
     // Check if there's a search query
     if (searchQuery) {
       // Modify the query to include the search condition
-      query = `SELECT id, medicamento, composto, laboratorio, lote, fabricacao, validade, CASE WHEN tipo_medicamento = 'COMPRIMIDO' THEN qtd_total WHEN tipo_medicamento = 'GOTAS' THEN qtd_cx ELSE NULL END AS quantidade FROM medicamentos WHERE ativo = true AND (medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%')`;
+      query = `SELECT id, medicamento, composto, laboratorio, lote, fabricacao, validade THEN qtd_cx ELSE NULL END AS quantidade FROM medicamentos WHERE ativo = true AND (medicamento ILIKE '%${searchQuery}%' OR composto ILIKE '%${searchQuery}%')`;
     }
 
     // Execute the query

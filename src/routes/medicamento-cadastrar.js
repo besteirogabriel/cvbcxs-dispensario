@@ -61,8 +61,8 @@ router.post('/', async (req, res) => {
 
     const medicamentoInsertQuery = `
       INSERT INTO MEDICAMENTOS
-      (fabricacao, validade, qtd_cx, unidades_cx, composto, laboratorio, lote, medicamento, tipo_medicamento, qtd_total)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      (fabricacao, validade, qtd_cx, unidades_cx, composto, laboratorio, lote, medicamento, tipo_medicamento, qtd_total, ativo)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true)
     `;
 
     const medicamentoData = [

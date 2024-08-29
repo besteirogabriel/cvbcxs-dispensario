@@ -39,6 +39,8 @@ var medicamentoCadastrar = require('./routes/medicamento-cadastrar');
 var medicamentoEditar = require('./routes/medicamento-editar');
 //system
 var dashboard = require('./routes/system-dashboard');
+//printable
+var pedidoImprimir = require('./routes/pedido-imprimir')
 
 var app = express();
 var port = 3000;
@@ -106,6 +108,10 @@ app.use('/pedidos', verifyToken, async (req, res, next) => {
 }, sitePedidos);
 
 app.use('/pedido-acompanhar', sitePedidoAcompanhar);
+
+app.use('/pedido-imprimir', (req, res, next) => { next(); }, pedidoImprimir);
+// app.use('/pedido-imprimir', pedidoImprimir)
+
 //lojas
 app.use('/loja-login', (req, res, next) => { req.lojas = lojas; next(); }, lojaLogin);
 app.use('/loja-cadastrar', lojaCadastrar);
