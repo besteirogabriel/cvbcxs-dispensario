@@ -49,6 +49,13 @@
     color: #888;
 }
 
+#print-button {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%
+}
+
 #print-button button {
     background-color: #007bff;
     color: white;
