@@ -49,12 +49,12 @@ $(function() {
           url: '/pedidos/buscar-endereco-loja/' + idLojaSelecionada,
           method: 'GET',
           success: function(response) {
+            console.log('response: ', response)
             // Preenche os campos de endereço com os dados retornados
-            $(form).find('#cep').val(response.cep.replace(/^(\d{5})(\d{3})$/, '$1-$2'));
             $(form).find('#endereco').val(response.endereco);
-            $(form).find('#numero').val(response.numero);
+            // $(form).find('#numero').val(response.numero);
             $(form).find('#cidade').val(response.cidade);
-            $(form).find('#estado').val(response.estado);
+            // $(form).find('#estado').val(response.estado);
             $(form).find('#veneravel').val(response.veneravel);
           },
           error: function(error) {

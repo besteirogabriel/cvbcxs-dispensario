@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
-// const lojas = require('../mocks/lojas');
-const {
-  checkAvailability,
-  insertPedido,
-} = require('../queries/inserts/insert-pedidos');
+const { checkAvailability, insertPedido } = require('../queries/inserts/insert-pedidos');
 const jwt = require('jsonwebtoken');
 const formatLojasData = require('../queries/selects/select-lojas');
-
 const { Pool } = require('pg');
 
 // Connection pool configuration
@@ -16,13 +11,11 @@ const pool = new Pool({
   host: '172.18.0.1',
   database: 'dispensario',
   password: 'Ai.g4aex.',
-  port: 5432, 
-  ssl: {
-    rejectUnauthorized: false,
-  }, //
+  port: 5432,
+  ssl: { rejectUnauthorized: false },
 });
 
-// variáveis template
+// Variáveis template
 var abas = [
   {
     name: 'Solicitar',
@@ -37,7 +30,7 @@ var abas = [
   },
 ];
 
-//chama o template
+// Chama o template
 router.get('/', function (req, res, next) {
   jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
     if (err) {
@@ -59,7 +52,7 @@ router.get('/', function (req, res, next) {
   });
 });
 
-//envia a solicitação
+// Envia a solicitação
 router.post('/', async (req, res) => {
   jwt.verify(req.cookies.token, req.cookies.secretKey, (err, decoded) => {
     if (err) {
@@ -107,52 +100,29 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.post('/alterar-status/:id', async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
-
-  try {
-    await pool.query('BEGIN');
-
-    const query = `
-      UPDATE pedidos
-      SET estado = $1
-      WHERE id = $2;
-    `;
-
-    await pool.query(query, [status, id]);
-
-    await pool.query('COMMIT');
-
-    console.log(`O estado do pedido ${id} foi atualizado para ${status}.`);
-    // res.status(200).send(`O estado do pedido ${id} foi atualizado para ${status}.`);
-    res.redirect('/dashboard');
-
-  } catch (error) {
-    await pool.query('ROLLBACK');
-
-    console.error('Erro ao atualizar o estado do pedido:', error);
-    res.status(500).send('Erro ao atualizar o estado do pedido.');
-  }
-});
-
-//busca o endereço da loja
+// Rota para buscar o endereço e venerável da loja selecionada
 router.get('/buscar-endereco-loja/:id', async (req, res) => {
   const { id } = req.params;
-  const lojas = await formatLojasData();
-  const lojaSelecionada = lojas.find((loja) => loja.id === parseInt(id));
-  if (lojaSelecionada) {
-    const enderecoLoja = {
-      cep: lojaSelecionada.cep,
-      endereco: lojaSelecionada.endereco,
-      numero: lojaSelecionada.numero_endereco,
-      cidade: lojaSelecionada.cidade,
-      estado: lojaSelecionada.estado,
-      veneravel: lojaSelecionada.vm,
-    };
-    res.json(enderecoLoja);
-  } else {
-    res.status(404).json({ error: 'Loja não encontrada.' });
+
+  try {
+    const lojas = await formatLojasData(); // Função para buscar as lojas
+    const lojaSelecionada = lojas.find((loja) => loja.id === parseInt(id));
+
+    if (lojaSelecionada) {
+      console.log('lojaSelecionada:', lojaSelecionada)
+      const enderecoLoja = {
+        endereco: lojaSelecionada.endereco,
+        cidade: lojaSelecionada.cidade,
+        veneravel: lojaSelecionada.vm,
+      };
+      console.log('Endereço da loja encontrado:', enderecoLoja);
+      res.json(enderecoLoja);
+    } else {
+      res.status(404).json({ error: 'Loja não encontrada.' });
+    }
+  } catch (error) {
+    console.error('Erro ao buscar dados da loja:', error);
+    res.status(500).json({ error: 'Erro ao buscar dados da loja.' });
   }
 });
 

@@ -32,12 +32,12 @@ async function formatLojasData(cookiesId = null) {
     email: loja.email,
     numero_da_loja: loja.numero_loja,
     vm: loja.nome_vm,
-    hospitaleiro: loja.nome_hospitaleiro,
-    cep: loja.cep,
-    endereco: loja.endereco,
-    numero_endereco: loja.numero,
     cidade: loja.cidade,
-    estado: loja.uf,
+    endereco: loja.endereco,
+    hospitaleiro: loja.nome_hospitaleiro,
+    // cep: loja.cep,
+    // numero_endereco: loja.numero,
+    // estado: loja.uf,
   }));
   if (cookiesId) {
     return [formattedLojas.find((loja) => loja.user_id == cookiesId)];
