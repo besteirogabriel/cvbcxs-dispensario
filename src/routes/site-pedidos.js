@@ -100,6 +100,29 @@ router.post('/', async (req, res) => {
   }
 });
 
+//UPDATE ORDER STATUS
+router.post('/alterar-status/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  try {
+    await pool.query('BEGIN');
+    const query = `
+      UPDATE pedidos
+      SET estado = $1
+      WHERE id = $2;
+    `;
+    await pool.query(query, [status, id]);
+    await pool.query('COMMIT');
+    console.log(`O estado do pedido ${id} foi atualizado para ${status}.`);
+    // res.status(200).send(`O estado do pedido ${id} foi atualizado para ${status}.`);
+    res.redirect('/dashboard');
+  } catch (error) {
+    await pool.query('ROLLBACK');
+    console.error('Erro ao atualizar o estado do pedido:', error);
+    res.status(500).send('Erro ao atualizar o estado do pedido.');
+  }
+});
+
 // Rota para buscar o endereço e venerável da loja selecionada
 router.get('/buscar-endereco-loja/:id', async (req, res) => {
   const { id } = req.params;
