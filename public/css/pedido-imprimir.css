@@ -1,0 +1,103 @@
+#pedido-imprimir-page {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    margin: 0;
+    background: #f5f5f5;
+}
+
+#document-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 210mm;
+    margin: 0 auto;
+    --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#header, #footer {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+#section-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+#content {
+    margin-bottom: 30px;
+}
+
+#content p {
+    margin: 5px 0;
+}
+
+#info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#footer {
+    font-size: 12px;
+    color: #888;
+}
+
+#print-button {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%
+}
+
+#print-button button {
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#print-button button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#print-button button:active {
+    background-color: #003f7f;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(2px)
+}
+
+#print-button button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+@media print {
+    #print-button {
+        display: none;
+    }
+
+    #print-button button {
+        display: none;
+    }
+
+    .whatsapp-icon {
+        display: none;
+    }
+
+    header {
+        display: none;
+    }
+}

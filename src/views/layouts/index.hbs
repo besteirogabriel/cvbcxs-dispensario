@@ -1,21 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
 
-    {{!-- Plugins CSS --}}    
+    {{!-- Plugins CSS --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
     {{!-- CSS --}}
+    {{#if (eq page 'pedido-imprimir') }}
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/pedido-imprimir.css">
+    <script src="/js/global.js"></script>
+    {{else}}
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/global.css">
-    {{#if page }}<link rel="stylesheet" href="css/{{page}}.css">{{/if}}
+    {{#if page }}
+    <link rel="stylesheet" href="css/{{page}}.css">{{/if}}
+    <script src="js/global.js"></script>
+    {{/if}}
+
 
 </head>
-<body class="{{ page }} {{ bodyClass }}" data-name="{{ page }}">    
+
+<body class="{{ page }} {{ bodyClass }}" data-name="{{ page }}">
     <!-- Cabeçalho página -->
     {{> header }}
 
@@ -25,8 +38,9 @@
 </body>
 
 {{!-- Plugins JS --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 {{!-- JS --}}
 <script src="js/global.js"></script>
+
 </html>

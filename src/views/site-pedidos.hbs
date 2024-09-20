@@ -3,105 +3,86 @@
         <div class="card-abas">
             {{> abas }}
             <div class="card-abas-content">
-                {{!-- mensagens de envio --}}
                 {{#if data.message}}
-                    {{> system-message }}
+                {{> system-message }}
                 {{/if}}
                 <!-- formulário de login administrador -->
                 <form id="form" method="post">
-                    {{!-- Informações --}}
+                    <!-- Informações -->
                     <div class="form-section">
                         <div class="form-section-title">Informações contato</div>
-                        {{!-- beneficiado e CIM --}}
-                        <div class="fieldset-group">        
-                            {{!-- beneficiado --}}
+                        <!-- beneficiado e CIM -->
+                        <div class="fieldset-group">
+                            <!-- beneficiado -->
                             <fieldset>
                                 <input type="text" name="beneficiado" id="beneficiado" required>
                                 <label> Nome do beneficiado* </label>
-                            </fieldset> 
-                            {{!-- CIM --}}
+                            </fieldset>
+                            <!-- CIM -->
                             <fieldset>
                                 <input type="text" name="cim" id="cim" required>
                                 <label> CIM* </label>
-                            </fieldset> 
-                        </div>   
-                        {{!-- select loja--}}
+                            </fieldset>
+                        </div>
+                        <!-- select loja-->
                         <fieldset>
-                            <select name="loja" id="loja" required class="js-select2" data-placeholder="Seleciona uma loja">
+                            <select name="loja" id="loja" required class="js-select2"
+                                data-placeholder="Seleciona uma loja">
                                 <option></option>
                                 {{#each data.lojas}}
                                 <option value="{{this.id}}">{{this.name}}</option>
                                 {{/each}}
                             </select>
                             <label>Loja*</label>
-                        </fieldset>      
-                        {{!-- venerável --}}
+                        </fieldset>
+                        <!-- venerável -->
                         <fieldset>
                             <input type="text" name="veneravel" id="veneravel" required disabled>
                             <label> Nome do venerável* </label>
-                        </fieldset> 
+                        </fieldset>
                     </div>
 
-                    {{!-- endereço de entrega --}}
+                    <!-- endereço de entrega -->
                     <div class="form-section">
                         <div class="form-section-title">Endereço loja para entrega</div>
-                        {{!-- CEP --}}
-                        <fieldset>
-                            <input type="text" name="cep" id="cep" disabled>
-                            <label>CEP*</label>
-                        </fieldset>
-                        {{!-- endereço --}}
                         <fieldset>
                             <input type="text" name="endereco" id="endereco" required disabled>
                             <label>Endereço*</label>
                         </fieldset>
-                        {{!-- numero, cidade e estado --}}
-                        <div class="fieldset-group">
-                            {{!-- numero --}}                            
-                            <fieldset>
-                                <input type="number" name="numero" id="numero" required disabled>
-                                <label>Número*</label>
-                            </fieldset>
-                            {{!-- cidade --}}
-                            <fieldset>
-                                <input type="text" name="cidade" id="cidade" required disabled>
-                                <label>Cidade*</label>
-                            </fieldset>
-                            {{!-- estado --}}
-                            <fieldset>
-                                <input type="text" name="estado" id="estado" required disabled>
-                                <label>Estado*</label>
-                            </fieldset>
-                        </div>
+                        {{!-- <fieldset></fieldset> --}}
+                        <input type="text" name="cidade" id="cidade" required disabled>
+                        <label>Cidade*</label>
+                        </fieldset>
                     </div>
 
-                    {{!-- informações do pedido --}}
+                    <!-- informações do pedido -->
                     <div class="form-section" id="medicamentos">
                         <div class="form-section-title">Informações do pedido</div>
-                        {{!-- select item estoque --}}
+                        <!-- select item estoque -->
                         <fieldset>
-                            <select name="medicamento[]" id="medicamento[]" required class="js-select2" data-placeholder="Selecione um medicamento">
+                            <select name="medicamento[]" id="medicamento[]" required class="js-select2"
+                                data-placeholder="Selecione um medicamento">
                                 {{#each data.estoque}}
-                                    <option value="{{this.medicamento_composto}}">{{this.medicamento_composto}}</option>
+                                <option value="{{this.medicamento_composto}}">{{this.medicamento_composto}}</option>
                                 {{/each}}
                             </select>
                             <label>Medicamento*</label>
                         </fieldset>
-                        {{!-- dosagem diária e peridiciodade --}}
-                         <div class="fieldset-group">
-                            {{!-- dosagem diária --}}
+                        <div class="fieldset-group">
+                            <!-- dosagem diária -->
                             <fieldset>
-                                <input type="text" name="quantidade[]" id="quantidade[]" required  >
+                                <input type="text" name="quantidade[]" id="quantidade[]" required>
                                 <label>Quantidade*</label>
                             </fieldset>
                         </div>
                     </div>
-                     <div style="margin-bottom: 20px;">
+                    <div style="margin-bottom: 20px;">
                         <button type="button" class="button-2" id="adicionar-medicamento">Adicionar Medicamento</button>
                         <button type="button" class="button-2" id="open-dialog">Não encontro meu medicamento</button>
-                     </div>
+                    </div>
                     <button type="submit" class="button-1">Enviar solicitação</button>
-                    <p class="info">Ao preencher o formulário você automaticamente concorda com nossa <a href="">politica de privacidade</a> e <a href="">termos de uso</a></p>
+                    <p class="info">Ao preencher o formulário você automaticamente concorda com nossa <a
+                            href="">politica de privacidade</a> e <a href="">termos de uso</a></p>
                 </form>
             </div>
         </div>
@@ -113,20 +94,22 @@
 </section>
 
 <!-- Dialog HTML -->
-<div id="medication-dialog" style="display:none; position:fixed; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1050; justify-content:center; align-items:center;">
+<div id="medication-dialog"
+    style="display:none; position:fixed; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1050; justify-content:center; align-items:center;">
     <div style="background:#fff; padding:20px; border-radius:5px; max-width:600px; width:90%; margin:10px;">
         <span id="close-dialog" style="float:right; cursor:pointer; font-size: 1.5em;">&times;</span>
         <h2>Medicamento Não Encontrado</h2>
-        <p>Se você, associado ao Grande Oriente do Brasil - Rio Grande do Sul (GOB-RS) não encontrar o medicamento de que precisa no Dispensário de Medicamentos, pedimos que entre em contato diretamente com o GOB-RS para solicitar a inclusão do item. É fundamental para nós garantir o acesso aos medicamentos necessários para todos os membros.</p>
+        <p>Se você, associado ao Grande Oriente do Brasil - Rio Grande do Sul (GOB-RS) não encontrar o medicamento de
+            que precisa no Dispensário de Medicamentos, pedimos que entre em contato diretamente com o GOB-RS para
+            solicitar a inclusão do item.</p>
         <p>Para fazer essa solicitação, você pode entrar em contato com:</p>
         <p>Paulo Aragão: +55 51 8416-0207<br>Sérgio Bueno: +55 51 9877-9887</p>
-        <p>Informe qual medicamento está faltando. Nós vamos avaliar a possibilidade de adicioná-lo ao nosso catálogo, visando expandir o nosso atendimento e melhorar o acesso a tratamentos essenciais. A sua contribuição é importante para nós, pois ajuda a aprimorar os serviços desta Central de Medicamentos.</p>
     </div>
 </div>
 
 <script>
     // Função para adicionar campo de medicamento e quantidade
-    document.getElementById('adicionar-medicamento').addEventListener('click', function() {
+    document.getElementById('adicionar-medicamento').addEventListener('click', function () {
         const container = document.querySelector('#medicamentos');
         const novoCampo = document.createElement('div');
         novoCampo.innerHTML = `
@@ -149,11 +132,11 @@
         container.appendChild(novoCampo);
     });
 
-    document.getElementById('open-dialog').addEventListener('click', function() {
+    document.getElementById('open-dialog').addEventListener('click', function () {
         document.getElementById('medication-dialog').style.display = 'flex';
     });
 
-    document.getElementById('close-dialog').addEventListener('click', function() {
+    document.getElementById('close-dialog').addEventListener('click', function () {
         document.getElementById('medication-dialog').style.display = 'none';
     });
 
@@ -163,8 +146,29 @@
         container.remove();
     }
 
+    // Função para preencher automaticamente endereço e nome do venerável
+    document.getElementById('loja').addEventListener('change', function () {
+        const lojaId = this.value;
+        console.log(`Loja selecionada: ${lojaId}`); // Log para depuração
+        if (lojaId) {
+            fetch(`/buscar-endereco-loja/${lojaId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erro ao buscar dados da loja: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Dados da loja recebidos:', data); // Verificando dados recebidos
+                    document.getElementById('endereco').value = data.endereco || '';
+                    document.getElementById('veneravel').value = data.veneravel || '';
+                })
+                .catch(error => console.error('Erro ao buscar dados da loja:', error));
+        }
+    });
+
     // TO-DO: Envio do formulário 
-    document.getElementById('form').addEventListener('submit', function(event) {
+    document.getElementById('form').addEventListener('submit', function (event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const data = {};
@@ -183,8 +187,8 @@
         });
         console.log('data', data);
         if (data.medicamento.length === data.quantidade.length) {
-         console.log('enviar formulário', data);
-         form.submit();
+            console.log('enviar formulário', data);
+            form.submit();
         } else {
             alert('Preencha todos os campos de medicamento e quantidade');
         }

@@ -78,9 +78,7 @@
 </div>
 
 <script>
-
-
-document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function() {
     // Adicione um evento de clique a todos os botões "Ver Detalhes"
     var detailButtons = document.querySelectorAll('.modal-button, .inventory-modal-button');
     detailButtons.forEach(function(button) {
@@ -105,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 modalButtonsContainer.innerHTML += `
                     <button class="button-2">Cancelar Pedido</button>
                     <span class="right-buttons">
-                        <button class="button-3">Imprimir Pedido</button>
+                        <button class="button-3 imprimir-pedido">Imprimir Pedido</button>
                         <button class="alterar-status">Alterar Status</button>
                     </span>
                 `;
@@ -127,6 +125,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
             document.getElementById('modal-content').innerHTML = modalContentHTML;
             document.getElementById('myModal').style.display = 'flex'; 
+            
+            // Adiciona o evento de clique para o botão "Imprimir Pedido"
+            document.querySelector('.imprimir-pedido').addEventListener('click', function() {
+                // Obtém o ID do pedido
+                var pedidoId = rowContent.querySelectorAll('li')[0].textContent;
+                
+                // Redireciona para a página de impressão
+                window.location.href = `pedido-imprimir/${pedidoId}`;
+            });
         });
     });
 
@@ -144,9 +151,6 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
 });
-
-
-
 </script>
 
 <style>
