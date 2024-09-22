@@ -113,8 +113,7 @@ router.post('/alterar-status/:id', async (req, res) => {
     `;
     await pool.query(query, [status, id]);
     await pool.query('COMMIT');
-    console.log(`O estado do pedido ${id} foi atualizado para ${status}.`);
-    // res.status(200).send(`O estado do pedido ${id} foi atualizado para ${status}.`);
+    // console.log(`O estado do pedido ${id} foi atualizado para ${status}.`);
     res.redirect('/dashboard');
   } catch (error) {
     await pool.query('ROLLBACK');
