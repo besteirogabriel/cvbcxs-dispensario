@@ -11,10 +11,10 @@ const pool = new Pool({
   },
 });
 
-async function runQuery(query) {
+async function runQuery(query, params = []) {
   try {
     const client = await pool.connect();
-    const result = await client.query(query);
+    const result = await client.query(query, params);
     client.release();
     return result.rows;
   } catch (error) {
@@ -24,12 +24,26 @@ async function runQuery(query) {
 }
 
 async function fetchOrdersData(userId, isAdmin = false) {
-  let ordersFromDB = await runQuery(
-    isAdmin === true
-      ? // ? `SELECT p.id AS pedido_id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at AS pedido_criado_em, p.estado, STRING_AGG(DISTINCT CONCAT(m.medicamento, ' - ', m.composto), ', ') AS medicamentos_compostos FROM pedidos p JOIN pedidos_medicamentos pm ON p.id = pm.pedido_id JOIN medicamentos m ON pm.medicamento_id = m.id JOIN lojas l ON p.id_loja = l.id GROUP BY p.id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at, p.estado ORDER BY p.id DESC;`
-      `SELECT l.nome_loja AS loja, p.id AS pedido_id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at AS pedido_criado_em, p.estado, STRING_AGG(DISTINCT CONCAT(m.medicamento, ' - ', m.composto), ', ') AS medicamentos_compostos FROM pedidos p JOIN pedidos_medicamentos pm ON p.id = pm.pedido_id JOIN medicamentos m ON pm.medicamento_id = m.id JOIN lojas l ON p.id_loja = l.id GROUP BY p.id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at, p.estado, l.nome_loja ORDER BY p.id DESC;`
-      : `SELECT p.id AS pedido_id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at AS pedido_criado_em, p.estado, STRING_AGG(DISTINCT CONCAT(m.medicamento, ' - ', m.composto), ', ') AS medicamentos_compostos FROM pedidos p JOIN pedidos_medicamentos pm ON p.id = pm.pedido_id JOIN medicamentos m ON pm.medicamento_id = m.id JOIN lojas l ON p.id_loja = l.id WHERE l.user_id = ${userId} GROUP BY p.id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at, p.estado;`
-  );
+  let query = isAdmin
+    ? `SELECT l.nome_loja AS loja, p.id AS pedido_id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at AS pedido_criado_em, p.estado, 
+          STRING_AGG(DISTINCT CONCAT(m.medicamento, ' - ', m.composto), ', ') AS medicamentos_compostos 
+       FROM pedidos p 
+       JOIN pedidos_medicamentos pm ON p.id = pm.pedido_id 
+       JOIN medicamentos m ON pm.medicamento_id = m.id 
+       JOIN lojas l ON p.id_loja = l.id 
+       GROUP BY p.id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at, p.estado, l.nome_loja 
+       ORDER BY p.id DESC;`
+    : `SELECT p.id AS pedido_id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at AS pedido_criado_em, p.estado, 
+          STRING_AGG(DISTINCT CONCAT(m.medicamento, ' - ', m.composto), ', ') AS medicamentos_compostos 
+       FROM pedidos p 
+       JOIN pedidos_medicamentos pm ON p.id = pm.pedido_id 
+       JOIN medicamentos m ON pm.medicamento_id = m.id 
+       JOIN lojas l ON p.id_loja = l.id 
+       WHERE l.user_id = $1 
+       GROUP BY p.id, p.nome_beneficiado, p.cim, p.id_loja, p.created_at, p.estado;`;
+
+  const params = isAdmin ? [] : [userId];
+  const ordersFromDB = await runQuery(query, params);
 
   let formattedOrders;
 
@@ -42,7 +56,6 @@ async function fetchOrdersData(userId, isAdmin = false) {
       medicamento: order.medicamentos_compostos,
       status: order.estado,
     }));
-    return formattedOrders;
   } else {
     formattedOrders = ordersFromDB.map((order) => ({
       cim: order.cim,
@@ -50,8 +63,9 @@ async function fetchOrdersData(userId, isAdmin = false) {
       medicamento: order.medicamentos_compostos,
       status: order.estado,
     }));
-    return formattedOrders;
   }
+
+  return formattedOrders;
 }
 
 async function fetchOrderForPrint(orderId) {
@@ -61,43 +75,34 @@ async function fetchOrderForPrint(orderId) {
       p.cim,
       l.nome_loja,
       l.nome_vm AS nome_veneravel,
-      l.cep,
       l.endereco,
-      l.numero,
       l.cidade,
-      l.uf AS estado,
       STRING_AGG(DISTINCT CONCAT(m.medicamento, ' - ', m.composto, ' (', pm.quantidade, ')'), ', ') AS medicamentos,
       l.telefone
     FROM pedidos p
     JOIN lojas l ON p.id_loja = l.id
     JOIN pedidos_medicamentos pm ON p.id = pm.pedido_id
     JOIN medicamentos m ON pm.medicamento_id = m.id
-    WHERE p.id = ${orderId}
+    WHERE p.id = $1
     GROUP BY 
       p.nome_beneficiado,
       p.cim,
       l.nome_loja,
       l.nome_vm,
-      l.cep,
       l.endereco,
-      l.numero,
       l.cidade,
-      l.uf,
       l.telefone;
   `;
 
-  const orderDetails = await runQuery(query);
+  const orderDetails = await runQuery(query, [orderId]);
 
   const formattedOrders = orderDetails.map(order => ({
     nome_beneficiado: order.nome_beneficiado,
     cim: order.cim,
     nome_loja: order.nome_loja,
     nome_veneravel: order.nome_veneravel,
-    cep: order.cep,
     endereco: order.endereco,
-    numero: order.numero,
     cidade: order.cidade,
-    estado: order.estado,
     medicamentos: order.medicamentos.split(', '),
     telefone: order.telefone
   }));

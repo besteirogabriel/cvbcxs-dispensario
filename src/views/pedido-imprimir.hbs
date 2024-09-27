@@ -17,13 +17,10 @@
                 <p><strong>Nome do Venerável:</strong> {{data.pedido.nome_veneravel}}</p>
             </div>
             <div id="info-row">
-                <p><strong>CEP:</strong> {{data.pedido.cep}}</p>
                 <p><strong>Endereço:</strong> {{data.pedido.endereco}}</p>
             </div>
             <div id="info-row">
-                <p><strong>Número:</strong> {{data.pedido.numero}}</p>
                 <p><strong>Cidade:</strong> {{data.pedido.cidade}}</p>
-                <p><strong>Estado:</strong> {{data.pedido.estado}}</p>
             </div>
             <div id="info-row">
                 <p><strong>Telefone:</strong> {{data.pedido.telefone}}</p>
@@ -32,7 +29,6 @@
             <div id="section-title">Medicamentos</div>
             {{#each data.pedido.medicamentos}}
             <div id="info-row">
-                {{!-- <strong>Medicamento:</strong> --}}
                 <p>{{this}}</p>
             </div>
             {{/each}}
