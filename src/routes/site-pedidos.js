@@ -127,7 +127,7 @@ router.get('/buscar-endereco-loja/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const lojas = await formatLojasData(); // Função para buscar as lojas
+    const lojas = await formatLojasData(); //git check Função para buscar as lojas
     const lojaSelecionada = lojas.find((loja) => loja.id === parseInt(id));
 
     if (lojaSelecionada) {

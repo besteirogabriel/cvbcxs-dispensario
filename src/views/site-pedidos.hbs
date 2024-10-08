@@ -49,9 +49,9 @@
                             <input type="text" name="endereco" id="endereco" required disabled>
                             <label>Endereço*</label>
                         </fieldset>
-                        {{!-- <fieldset></fieldset> --}}
-                        <input type="text" name="cidade" id="cidade" required disabled>
-                        <label>Cidade*</label>
+                        <fieldset>
+                            <input type="text" name="cidade" id="cidade" required disabled>
+                            <label>Cidade*</label>
                         </fieldset>
                     </div>
 
@@ -120,7 +120,7 @@
                     {{/each}}
                 </select>
                 <label>Medicamento*</label>
-            <button type="button" class="button-remove" onclick="removerMedicamento(this)">x</button>
+                <button type="button" class="button-remove" onclick="removerMedicamento(this)">x</button>
             </fieldset>
             <div class="fieldset-group">
                 <fieldset>
@@ -130,6 +130,20 @@
             </div>
         `;
         container.appendChild(novoCampo);
+
+        // Reaplicar o Select2 no novo campo adicionado
+        $(novoCampo).find('.js-select2').select2({
+            width: '100%', // Define a largura do select
+            placeholder: "Selecione um medicamento" // Placeholder personalizado
+        });
+    });
+
+    // Inicializar o Select2 nos campos existentes ao carregar a página
+    $(document).ready(function() {
+        $('.js-select2').select2({
+            width: '100%', // Define a largura do select
+            placeholder: "Selecione um medicamento" // Placeholder personalizado
+        });
     });
 
     document.getElementById('open-dialog').addEventListener('click', function () {
@@ -167,7 +181,7 @@
         }
     });
 
-    // TO-DO: Envio do formulário 
+    // Envio do formulário 
     document.getElementById('form').addEventListener('submit', function (event) {
         event.preventDefault();
         const formData = new FormData(event.target);
