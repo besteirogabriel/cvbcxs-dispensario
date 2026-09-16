@@ -10,7 +10,7 @@ assert len(rows)==56
 def download(d):
  p=root/d['path'];p.parent.mkdir(parents=True,exist_ok=True)
  for attempt in range(3):
-  if attempt==0:
+  if attempt==0 and 'www.redcross.org/' in d['pdf_url']:
    try:
     p.write_bytes(urllib.request.urlopen(d['pdf_url'],timeout=90).read())
     r=subprocess.CompletedProcess([],0)
@@ -26,7 +26,7 @@ def download(d):
     thumb=base64.b64encode(pix.tobytes('jpeg',jpg_quality=72)).decode()
    print('OK',d['id'],d['title'],flush=True)
    return d['id'],thumb
-  print('Retry',d['id'],attempt+1,flush=True)
+  print('Retry',d['id'],attempt+1,'code',r.returncode,'stderr',getattr(r,'stderr',b''),'bytes',p.stat().st_size if p.exists() else 0,flush=True)
  raise RuntimeError('Download/integrity failed: '+d['id']+' '+d['title'])
 with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:thumbs=dict(ex.map(download,rows))
 html=(root/'00_COMECE_AQUI.html').read_text()
