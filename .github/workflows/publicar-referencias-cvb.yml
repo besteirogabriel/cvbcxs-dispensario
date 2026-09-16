@@ -1,0 +1,24 @@
+name: Publicar referencias de relatorios CVB
+on:
+  push:
+    branches: [referencias-relatorios-cvb-20260916]
+    paths: ['.github/workflows/publicar-referencias-cvb.yml']
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Preparar PDFs e verificar integridade
+        env:
+          SOURCE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/referencias-relatorios/build_release.py
+        run: |
+          python -m pip install --quiet pymupdf==1.26.7
+          curl --fail --location --silent --show-error "$SOURCE_URL" -o build_release.py
+          python -u build_release.py
+      - name: Publicar arquivo para download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create referencias-relatorios-cvb-2026-09-16 Referencias_Relatorios_Cruz_Vermelha.zip SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "Referencias: 56 relatorios de atividades da Cruz Vermelha" --notes-file release-notes.md --latest=false
