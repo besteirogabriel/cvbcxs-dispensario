@@ -10,7 +10,15 @@ assert len(rows)==56
 def download(d):
  p=root/d['path'];p.parent.mkdir(parents=True,exist_ok=True)
  for attempt in range(3):
-  r=subprocess.run(['curl','-fLsS','--connect-timeout','30','--max-time','240','--retry','1',d['pdf_url'],'-o',str(p)],capture_output=True)
+  if attempt==0:
+   try:
+    p.write_bytes(urllib.request.urlopen(d['pdf_url'],timeout=90).read())
+    r=subprocess.CompletedProcess([],0)
+   except Exception as err:
+    print('urllib',d['id'],str(err),flush=True)
+    r=subprocess.CompletedProcess([],1)
+  else:
+   r=subprocess.run(['curl','-fLsS','--connect-timeout','30','--max-time','240','--retry','1',d['pdf_url'],'-o',str(p)],capture_output=True)
   if r.returncode==0 and p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest()==d['sha256']:
    with fitz.open(p) as doc:
     assert len(doc)==d['pages']
