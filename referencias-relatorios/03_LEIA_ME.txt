@@ -1,0 +1,14 @@
+ACERVO DE RELATORIOS DE ATIVIDADES - CRUZ VERMELHA
+56 PDFs originais | 4333 paginas | 16/09/2026
+
+1. Extraia todo o ZIP.
+2. Abra 00_COMECE_AQUI.html no navegador para pesquisar e abrir os PDFs.
+3. Leia 01_GUIA_PARA_CAXIAS.html para a curadoria e a proposta editorial.
+   A versao .md contem o mesmo guia em texto editavel.
+4. As pastas numeradas contêm os documentos originais.
+5. 02_FONTES_E_VERIFICACAO.json registra as fontes e os hashes SHA-256.
+
+O catalogo e os PDFs funcionam offline. Os links de fonte usam internet.
+Paginas citadas contam a capa como pagina 1.
+Os arquivos de apoio nao entram na contagem de 56 relatorios.
+Os direitos e creditos dos documentos pertencem aos respectivos titulares.
