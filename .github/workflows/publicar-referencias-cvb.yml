@@ -2,7 +2,7 @@ name: Publicar referencias de relatorios CVB
 on:
   push:
     branches: [referencias-relatorios-cvb-20260916]
-    paths: ['.github/workflows/publicar-referencias-cvb.yml']
+    paths: ['.github/workflows/publicar-referencias-cvb.yml', 'referencias-relatorios/build_release.py']
 permissions:
   contents: write
 jobs:
